@@ -8,9 +8,10 @@ and curated resources.
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Single-page site: hero, "What's an Elmer", learning tracks, resources |
+| `index.html` | Single-page site: hero, "What's an Elmer", learning tracks, featured book, resources |
 | `style.css` | TavaOne brand system (dark theme, `#10b981` green, Plus Jakarta Sans + JetBrains Mono) |
 | `favicon.ico` | Shared TavaOne favicon |
+| `images/` | Site imagery (book cover, etc.) |
 
 ## Learning tracks
 
