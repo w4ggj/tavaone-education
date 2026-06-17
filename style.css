@@ -125,6 +125,10 @@ header{
 .section{max-width:var(--max);margin:0 auto;padding:80px 24px}
 .section-alt{background:var(--bg-alt);max-width:none}
 .section-alt > *{max-width:var(--max);margin-left:auto;margin-right:auto}
+.section-lab{
+  background:linear-gradient(180deg,rgba(16,185,129,0.08),rgba(16,185,129,0.02));
+  border-top:1px solid var(--green-lt);border-bottom:1px solid var(--green-lt);
+}
 .section-head{text-align:center;max-width:640px;margin:0 auto 50px}
 .section-kicker{font-size:0.68rem;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;color:var(--green);margin-bottom:12px}
 .section-head h2{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:800;letter-spacing:-0.02em;color:var(--text-lt);margin-bottom:16px}
