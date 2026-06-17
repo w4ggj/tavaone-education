@@ -133,6 +133,11 @@ header{
   content:'';position:absolute;left:0;top:8px;width:7px;height:7px;
   background:var(--green);border-radius:50%;box-shadow:0 0 6px rgba(16,185,129,0.5);
 }
+.track-link{
+  display:inline-block;margin-top:18px;font-size:0.85rem;font-weight:700;
+  color:var(--green);border-bottom:1px solid transparent;transition:border-color .15s;
+}
+.track-link:hover{border-bottom-color:var(--green)}
 
 /* ─── FEATURED BOOK ──────────────────────────────── */
 .book{
