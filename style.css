@@ -41,6 +41,7 @@ header{
 }
 .logo{font-size:1.15rem;font-weight:800;letter-spacing:0.01em;display:flex;align-items:center;gap:5px}
 .logo-tava{color:#fff;font-weight:800}
+.logo-one{color:var(--green);font-weight:800}
 .logo-slash{color:rgba(255,255,255,0.4);font-weight:700}
 .logo-edu{color:var(--green);font-weight:800}
 .nav{display:flex;align-items:center;gap:26px}
