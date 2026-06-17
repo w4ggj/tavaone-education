@@ -191,6 +191,8 @@ header{
 .book-author{color:var(--text-muted);font-size:0.9rem;margin-bottom:22px}
 .book-author strong{color:var(--text-lt)}
 
+.lab-note{text-align:center;max-width:640px;margin:26px auto 0;font-size:0.85rem;color:var(--text-muted)}
+
 /* ─── SPONSORS ───────────────────────────────────── */
 .sponsor-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:0 auto;align-items:stretch}
 .sponsor-cta-card{
