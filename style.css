@@ -68,7 +68,20 @@ header{
 
 /* ─── HERO ───────────────────────────────────────── */
 .hero{
-  max-width:var(--max);margin:0 auto;padding:90px 24px 70px;text-align:center;
+  max-width:var(--max);margin:0 auto;padding:70px 24px 70px;text-align:center;
+}
+.hero-graphic{display:flex;justify-content:center;margin-bottom:22px}
+.antenna{
+  width:130px;height:auto;color:var(--green);
+  stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+}
+.antenna .wave{animation:signal 3s ease-in-out infinite}
+.antenna .w1{animation-delay:0s}
+.antenna .w2{animation-delay:.35s}
+.antenna .w3{animation-delay:.7s}
+@keyframes signal{0%,100%{opacity:.12}50%{opacity:.85}}
+@media (prefers-reduced-motion:reduce){
+  .antenna .wave{animation:none;opacity:.55}
 }
 .kicker{
   display:inline-block;font-size:0.7rem;font-weight:700;letter-spacing:0.28em;
