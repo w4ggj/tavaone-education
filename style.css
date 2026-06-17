@@ -44,7 +44,7 @@ header{
 .logo-one{color:var(--green);font-weight:800}
 .logo-slash{color:rgba(255,255,255,0.4);font-weight:700}
 .logo-edu{color:var(--green);font-weight:800}
-.nav{display:flex;align-items:center;gap:26px}
+.nav{display:flex;align-items:center;gap:20px}
 .nav a{font-size:0.82rem;font-weight:600;color:var(--text-muted);transition:color .15s}
 .nav a:hover{color:var(--text-lt)}
 .nav-cta{
@@ -191,6 +191,16 @@ header{
 .book-author{color:var(--text-muted);font-size:0.9rem;margin-bottom:22px}
 .book-author strong{color:var(--text-lt)}
 
+/* ─── SPONSORS ───────────────────────────────────── */
+.sponsor-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:0 auto;align-items:stretch}
+.sponsor-cta-card{
+  background:linear-gradient(160deg,rgba(16,185,129,0.10),rgba(16,185,129,0.02));
+  border-color:var(--green-lt);display:flex;flex-direction:column;
+}
+.sponsor-cta-card .btn{margin-top:auto;align-self:flex-start}
+.sponsor-note{font-size:0.8rem;line-height:1.55;color:var(--text-muted);margin:14px 0 20px}
+.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
 /* ─── RESOURCES ──────────────────────────────────── */
 .resource{
   background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
@@ -221,6 +231,7 @@ header{
 /* ─── RESPONSIVE ─────────────────────────────────── */
 @media (max-width:860px){
   .grid-3{grid-template-columns:repeat(2,1fr)}
+  .sponsor-wrap{grid-template-columns:1fr}
   .book{grid-template-columns:1fr;gap:28px;text-align:center;padding:30px 24px}
   .book-cover{max-width:240px;margin:0 auto}
   .book-body .section-kicker{text-align:center}
