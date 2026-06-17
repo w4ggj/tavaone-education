@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TavaOne // Education — Find Your Elmer</title>
+<title>TavaOne // Education — Learn Amateur Radio with an Elmer</title>
 <meta name="description" content="TavaOne Education connects new and aspiring amateur radio operators with experienced Elmers — mentors who help you get on the air, pass your exam, and make your first contacts.">
 <link rel="icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,9 +22,8 @@
   <nav class="nav">
     <a href="#what">What's an Elmer</a>
     <a href="#tracks">Learning Tracks</a>
-    <a href="#elmers">Find an Elmer</a>
     <a href="#resources">Resources</a>
-    <a class="nav-cta" href="#elmers">Get Mentored</a>
+    <a class="nav-cta" href="mailto:elmers@tavaone.com">Ask an Elmer</a>
   </nav>
 </header>
 
@@ -40,8 +39,8 @@
       curiosity to your first contact, and keeps you on the air long after license day.
     </p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="#elmers">Find an Elmer</a>
-      <a class="btn btn-ghost" href="#tracks">Browse Learning Tracks</a>
+      <a class="btn btn-primary" href="#tracks">Browse Learning Tracks</a>
+      <a class="btn btn-ghost" href="mailto:elmers@tavaone.com">Ask an Elmer</a>
     </div>
     <div class="hero-stats">
       <div class="stat"><div class="stat-val">3</div><div class="stat-lbl">License Classes</div></div>
@@ -135,62 +134,6 @@
     </div>
   </section>
 
-  <!-- FIND AN ELMER -->
-  <section id="elmers" class="section">
-    <div class="section-head">
-      <div class="section-kicker">Mentorship</div>
-      <h2>Find an Elmer</h2>
-      <p class="section-sub">
-        Tell us where you are on the journey and we'll match you with a mentor. No cost, no
-        pressure — just one operator helping another, the way the hobby has always worked.
-      </p>
-    </div>
-
-    <div class="match-wrap">
-      <form class="match-form" onsubmit="return submitMatch(event)">
-        <div class="form-row">
-          <label for="name">Name or callsign</label>
-          <input type="text" id="name" placeholder="e.g. KK4XYZ or Jordan" required>
-        </div>
-        <div class="form-row">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="you@example.com" required>
-        </div>
-        <div class="form-row">
-          <label for="level">Where are you now?</label>
-          <select id="level" required>
-            <option value="">Select…</option>
-            <option>Curious — no license yet</option>
-            <option>Studying for Technician</option>
-            <option>Licensed, not yet on the air</option>
-            <option>Upgrading to General / Extra</option>
-            <option>Active, want to learn a new mode</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label for="interest">What pulls you in?</label>
-          <select id="interest" required>
-            <option value="">Select…</option>
-            <option>POTA / field operating</option>
-            <option>HF &amp; DX</option>
-            <option>Digital modes (FT8, etc.)</option>
-            <option>Emergency &amp; public service</option>
-            <option>Building &amp; antennas</option>
-            <option>Just want to get on the air</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Request a Match</button>
-        <p class="form-note" id="formNote"></p>
-      </form>
-
-      <aside class="become-elmer">
-        <h3>Already experienced?</h3>
-        <p>The best way to honor your Elmer is to become one. Volunteer an hour a week and help the next operator find their voice on the air.</p>
-        <a class="btn btn-ghost" href="mailto:elmers@tavaone.com?subject=I'd like to be an Elmer">Become an Elmer</a>
-      </aside>
-    </div>
-  </section>
-
   <!-- RESOURCES -->
   <section id="resources" class="section section-alt">
     <div class="section-head">
@@ -229,7 +172,7 @@
   <!-- CTA -->
   <section class="cta">
     <h2>The bands are open. Let's get you on the air.</h2>
-    <a class="btn btn-primary" href="#elmers">Find Your Elmer</a>
+    <a class="btn btn-primary" href="#tracks">Start a Learning Track</a>
   </section>
 
 </main>
@@ -243,23 +186,11 @@
   <nav class="footer-nav">
     <a href="https://activate.tavaone.com/" target="_blank" rel="noopener">Activate</a>
     <a href="#tracks">Tracks</a>
-    <a href="#elmers">Find an Elmer</a>
-    <a href="mailto:elmers@tavaone.com">Contact</a>
+    <a href="#resources">Resources</a>
+    <a href="mailto:elmers@tavaone.com">Ask an Elmer</a>
   </nav>
   <div class="footer-copy">© 2026 TavaOne · 73 de the Elmers crew</div>
 </footer>
-
-<script>
-function submitMatch(e){
-  e.preventDefault();
-  var note = document.getElementById('formNote');
-  var name = document.getElementById('name').value.trim();
-  note.textContent = "Thanks, " + (name || 'friend') + "! An Elmer will reach out within a few days. (Backend matching coming soon.)";
-  note.classList.add('show');
-  e.target.reset();
-  return false;
-}
-</script>
 
 </body>
 </html>

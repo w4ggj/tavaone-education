@@ -8,7 +8,7 @@ and curated resources.
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Single-page site: hero, "What's an Elmer", learning tracks, find-an-elmer form, resources |
+| `index.html` | Single-page site: hero, "What's an Elmer", learning tracks, resources |
 | `style.css` | TavaOne brand system (dark theme, `#10b981` green, Plus Jakarta Sans + JetBrains Mono) |
 | `favicon.ico` | Shared TavaOne favicon |
 
@@ -34,5 +34,4 @@ Designed for GitHub Pages or Netlify, like its companion app
 [TavaOne Activate](https://activate.tavaone.com/). Point a custom domain
 (e.g. `education.tavaone.com`) at the deployment.
 
-> The find-an-elmer form currently shows a client-side confirmation; wiring it to a
-> backend / mailer is the next step.
+> Mentorship requests currently route to `elmers@tavaone.com` via the "Ask an Elmer" links.
