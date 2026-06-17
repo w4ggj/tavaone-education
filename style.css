@@ -134,6 +134,23 @@ header{
   background:var(--green);border-radius:50%;box-shadow:0 0 6px rgba(16,185,129,0.5);
 }
 
+/* ─── FEATURED BOOK ──────────────────────────────── */
+.book{
+  display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:center;
+  max-width:920px;margin:0 auto;
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:36px;box-shadow:var(--shadow-md);
+}
+.book-cover{display:block;border-radius:var(--radius);overflow:hidden;transition:transform .18s}
+.book-cover:hover{transform:translateY(-4px)}
+.book-cover img{width:100%;height:auto;border-radius:var(--radius);box-shadow:0 12px 30px rgba(0,0,0,0.45)}
+.book-body .section-kicker{text-align:left;margin-bottom:10px}
+.book-body h2{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800;letter-spacing:-0.02em;color:var(--text-lt);margin-bottom:6px}
+.book-sub{font-size:1.05rem;font-weight:600;color:var(--green);margin-bottom:16px}
+.book-lede{color:var(--text-light);font-size:0.97rem;line-height:1.65;margin-bottom:18px}
+.book-author{color:var(--text-muted);font-size:0.9rem;margin-bottom:22px}
+.book-author strong{color:var(--text-lt)}
+
 /* ─── RESOURCES ──────────────────────────────────── */
 .resource{
   background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
@@ -164,6 +181,9 @@ header{
 /* ─── RESPONSIVE ─────────────────────────────────── */
 @media (max-width:860px){
   .grid-3{grid-template-columns:repeat(2,1fr)}
+  .book{grid-template-columns:1fr;gap:28px;text-align:center;padding:30px 24px}
+  .book-cover{max-width:240px;margin:0 auto}
+  .book-body .section-kicker{text-align:center}
 }
 @media (max-width:680px){
   .nav a:not(.nav-cta){display:none}
