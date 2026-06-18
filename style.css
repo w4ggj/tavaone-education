@@ -104,3 +104,12 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
   .wave-grp{animation:none}
   .btn:hover,.card:hover,.reslink:hover{transform:none}
 }
+
+.partners{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:40px}
+.partner{display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px;transition:border-color .18s,transform .18s}
+.partner:hover{border-color:var(--green-dk);transform:translateY(-3px)}
+.partner-logo{background:var(--light);border-radius:10px;padding:18px;width:100%;display:flex;align-items:center;justify-content:center;min-height:96px}
+.partner-logo img{max-width:100%;max-height:64px;height:auto;display:block}
+.partner-name{margin-top:16px;font-weight:700;color:var(--text);font-size:1.02rem}
+.partner-role{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-top:4px}
+@media (max-width:820px){ .partners{grid-template-columns:1fr} }
