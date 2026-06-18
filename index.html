@@ -1,346 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>TavaOne // Education — Learn Amateur Radio with an Elmer</title>
-<meta name="description" content="The Pinellas STEM Radio Lab at Balance Gaming — hands-on STEM education through amateur radio for students, adult learners, veterans, and first responders in Pinellas County. Programs include the BSA Radio merit badge for Scouts. Sponsorship and partnership opportunities welcome.">
-<link rel="icon" href="favicon.ico">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=11">
+<meta name="description" content="The Pinellas STEM Radio Lab at Balance Gaming — hands-on STEM through amateur radio for students, adult learners, veterans, and first responders, including the BSA Radio merit badge for Scouts." />
+<link rel="icon" type="image/svg+xml" href="tavaone-education-emblem.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css?v=12">
 </head>
-<body>
+<body id="top">
 
 <header>
-  <a class="logo" href="#top">
-    <span class="logo-word"><span class="logo-tava">Tava</span><span class="logo-one">One</span></span>
-    <span class="logo-slash">//</span>
-    <span class="logo-edu">Education</span>
-  </a>
-  <nav class="nav">
-    <a href="#what">What's an Elmer</a>
-    <a href="#lab">STEM Lab</a>
-    <a href="#programs">Programs</a>
-    <a href="#sponsor">Sponsor</a>
-    <a href="#tracks">Learning Tracks</a>
-    <a href="#resources">Resources</a>
-    <a class="nav-cta" href="mailto:support@tavaone.com?subject=Ask%20an%20Elmer">Ask an Elmer</a>
-  </nav>
+  <div class="wrap bar">
+    <a href="#top" class="mark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></a>
+    <nav class="links" aria-label="Primary">
+      <a href="#what">What's an Elmer</a>
+      <a href="#lab">STEM Lab</a>
+      <a href="#programs">Programs</a>
+      <a href="#tracks">Tracks</a>
+      <a href="#sponsor">Sponsor</a>
+      <a href="#resources">Resources</a>
+    </nav>
+  </div>
 </header>
 
-<main id="top">
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-graphic" aria-hidden="true">
-      <svg class="antenna" viewBox="0 0 200 132" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- signal waves, right -->
-        <path class="wave w1" d="M108 22.1 A16 16 0 0 1 108 49.9"/>
-        <path class="wave w2" d="M113 13.5 A26 26 0 0 1 113 58.5"/>
-        <path class="wave w3" d="M118 4.8 A36 36 0 0 1 118 67.2"/>
-        <!-- signal waves, left -->
-        <path class="wave w1" d="M92 22.1 A16 16 0 0 0 92 49.9"/>
-        <path class="wave w2" d="M87 13.5 A26 26 0 0 0 87 58.5"/>
-        <path class="wave w3" d="M82 4.8 A36 36 0 0 0 82 67.2"/>
-        <!-- mast -->
-        <line x1="100" y1="39" x2="100" y2="118"/>
-        <!-- cross braces -->
-        <line x1="93" y1="62" x2="107" y2="62"/>
-        <line x1="95" y1="84" x2="105" y2="84"/>
-        <line x1="97" y1="102" x2="103" y2="102"/>
-        <!-- base legs -->
-        <line x1="100" y1="118" x2="84" y2="128"/>
-        <line x1="100" y1="118" x2="116" y2="128"/>
-        <!-- feed tip -->
-        <circle cx="100" cy="36" r="3.5" fill="currentColor" stroke="none"/>
+<main>
+  <section class="hero" aria-label="Introduction">
+    <div class="wrap">
+      <p class="eyebrow">CQ CQ CQ <span class="dim">— amateur radio mentorship</span></p>
+      <h1>Every new ham deserves an <span class="em">Elmer</span>.</h1>
+      <p class="lede">An <strong>Elmer</strong> is the amateur radio tradition of one operator mentoring another. TavaOne Education pairs newcomers with experienced operators, walks you from curiosity to your first contact, and keeps you on the air long after license day.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#tracks">Browse learning tracks</a>
+        <a class="btn btn-ghost" href="mailto:hello@tavaoneeducation.org?subject=Ask%20an%20Elmer">Ask an Elmer</a>
+      </div>
+    </div>
+    <div class="signal" aria-hidden="true">
+      <svg viewBox="0 0 1200 80" preserveAspectRatio="none">
+        <g class="wave-grp" fill="none" stroke="#10b981" stroke-width="2" opacity="0.65">
+          <path d="M -200,40 C -167,12 -133,12 -100,40 C -67,68 -33,68 0,40 C 33,12 67,12 100,40 C 133,68 167,68 200,40 C 233,12 267,12 300,40 C 333,68 367,68 400,40 C 433,12 467,12 500,40 C 533,68 567,68 600,40 C 633,12 667,12 700,40 C 733,68 767,68 800,40 C 833,12 867,12 900,40 C 933,68 967,68 1000,40 C 1033,12 1067,12 1100,40 C 1133,68 1167,68 1200,40 C 1233,12 1267,12 1300,40 C 1333,68 1367,68 1400,40 C 1433,12 1467,12 1500,40 C 1533,68 1567,68 1600,40 C 1633,12 1667,12 1700,40 C 1733,68 1767,68 1800,40 C 1833,12 1867,12 1900,40 C 1933,68 1967,68 2000,40 C 2033,12 2067,12 2100,40 C 2133,68 2167,68 2200,40"/>
+        </g>
       </svg>
-    </div>
-    <div class="hero-logo">
-      <img src="images/tavaone-logo.png" alt="Tava One" width="120" height="120">
-    </div>
-    <div class="kicker">Amateur Radio Mentorship</div>
-    <h1>Every new ham deserves an <span class="accent">Elmer</span>.</h1>
-    <p class="lede">
-      An <strong>Elmer</strong> is the amateur radio tradition of one operator mentoring another.
-      TavaOne Education pairs newcomers with experienced operators, walks you from
-      curiosity to your first contact, and keeps you on the air long after license day.
-    </p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="#tracks">Browse Learning Tracks</a>
-      <a class="btn btn-ghost" href="mailto:support@tavaone.com?subject=Ask%20an%20Elmer">Ask an Elmer</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-val">3</div><div class="stat-lbl">License Classes</div></div>
-      <div class="stat"><div class="stat-val">1:1</div><div class="stat-lbl">Mentorship</div></div>
-      <div class="stat"><div class="stat-val">∞</div><div class="stat-lbl">On-air Support</div></div>
+      <span class="tag">ON THE AIR</span>
     </div>
   </section>
 
-  <div class="wave-divider" aria-hidden="true">
-    <svg viewBox="0 0 1200 24" preserveAspectRatio="none"><path d="M0 12 Q30 0 60 12 T120 12 T180 12 T240 12 T300 12 T360 12 T420 12 T480 12 T540 12 T600 12 T660 12 T720 12 T780 12 T840 12 T900 12 T960 12 T1020 12 T1080 12 T1140 12 T1200 12"/></svg>
-  </div>
-
-  <!-- WHAT'S AN ELMER -->
-  <section id="what" class="section">
-    <div class="section-head">
-      <div class="section-kicker">The Tradition</div>
+  <section id="what" aria-label="What's an Elmer">
+    <div class="wrap">
+      <p class="seclabel">The Tradition</p>
       <h2>What's an Elmer?</h2>
-      <p class="section-sub">
-        The term dates to the 1970s — a nod to the patient, experienced operators who quietly
-        help newcomers get started. The radio is easy. Knowing what to do with it is the part
-        a good Elmer makes effortless.
-      </p>
-    </div>
-    <div class="grid grid-3">
-      <article class="card">
-        <div class="card-icon">📻</div>
-        <h3>Get on the air</h3>
-        <p>Your first contact is nerve-wracking. An Elmer is on frequency with you, talking you through your first QSO until calling CQ feels like second nature.</p>
-      </article>
-      <article class="card">
-        <div class="card-icon">🎓</div>
-        <h3>Pass the exam</h3>
-        <p>Technician, General, or Extra — study with someone who has already walked the path and can explain the why behind every question pool answer.</p>
-      </article>
-      <article class="card">
-        <div class="card-icon">🛠️</div>
-        <h3>Build &amp; troubleshoot</h3>
-        <p>Antennas, coax, SWR, grounding, digital modes. Skip the weeks of forum-diving — ask the person who has already made the mistakes.</p>
-      </article>
-    </div>
-  </section>
-
-  <!-- STEM RADIO LAB -->
-  <section id="lab" class="section section-alt section-lab">
-    <div class="section-head">
-      <div class="section-kicker">STEM Education</div>
-      <h2>The Pinellas STEM Radio Lab at Balance Gaming</h2>
-      <p class="section-sub">
-        Amateur radio is hands-on STEM you can actually touch — electronics, physics, geography,
-        and digital communication in one hobby. Hosted at <strong>Balance Gaming</strong> in
-        Pinellas County, the lab opens that world to students, adult learners, veterans, and
-        first responders — with open access for those who'd otherwise never get the chance,
-        the space to learn the theory, and the gear to put it on the air the same day.
-      </p>
-    </div>
-    <div class="grid grid-2">
-      <article class="card">
-        <div class="card-icon">🎤</div>
-        <h3>Presentation Area</h3>
-        <p>Balance Gaming's tabletop gaming area does double duty — plenty of seating and a big 75″ TV make it a ready-made space for STEM sessions, club talks, demos, and exam prep.</p>
-      </article>
-      <article class="card">
-        <div class="card-icon">📡</div>
-        <h3>Radio Room</h3>
-        <p>The store's gaming streaming room is being fitted with a custom radio desk and dedicated radios — a real station where learners go from lesson to live, on-air contacts.</p>
-      </article>
-    </div>
-    <p class="lab-note">We prepare students for their license, then refer them to a local club to test — amateur radio license exams are always free.</p>
-  </section>
-
-  <!-- PROGRAMS -->
-  <section id="programs" class="section section-alt">
-    <div class="section-head">
-      <div class="section-kicker">Programs</div>
-      <h2>Hands-On Radio Programs</h2>
-      <p class="section-sub">
-        Structured, partner-backed programs that take learners from first spark to real
-        credentials — starting with Scouting, and growing from there.
-      </p>
-    </div>
-    <div class="grid grid-2">
-      <article class="card">
-        <div class="card-icon">🏕️</div>
-        <h3>Radio Merit Badge · Boy Scouts of America</h3>
-        <p>We run a complete program to help Scouts earn the BSA Radio merit badge — from the science behind radio to real time on the air — with a registered <strong>merit badge counselor</strong> on hand to review and sign off. Scouts get on the air under our own dedicated BSA club call sign, sponsored by the <strong>Gulf Coast Contest Club (GCCC)</strong>.</p>
-      </article>
-      <article class="card sponsor-cta-card">
-        <div class="card-icon">🤝</div>
-        <h3>Bring a program to your group</h3>
-        <p>Troops and packs, schools, libraries, veteran groups, and clubs — we'll build a hands-on radio and STEM session tailored to your members.</p>
-        <a class="btn btn-ghost" href="mailto:support@tavaone.com?subject=Program%20inquiry">Start a Program →</a>
-      </article>
-    </div>
-  </section>
-
-  <!-- SPONSORS & PARTNERS -->
-  <section id="sponsor" class="section">
-    <div class="section-head">
-      <div class="section-kicker">Sponsors &amp; Partners</div>
-      <h2>Help Us Put Pinellas on the Air</h2>
-      <p class="section-sub">
-        The Pinellas STEM Radio Lab turns curiosity into capability — teaching real STEM skills
-        and licensing a new generation of amateur radio operators who serve their neighbors when
-        it matters most. We reach students, adult learners, veterans, and first responders across
-        Pinellas County, keeping access open to those who need it. Your sponsorship builds it.
-      </p>
-    </div>
-    <div class="sponsor-wrap">
-      <article class="card">
-        <h3>What your support builds</h3>
-        <ul class="track-list">
-          <li>A custom radio desk and dedicated radios for the station</li>
-          <li>Antennas and RF gear for HF, VHF/UHF, and digital modes</li>
-          <li>Study materials and hands-on lab kits for every class</li>
-          <li>Demo and test equipment so students learn by doing</li>
-        </ul>
-        <p class="sponsor-note">Support goes entirely to the tools we teach with. Exams are free, and license fees are the participant's own — we don't charge for either.</p>
-      </article>
-      <article class="card sponsor-cta-card">
-        <h3>Become a sponsor or partner</h3>
-        <p>We welcome equipment donors, financial sponsors, grant partners, and volunteer Elmers. Sponsors are recognized on-site at the lab and here on our site.</p>
-        <p class="sponsor-note">Tava One is a Pinellas County small business actively pursuing 501(c)(3) status and fiscal-sponsor partnerships to expand grant eligibility and tax-deductible giving.</p>
-        <a class="btn btn-primary" href="mailto:support@tavaone.com?subject=Sponsorship%20inquiry">Become a Sponsor →</a>
-      </article>
-    </div>
-  </section>
-
-  <!-- LEARNING TRACKS -->
-  <section id="tracks" class="section section-alt">
-    <div class="section-head">
-      <div class="section-kicker">Structured Paths</div>
-      <h2>Learning Tracks</h2>
-      <p class="section-sub">Self-paced curricula, each paired with an Elmer check-in at every milestone.</p>
-    </div>
-    <div class="grid grid-2">
-      <article class="track">
-        <div class="track-tag">Track 01</div>
-        <h3>Zero to Technician</h3>
-        <p>From "what's a repeater?" to a passed exam. The fastest path onto the air.</p>
-        <ul class="track-list">
-          <li>RF safety &amp; FCC rules</li>
-          <li>VHF/UHF operating practices</li>
-          <li>Reading the question pool with confidence</li>
-          <li>Help booking your exam session with a local club</li>
-        </ul>
-      </article>
-      <article class="track">
-        <div class="track-tag">Track 02</div>
-        <h3>HF &amp; the General Ticket</h3>
-        <p>Open up the HF bands and reach across the country — and the world.</p>
-        <ul class="track-list">
-          <li>Propagation &amp; band planning</li>
-          <li>Antenna theory that actually sticks</li>
-          <li>Your first HF station on a budget</li>
-          <li>SSB, CW, and digital basics</li>
-        </ul>
-      </article>
-      <article class="track">
-        <div class="track-tag">Track 03</div>
-        <h3>POTA &amp; Field Operating</h3>
-        <p>Take the radio outdoors. Parks On The Air is the friendliest on-ramp to real operating.</p>
-        <ul class="track-list">
-          <li>Portable power &amp; antennas</li>
-          <li>Activating your first park</li>
-          <li>Logging with TavaOne Activate</li>
-          <li>Hunting &amp; park-to-park contacts</li>
-        </ul>
-      </article>
-      <article class="track">
-        <div class="track-tag">Track 04</div>
-        <h3>Digital Modes</h3>
-        <p>FT8, FT4, JS8 and beyond — make contacts when the bands sound dead.</p>
-        <ul class="track-list">
-          <li>WSJT-X setup, start to finish</li>
-          <li>Sound card &amp; CAT interfacing</li>
-          <li>Decoding the waterfall</li>
-          <li>PSKReporter &amp; spotting</li>
-        </ul>
-        <a class="track-link" href="#book">📘 New to FT8? Start with the book →</a>
-      </article>
-    </div>
-  </section>
-
-  <!-- FEATURED BOOK -->
-  <section id="book" class="section">
-    <div class="book">
-      <a class="book-cover" href="https://amzn.to/4tYSAyp" target="_blank" rel="noopener">
-        <img src="images/ft8-for-the-first-time.jpg" alt="Book cover: FT8 for the First Time — A Simple Guide to Digital Modes and POTA for Licensed Hams, by Joe Leone, W4GGJ" loading="lazy">
-      </a>
-      <div class="book-body">
-        <div class="section-kicker">From the Author</div>
-        <h2>FT8 for the First Time</h2>
-        <p class="book-sub">A Simple Guide to Digital Modes and POTA for Licensed Hams</p>
-        <p class="book-lede">
-          Your license is in your hand. Now what? FT8 is the most popular digital mode in
-          amateur radio today — five watts into a simple antenna can work the world. This book
-          walks you through every step of getting on the air with digital modes and taking your
-          station into the field for Parks on the Air. No assumptions, no skipped steps, no
-          manuals written for engineers.
-        </p>
-        <p class="book-author">By <strong>Joe Leone — W4GGJ</strong> · Tava One · Tampa Bay, Florida</p>
-        <a class="btn btn-primary" href="https://amzn.to/4tYSAyp" target="_blank" rel="noopener">Get it on Kindle or in Paperback →</a>
+      <p class="sec-intro">The term dates to the 1970s — a nod to the patient, experienced operators who quietly help newcomers get started. The radio is easy. Knowing what to do with it is the part a good Elmer makes effortless.</p>
+      <div class="grid cols3">
+        <div class="card">
+          <div class="ico">📻</div>
+          <h3>Get on the air</h3>
+          <p>Your first contact is nerve-wracking. An Elmer is on frequency with you, talking you through your first QSO until calling CQ feels like second nature.</p>
+        </div>
+        <div class="card">
+          <div class="ico">🎓</div>
+          <h3>Pass the exam</h3>
+          <p>Technician, General, or Extra — study with someone who has already walked the path and can explain the why behind every question-pool answer.</p>
+        </div>
+        <div class="card">
+          <div class="ico">🛠️</div>
+          <h3>Build &amp; troubleshoot</h3>
+          <p>Antennas, coax, SWR, grounding, digital modes. Skip the weeks of forum-diving — ask the person who has already made the mistakes.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- RESOURCES -->
-  <section id="resources" class="section section-alt">
-    <div class="section-head">
-      <div class="section-kicker">Keep Going</div>
+  <section id="lab" class="lab" aria-label="STEM Lab">
+    <div class="wrap">
+      <p class="seclabel">STEM Education</p>
+      <h2>The Pinellas STEM Radio Lab at Balance Gaming</h2>
+      <p class="sec-intro">Amateur radio is hands-on STEM you can actually touch — electronics, physics, geography, and digital communication in one hobby. Hosted at <strong>Balance Gaming</strong> in Pinellas County, the lab opens that world to students, adult learners, veterans, and first responders — with open access for those who'd otherwise never get the chance, the space to learn the theory, and the gear to put it on the air the same day.</p>
+      <div class="grid cols2">
+        <div class="card">
+          <div class="ico">🎤</div>
+          <h3>Presentation area</h3>
+          <p>Balance Gaming's tabletop area does double duty — plenty of seating and a big 75″ TV make it a ready-made space for STEM sessions, club talks, demos, and exam prep.</p>
+        </div>
+        <div class="card">
+          <div class="ico">📡</div>
+          <h3>Radio room</h3>
+          <p>The store's streaming room is being fitted with a custom radio desk and dedicated radios — a real station where learners go from lesson to live, on-air contacts.</p>
+        </div>
+      </div>
+      <p class="labnote">We prepare students for their license, then refer them to a local club to test — amateur radio license exams are always free.</p>
+    </div>
+  </section>
+
+  <section id="programs" aria-label="Programs">
+    <div class="wrap">
+      <p class="seclabel">Programs</p>
+      <h2>Hands-on radio programs</h2>
+      <p class="sec-intro">Structured, partner-backed programs that take learners from first spark to real credentials — starting with Scouting, and growing from there.</p>
+      <div class="grid cols2">
+        <div class="card">
+          <div class="ico">🏕️</div>
+          <h3>Radio Merit Badge · Boy Scouts of America</h3>
+          <p>A complete program to help Scouts earn the BSA Radio merit badge — from the science behind radio to real time on the air — with a registered merit badge counselor on hand to review and sign off. Scouts get on the air under a dedicated BSA club call sign, sponsored by the Gulf Coast Contest Club (GCCC).</p>
+        </div>
+        <div class="card">
+          <div class="ico">🤝</div>
+          <h3>Bring a program to your group</h3>
+          <p>Troops and packs, schools, libraries, veteran groups, and clubs — we'll build a hands-on radio and STEM session tailored to your members.</p>
+          <a class="more" href="mailto:hello@tavaoneeducation.org?subject=Program%20inquiry">Start a program →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tracks" aria-label="Learning tracks">
+    <div class="wrap">
+      <p class="seclabel">Structured Paths</p>
+      <h2>Learning tracks</h2>
+      <p class="sec-intro">Self-paced curricula, each paired with an Elmer check-in at every milestone.</p>
+      <div class="grid cols2">
+        <div class="card">
+          <span class="kicker">Track 01</span>
+          <h3>Zero to Technician</h3>
+          <p>From "what's a repeater?" to a passed exam. The fastest path onto the air.</p>
+          <ul class="tracklist">
+            <li>RF safety &amp; FCC rules</li>
+            <li>VHF/UHF operating practices</li>
+            <li>Reading the question pool with confidence</li>
+            <li>Help booking your exam session with a local club</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="kicker">Track 02</span>
+          <h3>HF &amp; the General ticket</h3>
+          <p>Open up the HF bands and reach across the country — and the world.</p>
+          <ul class="tracklist">
+            <li>Propagation &amp; band planning</li>
+            <li>Antenna theory that actually sticks</li>
+            <li>Your first HF station on a budget</li>
+            <li>SSB, CW, and digital basics</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="kicker">Track 03</span>
+          <h3>POTA &amp; field operating</h3>
+          <p>Take the radio outdoors. Parks On The Air is the friendliest on-ramp to real operating.</p>
+          <ul class="tracklist">
+            <li>Portable power &amp; antennas</li>
+            <li>Activating your first park</li>
+            <li>On-air logging in the field</li>
+            <li>Hunting &amp; park-to-park contacts</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="kicker">Track 04</span>
+          <h3>Digital modes</h3>
+          <p>FT8, FT4, JS8 and beyond — make contacts when the bands sound dead.</p>
+          <ul class="tracklist">
+            <li>WSJT-X setup, start to finish</li>
+            <li>Sound card &amp; CAT interfacing</li>
+            <li>Decoding the waterfall</li>
+            <li>PSKReporter &amp; spotting</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sponsor" class="sponsor" aria-label="Sponsors and partners">
+    <div class="wrap">
+      <p class="seclabel">Sponsors &amp; Partners</p>
+      <h2>Help us put Pinellas on the air</h2>
+      <p class="sec-intro">The Pinellas STEM Radio Lab turns curiosity into capability — teaching real STEM skills and licensing a new generation of amateur radio operators who serve their neighbors when it matters most. We reach students, adult learners, veterans, and first responders across Pinellas County, keeping access open to those who need it. Your support builds it.</p>
+      <div class="two">
+        <div>
+          <h3>What your support builds</h3>
+          <ul class="buildlist">
+            <li>A custom radio desk and dedicated radios for the station</li>
+            <li>Antennas and RF gear for HF, VHF/UHF, and digital modes</li>
+            <li>Study materials and hands-on lab kits for every class</li>
+            <li>Demo and test equipment so students learn by doing</li>
+          </ul>
+          <p class="statusnote">Support goes entirely to the tools we teach with. Exams are free and license fees are the participant's own — we don't charge for either.</p>
+        </div>
+        <div>
+          <h3>Become a sponsor or partner</h3>
+          <p style="color:var(--muted);font-size:.96rem">We welcome equipment donors, financial sponsors, grant partners, and volunteer Elmers. Sponsors are recognized on-site at the lab and here on our site.</p>
+          <p style="margin-top:18px"><a class="btn btn-primary" href="mailto:hello@tavaoneeducation.org?subject=Sponsorship%20inquiry">Become a sponsor →</a></p>
+          <p class="statusnote">TavaOne Education, Inc. is a Florida nonprofit corporation with a 501(c)(3) application pending. Until our exemption is recognized, contributions are not yet tax-deductible — we'll update this the moment that changes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="resources" aria-label="Resources">
+    <div class="wrap">
+      <p class="seclabel">Keep Going</p>
       <h2>Resources</h2>
-      <p class="section-sub">Hand-picked references our Elmers point newcomers to again and again.</p>
-    </div>
-    <div class="grid grid-3">
-      <a class="resource" href="https://www.arrl.org/getting-licensed" target="_blank" rel="noopener">
-        <h3>ARRL — Getting Licensed →</h3>
-        <p>The official starting point for U.S. amateur licensing.</p>
-      </a>
-      <a class="resource" href="https://hamstudy.org/" target="_blank" rel="noopener">
-        <h3>HamStudy.org →</h3>
-        <p>Free flashcards and practice exams for all three license classes.</p>
-      </a>
-      <a class="resource" href="https://parksontheair.com/" target="_blank" rel="noopener">
-        <h3>Parks On The Air →</h3>
-        <p>The friendliest on-ramp to real operating — activate and hunt parks.</p>
-      </a>
-      <a class="resource" href="https://activate.tavaone.com/" target="_blank" rel="noopener">
-        <h3>TavaOne Activate →</h3>
-        <p>Our companion field-logging PWA — log QSOs, spot, and export with one tap.</p>
-      </a>
-      <a class="resource" href="https://wsjt.sourceforge.io/wsjtx.html" target="_blank" rel="noopener">
-        <h3>WSJT-X →</h3>
-        <p>The official home of WSJT-X — download, docs, and setup for FT8, FT4, and other weak-signal modes.</p>
-      </a>
-      <a class="resource" href="mailto:support@tavaone.com?subject=Ask%20an%20Elmer">
-        <h3>Ask an Elmer →</h3>
-        <p>Stuck on something specific? Email us — a real operator will reply.</p>
-      </a>
+      <p class="sec-intro">Hand-picked references our Elmers point newcomers to again and again.</p>
+      <div class="reslist">
+        <a class="reslink" href="https://www.arrl.org/getting-licensed"><div class="rt">ARRL — Getting Licensed</div><div class="rd">The official starting point for U.S. amateur licensing.</div></a>
+        <a class="reslink" href="https://hamstudy.org/"><div class="rt">HamStudy.org</div><div class="rd">Free flashcards and practice exams for all three license classes.</div></a>
+        <a class="reslink" href="https://parksontheair.com/"><div class="rt">Parks On The Air</div><div class="rd">The friendliest on-ramp to real operating — activate and hunt parks.</div></a>
+        <a class="reslink" href="https://wsjt.sourceforge.io/wsjtx.html"><div class="rt">WSJT-X</div><div class="rd">Download, docs, and setup for FT8, FT4, and other weak-signal modes.</div></a>
+        <a class="reslink" href="https://activate.tavaone.com/"><div class="rt">TavaOne Activate</div><div class="rd">A free field-logging app — log QSOs, spot, and export with one tap.</div></a>
+        <a class="reslink" href="mailto:hello@tavaoneeducation.org?subject=Ask%20an%20Elmer"><div class="rt">Ask an Elmer</div><div class="rd">Stuck on something specific? Email us — a real operator will reply.</div></a>
+      </div>
     </div>
   </section>
 
-  <div class="wave-divider" aria-hidden="true">
-    <svg viewBox="0 0 1200 24" preserveAspectRatio="none"><path d="M0 12 Q30 0 60 12 T120 12 T180 12 T240 12 T300 12 T360 12 T420 12 T480 12 T540 12 T600 12 T660 12 T720 12 T780 12 T840 12 T900 12 T960 12 T1020 12 T1080 12 T1140 12 T1200 12"/></svg>
-  </div>
-
-  <!-- CTA -->
-  <section class="cta">
-    <h2>The bands are open. Let's get you on the air.</h2>
-    <div class="cta-actions">
-      <a class="btn btn-primary" href="#tracks">Start a Learning Track</a>
-      <a class="btn btn-ghost" href="#sponsor">Sponsor the Lab</a>
+  <section class="closing" aria-label="Get started">
+    <div class="wrap">
+      <h2>The bands are open. Let's get you on the air.</h2>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#tracks">Start a learning track</a>
+        <a class="btn btn-ghost" href="#sponsor">Sponsor the lab</a>
+      </div>
     </div>
   </section>
-
 </main>
 
-<footer class="site-footer">
-  <div class="footer-logo">
-    <span class="logo-word"><span class="logo-tava">Tava</span><span class="logo-one">One</span></span>
-    <span class="logo-slash">//</span>
-    <span class="logo-edu">Education</span>
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="mark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></div>
+        <div class="signoff">73 de the Elmers crew</div>
+      </div>
+      <div class="legal">
+        <span class="em">TavaOne Education, Inc.</span><br>
+        A Florida nonprofit corporation · St. Petersburg, FL<br>
+        501(c)(3) status pending · © 2026
+      </div>
+      <nav aria-label="Footer">
+        <a href="#programs">Programs</a>
+        <a href="#tracks">Tracks</a>
+        <a href="#sponsor">Sponsor</a>
+        <a href="#resources">Resources</a>
+        <a href="mailto:hello@tavaoneeducation.org?subject=Ask%20an%20Elmer">Ask an Elmer</a>
+      </nav>
+    </div>
   </div>
-  <nav class="footer-nav">
-    <a href="https://activate.tavaone.com/" target="_blank" rel="noopener">Activate</a>
-    <a href="#programs">Programs</a>
-    <a href="#tracks">Tracks</a>
-    <a href="#sponsor">Sponsor</a>
-    <a href="#resources">Resources</a>
-    <a href="mailto:support@tavaone.com?subject=Ask%20an%20Elmer">Ask an Elmer</a>
-  </nav>
-  <div class="footer-copy">© 2026 TavaOne · 73 de the Elmers crew</div>
 </footer>
 
 </body>
