@@ -15,10 +15,9 @@ and curated resources.
 
 ## Learning tracks
 
-1. **Zero to Technician** — from curiosity to a passed exam
-2. **HF & the General Ticket** — open up the HF bands
-3. **POTA & Field Operating** — take the radio outdoors
-4. **Digital Modes** — FT8, FT4, JS8 and beyond
+1. **Technician License Course** — complete beginner to licensed operator in four sessions
+2. **POTA & Field Operating** — take the radio outdoors
+3. **Digital Modes** — FT8, FT4, JS8 and beyond
 
 ## Develop / preview
 
