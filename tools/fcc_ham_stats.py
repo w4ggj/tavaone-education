@@ -532,61 +532,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <main class="wrap">
 
   <section>
-    <div class="sec-head"><span class="eyebrow">01</span><h2>The licensing ladder</h2></div>
-    <p class="sec-note">Every operator starts at Technician and can climb to General, then Amateur Extra &mdash; each step unlocking more bands and privileges. Here's where today's operators sit.</p>
-    <div class="grid2">
-      <div class="panel"><div class="ladder" id="ladder"></div></div>
-      <div class="panel"><div class="chart-box"><canvas id="classChart"></canvas></div></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><span class="eyebrow">02</span><h2>Where operators are</h2></div>
-    <p class="sec-note">Active licenses by state of record. <span id="stateSummary"></span></p>
-    <div class="grid2">
-      <div class="panel"><div class="chart-box" style="height:360px"><canvas id="stateChart"></canvas></div></div>
-      <div class="panel" style="max-height:404px; overflow:auto"><table id="stateTable"></table></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><span class="eyebrow">03</span><h2>Call sign anatomy</h2></div>
-    <p class="sec-note">U.S. call signs begin with A, K, N, or W, in formats like 1&times;3 (<span class="mono">W4GGJ</span>). The short 1&times;2 and 2&times;1 formats are no longer issued in sequence &mdash; they come only through the <b>vanity</b> program. <span id="vanityNote"></span></p>
-    <div class="grid2">
-      <div class="panel"><div class="chart-box"><canvas id="letterChart"></canvas></div></div>
-      <div class="panel"><div class="chart-box"><canvas id="formatChart"></canvas></div></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><span class="eyebrow">04</span><h2>Renewals on the horizon</h2></div>
-    <p class="sec-note">Licenses run 10 years. This is when the current roster comes up for renewal &mdash; the current year is flagged in red.</p>
-    <div class="panel"><div class="chart-box" style="height:320px"><canvas id="expChart"></canvas></div></div>
-  </section>
-
-  <section id="trendSec">
-    <div class="sec-head"><span class="eyebrow">05</span><h2>The roster over time</h2></div>
-    <p class="sec-note" id="trendNote"></p>
-    <div class="panel"><div class="chart-box" style="height:320px"><canvas id="trendChart"></canvas></div></div>
-  </section>
-
-  <section>
-    <div class="sec-head"><span class="eyebrow">06</span><h2>Most common first names</h2></div>
-    <p class="sec-note">The first names on the active roster, most common first.</p>
-    <div class="panel" style="max-height:420px; overflow:auto"><table id="nameTable"></table></div>
-  </section>
-
-  <section>
-    <div class="sec-head"><span class="eyebrow">07</span><h2>Florida</h2></div>
-    <p class="sec-note" id="flNote"></p>
-    <div class="grid2">
-      <div class="panel"><div class="ladder" id="flLadder"></div></div>
-      <div class="panel"><div class="chart-box"><canvas id="flChart"></canvas></div></div>
-    </div>
-  </section>
-
-  <section style="border-bottom:none">
-    <div class="sec-head"><span class="eyebrow">08</span><h2>Pinellas County &mdash; our backyard</h2></div>
+    <div class="sec-head"><span class="eyebrow">01</span><h2>Pinellas County &mdash; our backyard</h2></div>
     <p class="sec-note" id="pinNote"></p>
     <div class="microbar" id="pinMicro" style="margin-top:0; margin-bottom:28px"></div>
     <div class="grid2">
@@ -598,6 +544,60 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       <div class="panel" style="max-height:360px; overflow:auto"><table id="pinZipTable"></table></div>
     </div>
     <div class="panel" style="max-height:360px; overflow:auto; margin-top:28px"><table id="pinNameTable"></table></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">02</span><h2>The licensing ladder</h2></div>
+    <p class="sec-note">Every operator starts at Technician and can climb to General, then Amateur Extra &mdash; each step unlocking more bands and privileges. Here's where today's operators sit.</p>
+    <div class="grid2">
+      <div class="panel"><div class="ladder" id="ladder"></div></div>
+      <div class="panel"><div class="chart-box"><canvas id="classChart"></canvas></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">03</span><h2>Where operators are</h2></div>
+    <p class="sec-note">Active licenses by state of record. <span id="stateSummary"></span></p>
+    <div class="grid2">
+      <div class="panel"><div class="chart-box" style="height:360px"><canvas id="stateChart"></canvas></div></div>
+      <div class="panel" style="max-height:404px; overflow:auto"><table id="stateTable"></table></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">04</span><h2>Call sign anatomy</h2></div>
+    <p class="sec-note">U.S. call signs begin with A, K, N, or W, in formats like 1&times;3 (<span class="mono">W4GGJ</span>). The short 1&times;2 and 2&times;1 formats are no longer issued in sequence &mdash; they come only through the <b>vanity</b> program. <span id="vanityNote"></span></p>
+    <div class="grid2">
+      <div class="panel"><div class="chart-box"><canvas id="letterChart"></canvas></div></div>
+      <div class="panel"><div class="chart-box"><canvas id="formatChart"></canvas></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">05</span><h2>Renewals on the horizon</h2></div>
+    <p class="sec-note">Licenses run 10 years. This is when the current roster comes up for renewal &mdash; the current year is flagged in red.</p>
+    <div class="panel"><div class="chart-box" style="height:320px"><canvas id="expChart"></canvas></div></div>
+  </section>
+
+  <section id="trendSec">
+    <div class="sec-head"><span class="eyebrow">06</span><h2>The roster over time</h2></div>
+    <p class="sec-note" id="trendNote"></p>
+    <div class="panel"><div class="chart-box" style="height:320px"><canvas id="trendChart"></canvas></div></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">07</span><h2>Most common first names</h2></div>
+    <p class="sec-note">The first names on the active roster, most common first.</p>
+    <div class="panel" style="max-height:420px; overflow:auto"><table id="nameTable"></table></div>
+  </section>
+
+  <section style="border-bottom:none">
+    <div class="sec-head"><span class="eyebrow">08</span><h2>Florida</h2></div>
+    <p class="sec-note" id="flNote"></p>
+    <div class="grid2">
+      <div class="panel"><div class="ladder" id="flLadder"></div></div>
+      <div class="panel"><div class="chart-box"><canvas id="flChart"></canvas></div></div>
+    </div>
   </section>
 
 </main>
