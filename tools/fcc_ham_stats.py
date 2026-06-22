@@ -44,6 +44,7 @@ CLASS_ORDER = ["N", "T", "P", "G", "A", "E"]
 CLASS_LABELS = {
     "N": "Novice", "T": "Technician", "P": "Technician Plus",
     "G": "General", "A": "Advanced", "E": "Amateur Extra",
+    "?": "Club / other",
 }
 
 def log(*a, **k): print(*a, file=sys.stderr, flush=True, **k)
@@ -316,7 +317,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .total-label{font-size:clamp(15px,2.4vw,20px); color:var(--muted); max-width:46ch}
   .total-label b{color:var(--green-l); font-weight:600}
 
-  .microbar{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:40px}
+  .microbar{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px}
   .micro{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px}
   .micro .v{font-family:var(--mono); font-size:26px; font-weight:700; color:var(--light)}
   .micro .k{font-size:12px; color:var(--muted); margin-top:4px}
@@ -398,10 +399,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   <section>
     <div class="sec-head"><span class="eyebrow">03</span><h2>Call sign anatomy</h2></div>
     <p class="sec-note">U.S. call signs begin with A, K, N, or W. Operators can also apply for a personalized &ldquo;vanity&rdquo; call instead of taking the sequentially issued one.</p>
-    <div class="grid2">
-      <div class="panel"><div class="chart-box"><canvas id="letterChart"></canvas></div></div>
-      <div class="panel"><div class="chart-box"><canvas id="vanityChart"></canvas></div></div>
-    </div>
+    <div class="panel"><div class="chart-box"><canvas id="letterChart"></canvas></div></div>
   </section>
 
   <section>
@@ -462,7 +460,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   // microstats
   const micro=[
     ['Operators', num(D.total)],
-    ['Vanity calls', D.vanity.vanity_pct.toFixed(1)+'%'],
+
     ['States & territories', num(D.states_represented)],
     ['Most common name', D.top_name],
   ];
@@ -506,11 +504,6 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     data:{labels:L.map(x=>x.letter),
       datasets:[{data:L.map(x=>x.count), backgroundColor:['#34d399','#10b981','#059669','#047857']}]},
     options:{...noLegend, scales:{x:grid,y:grid}}});
-
-  new Chart(vanityChart,{type:'doughnut',
-    data:{labels:['Vanity','General issue'],
-      datasets:[{data:[D.vanity.vanity,D.vanity.general], backgroundColor:[GREEN_L,MUTED], borderColor:CARD, borderWidth:2}]},
-    options:{cutout:'62%', plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:12}}}}});
 
   const cur=new Date().getFullYear();
   new Chart(expChart,{type:'bar',
