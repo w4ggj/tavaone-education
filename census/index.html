@@ -25,7 +25,8 @@
   /* hero */
   .hero{position:relative; padding:88px 0 56px; border-bottom:1px solid var(--border);
         background:radial-gradient(120% 80% at 50% -10%, rgba(16,185,129,.10), transparent 60%), var(--bg2);}
-  .live{display:inline-flex; align-items:center; gap:8px; margin-bottom:22px}
+  .live{display:inline-flex; align-items:center; gap:8px; margin-bottom:22px; flex-wrap:wrap}
+  .live .updated{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
   .dot{width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 0 0 rgba(16,185,129,.6); animation:pulse 2.4s infinite}
   @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.5)}70%{box-shadow:0 0 0 9px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
   .total{font-family:var(--mono); font-weight:700; font-size:clamp(56px,13vw,150px); line-height:.95;
@@ -128,7 +129,7 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="live"><span class="dot"></span><span class="eyebrow" id="eyebrow"></span></div>
+    <div class="live"><span class="dot"></span><span class="eyebrow" id="eyebrow"></span><span class="updated">&middot; updated Mondays 7&nbsp;AM ET</span></div>
     <div class="total" id="total">0</div>
     <div class="total-label">active <b>U.S. amateur radio operators</b> on the FCC roster &mdash; licensed, unexpired, ready to get on the air.</div>
     <div class="microbar" id="microbar"></div>
