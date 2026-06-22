@@ -362,10 +362,43 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     .dot{animation:none}
     .rung .fill{transition:none}
   }
+
+  /* site chrome (matches the main page) */
+  .site-bar{position:sticky; top:0; z-index:50; background:rgba(15,23,42,.82); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--border)}
+  .site-bar-inner{display:flex; align-items:center; justify-content:space-between; height:64px; gap:20px}
+  .mark{display:inline-flex; align-items:center; gap:10px; font-family:var(--mono); font-weight:700; font-size:17px; letter-spacing:-.01em; white-space:nowrap; color:var(--text); text-decoration:none}
+  .mark-emblem{width:28px; height:28px; display:block; flex:none}
+  .mark .one,.mark .edu{color:var(--green)}
+  .mark .slash{color:var(--text); opacity:.7; margin:0 .15em}
+  .site-links{display:flex; gap:22px; font-size:14px; font-weight:500}
+  .site-links a{color:var(--muted); text-decoration:none; transition:color .15s}
+  .site-links a:hover{color:var(--text)}
+  .site-links a[aria-current="page"]{color:var(--green-l)}
+  .site-foot .foot{display:flex; flex-wrap:wrap; justify-content:space-between; gap:18px; align-items:center}
+  .site-foot .foot-nav{display:flex; flex-wrap:wrap; gap:18px; font-size:14px}
+  .site-foot .foot-nav a{color:var(--muted); text-decoration:none}
+  .site-foot .foot-nav a:hover{color:var(--text)}
+  .site-foot .foot-nav a[aria-current="page"]{color:var(--green-l)}
+  .site-foot .signoff{margin-top:8px; font-family:var(--mono); font-size:12px; color:var(--green-d)}
+  @media (max-width:760px){ .site-links{display:none} }
 </style>
 </head>
 <body>
 <script>const DATA = /*__DATA__*/;</script>
+
+<header class="site-bar">
+  <div class="wrap site-bar-inner">
+    <a href="/" class="mark" aria-label="TavaOne Education home"><img src="/tavaone-education-emblem.svg" alt="" class="mark-emblem" width="28" height="28"/><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></a>
+    <nav class="site-links" aria-label="Primary">
+      <a href="/#what">What's an Elmer</a>
+      <a href="/#lab">STEM Lab</a>
+      <a href="/#programs">Programs</a>
+      <a href="/#tracks">Tracks</a>
+      <a href="/#resources">Resources</a>
+      <a href="/census/" aria-current="page">License Census</a>
+    </nav>
+  </div>
+</header>
 
 <header class="hero">
   <div class="wrap">
@@ -422,9 +455,19 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
 </main>
 
-<footer class="wrap">
-  <div class="tag">TavaOne Education</div>
-  <p style="max-width:62ch; margin:10px 0 18px">A public-interest snapshot of the amateur radio service, maintained to support STEM and licensing education.</p>
+<footer class="wrap site-foot">
+  <div class="foot">
+    <a href="/" class="mark" aria-label="TavaOne Education home"><img src="/tavaone-education-emblem.svg" alt="" class="mark-emblem" width="28" height="28"/><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></a>
+    <nav class="foot-nav" aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="/#programs">Programs</a>
+      <a href="/#tracks">Tracks</a>
+      <a href="/#resources">Resources</a>
+      <a href="/census/" aria-current="page">License Census</a>
+    </nav>
+  </div>
+  <div class="signoff">73 de the Elmers crew</div>
+  <p style="max-width:62ch; margin:14px 0 18px">A public-interest snapshot of the amateur radio service, maintained to support STEM and licensing education.</p>
   <div class="src">
     Source: FCC Universal Licensing System (ULS), <a href="https://data.fcc.gov/download/pub/uls/complete/l_amat.zip">l_amat complete database</a><br>
     Method: active status &ldquo;A&rdquo; with an expiration date after the snapshot date; records joined on Unique System Identifier.<br>
