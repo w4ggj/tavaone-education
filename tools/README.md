@@ -17,9 +17,11 @@ python3 tools/fcc_ham_stats.py --zip l_amat.zip --out ./_build   # reuse a local
 
 Output of interest: `_build/ham_stats.html` → copy to `census/index.html`.
 
-If `data.fcc.gov` returns 503/timeout (it throttles some datacenter IPs),
-download <https://data.fcc.gov/download/pub/uls/complete/l_amat.zip> in a browser
-and pass it with `--zip`.
+`data.fcc.gov` is behind Akamai, which **stalls large-file GETs from non-browser
+clients** (plain `urllib`/`curl` hang on the body even though a HEAD returns 200).
+The downloader sends a full browser header set (real UA + `Accept-Language` +
+`Referer`) to get the body served; `vps-refresh.sh` does the same with curl. If a
+fetch still fails, download the zip in a browser and pass it with `--zip`.
 
 ## `census-history.csv`
 
