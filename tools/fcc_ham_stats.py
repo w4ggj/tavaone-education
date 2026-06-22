@@ -34,6 +34,18 @@ from collections import Counter
 
 FCC_URL = "https://data.fcc.gov/download/pub/uls/complete/l_amat.zip"
 
+# data.fcc.gov is behind Akamai, which stalls large-file GETs from non-browser
+# clients. A full browser-like header set (real UA + Accept-Language + Referer)
+# gets the body served. Used by both the urllib downloader here and curl in
+# tools/vps-refresh.sh.
+BROWSER_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://www.fcc.gov/",
+}
+
 # ---- ULS PUBACC column indices (0-based), verified against the layouts ----
 HD_UI, HD_CALL, HD_STATUS, HD_SERVICE, HD_GRANT, HD_EXPIRED = 1, 4, 5, 6, 7, 8
 EN_UI, EN_CALL, EN_NAME, EN_FIRST, EN_LAST, EN_CITY, EN_STATE, EN_ZIP, EN_FRN = 1, 4, 7, 8, 10, 16, 17, 18, 22
@@ -78,7 +90,7 @@ def log(*a, **k): print(*a, file=sys.stderr, flush=True, **k)
 # --------------------------------------------------------------------------- #
 def download(url, dest):
     log(f"Downloading {url} ...")
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    req = urllib.request.Request(url, headers=BROWSER_HEADERS)
     with urllib.request.urlopen(req, timeout=600) as r, open(dest, "wb") as f:
         total = 0
         while True:
