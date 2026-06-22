@@ -238,8 +238,8 @@ def compute(records, today, top_names, top_states):
         "top_city": cities.most_common(1)[0][0] if cities else "-",
         "vanity_est": {"count": pin_vest, "pct": pin_pct(pin_vest)},
         "classes": class_breakdown(pin),
-        "cities": [{"city": c, "count": v, "pct": pin_pct(v)} for c, v in cities.most_common(12)],
-        "zips": [{"zip": z, "count": v, "pct": pin_pct(v)} for z, v in zips.most_common(15)],
+        "cities": [{"city": c, "count": v, "pct": pin_pct(v)} for c, v in cities.most_common()],
+        "zips": [{"zip": z, "count": v, "pct": pin_pct(v)} for z, v in zips.most_common()],
         "names": [{"name": x, "count": v, "pct": pin_pct(v)} for x, v in pnames.most_common(10)],
     }
 
@@ -308,17 +308,26 @@ def write_json(s, out_dir):
 
 def update_history(s, out_dir):
     hist = os.path.join(out_dir, "history.csv")
-    new = not os.path.exists(hist)
+    header = ["snapshot_date", "total"] + [CLASS_LABELS[c] for c in CLASS_ORDER]
     cls = {c["code"]: c["count"] for c in s["classes"]}
-    with open(hist, "a", newline="") as f:
-        wr = csv.writer(f)
-        if new:
-            wr.writerow(["snapshot_date","total"] + [CLASS_LABELS[c] for c in CLASS_ORDER])
-        wr.writerow([s["snapshot_date"], s["total"]] + [cls.get(c,0) for c in CLASS_ORDER])
-    rows = []
-    with open(hist, newline="") as f:
-        for r in csv.DictReader(f):
-            rows.append({"date": r["snapshot_date"], "total": int(r["total"])})
+    # Keep one row per snapshot date (a re-run on the same day overwrites it),
+    # so the trend chart has one point per day rather than stacked duplicates.
+    by_date = {}
+    if os.path.exists(hist):
+        with open(hist, newline="") as f:
+            for r in csv.DictReader(f):
+                if r.get("snapshot_date"):
+                    by_date[r["snapshot_date"]] = r
+    row = {"snapshot_date": s["snapshot_date"], "total": s["total"]}
+    for c in CLASS_ORDER:
+        row[CLASS_LABELS[c]] = cls.get(c, 0)
+    by_date[s["snapshot_date"]] = row
+    with open(hist, "w", newline="") as f:
+        wr = csv.DictWriter(f, fieldnames=header)
+        wr.writeheader()
+        for d in sorted(by_date):
+            wr.writerow({k: by_date[d].get(k, "") for k in header})
+    rows = [{"date": d, "total": int(by_date[d]["total"])} for d in sorted(by_date)]
     s["history"] = rows
     return rows
 
