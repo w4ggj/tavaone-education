@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>U.S. Amateur Radio License Census &middot; TavaOne Education</title>
+<meta name="description" content="A living census of U.S. amateur radio licenses, built from the FCC ULS public database."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0f172a; --bg2:#0b1120; --card:#1e293b; --border:#334155;
+    --green:#10b981; --green-l:#34d399; --green-d:#065f46;
+    --text:#e2e8f0; --muted:#94a3b8; --light:#f8fafc; --red:#ef4444;
+    --sans:'Plus Jakarta Sans',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.55; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--green-l)}
+
+  /* hero */
+  .hero{position:relative; padding:88px 0 56px; border-bottom:1px solid var(--border);
+        background:radial-gradient(120% 80% at 50% -10%, rgba(16,185,129,.10), transparent 60%), var(--bg2);}
+  .live{display:inline-flex; align-items:center; gap:8px; margin-bottom:22px}
+  .dot{width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 0 0 rgba(16,185,129,.6); animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.5)}70%{box-shadow:0 0 0 9px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+  .total{font-family:var(--mono); font-weight:700; font-size:clamp(56px,13vw,150px); line-height:.95;
+         color:var(--light); text-shadow:0 0 32px rgba(16,185,129,.28); letter-spacing:-.02em; margin:6px 0 4px}
+  .total-label{font-size:clamp(15px,2.4vw,20px); color:var(--muted); max-width:46ch}
+  .total-label b{color:var(--green-l); font-weight:600}
+
+  .microbar{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:40px}
+  .micro{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px}
+  .micro .v{font-family:var(--mono); font-size:26px; font-weight:700; color:var(--light)}
+  .micro .k{font-size:12px; color:var(--muted); margin-top:4px}
+
+  /* sections */
+  section{padding:64px 0; border-bottom:1px solid var(--border)}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:6px}
+  h2{font-size:clamp(22px,3.4vw,30px); font-weight:800; margin:0; color:var(--light); letter-spacing:-.01em}
+  .sec-note{color:var(--muted); font-size:15px; margin:8px 0 30px; max-width:64ch}
+
+  .grid2{display:grid; grid-template-columns:1.15fr .85fr; gap:28px; align-items:start}
+  .panel{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:22px}
+  .chart-box{position:relative; height:300px}
+
+  /* class ladder */
+  .ladder{display:flex; flex-direction:column; gap:10px}
+  .rung{display:grid; grid-template-columns:128px 1fr 92px; align-items:center; gap:14px}
+  .rung .name{font-size:14px; color:var(--text)}
+  .rung .track{height:26px; background:var(--bg2); border:1px solid var(--border); border-radius:6px; overflow:hidden}
+  .rung .fill{height:100%; border-radius:5px 0 0 5px; transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+  .rung .val{font-family:var(--mono); font-size:14px; text-align:right; color:var(--muted)}
+  .rung .val b{color:var(--light)}
+
+  table{width:100%; border-collapse:collapse; font-size:14px}
+  th,td{text-align:left; padding:9px 10px; border-bottom:1px solid var(--border)}
+  th{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700}
+  td.num{font-family:var(--mono); text-align:right; color:var(--light)}
+  tbody tr:hover{background:rgba(16,185,129,.06)}
+
+  footer{padding:48px 0 72px; color:var(--muted); font-size:13px}
+  footer .src{font-family:var(--mono); font-size:12px; line-height:1.9}
+  footer a{color:var(--green-l); text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  .tag{font-family:var(--mono); color:var(--green-l); letter-spacing:.12em; text-transform:uppercase; font-size:12px}
+
+  @media(max-width:760px){
+    .microbar{grid-template-columns:repeat(2,1fr)}
+    .grid2{grid-template-columns:1fr}
+    .rung{grid-template-columns:96px 1fr 78px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .dot{animation:none}
+    .rung .fill{transition:none}
+  }
+</style>
+</head>
+<body>
+<script>const DATA = {"snapshot_date": "2026-06-22", "total": 743776, "states_represented": 60, "top_name": "John", "top_state": "CA", "classes": [{"code": "N", "label": "Novice", "count": 4229, "pct": 0.569}, {"code": "T", "label": "Technician", "count": 360061, "pct": 48.41}, {"code": "G", "label": "General", "count": 184342, "pct": 24.785}, {"code": "A", "label": "Advanced", "count": 26218, "pct": 3.525}, {"code": "E", "label": "Amateur Extra", "count": 157762, "pct": 21.211}, {"code": "?", "label": "?", "count": 11164, "pct": 1.501}], "states": [{"state": "CA", "count": 90988, "pct": 12.233}, {"state": "TX", "count": 53586, "pct": 7.205}, {"state": "FL", "count": 42203, "pct": 5.674}, {"state": "WA", "count": 32909, "pct": 4.425}, {"state": "OH", "count": 26753, "pct": 3.597}, {"state": "NY", "count": 26005, "pct": 3.496}, {"state": "PA", "count": 23821, "pct": 3.203}, {"state": "NC", "count": 23435, "pct": 3.151}, {"state": "AZ", "count": 21109, "pct": 2.838}, {"state": "MI", "count": 20600, "pct": 2.77}, {"state": "VA", "count": 20446, "pct": 2.749}, {"state": "TN", "count": 20281, "pct": 2.727}, {"state": "OR", "count": 20081, "pct": 2.7}, {"state": "CO", "count": 19482, "pct": 2.619}, {"state": "GA", "count": 19006, "pct": 2.555}, {"state": "IL", "count": 18950, "pct": 2.548}, {"state": "UT", "count": 18123, "pct": 2.437}, {"state": "IN", "count": 15367, "pct": 2.066}, {"state": "MO", "count": 14965, "pct": 2.012}, {"state": "MA", "count": 13319, "pct": 1.791}, {"state": "NJ", "count": 12879, "pct": 1.732}, {"state": "AL", "count": 12127, "pct": 1.63}, {"state": "MN", "count": 11252, "pct": 1.513}, {"state": "WI", "count": 11238, "pct": 1.511}, {"state": "ID", "count": 11050, "pct": 1.486}, {"state": "SC", "count": 10661, "pct": 1.433}, {"state": "MD", "count": 10648, "pct": 1.432}, {"state": "KY", "count": 9800, "pct": 1.318}, {"state": "OK", "count": 9704, "pct": 1.305}, {"state": "NV", "count": 8091, "pct": 1.088}, {"state": "AR", "count": 7914, "pct": 1.064}, {"state": "KS", "count": 7072, "pct": 0.951}, {"state": "CT", "count": 7013, "pct": 0.943}, {"state": "IA", "count": 6363, "pct": 0.855}, {"state": "NM", "count": 6089, "pct": 0.819}, {"state": "LA", "count": 5960, "pct": 0.801}, {"state": "NH", "count": 5804, "pct": 0.78}, {"state": "WV", "count": 5769, "pct": 0.776}, {"state": "PR", "count": 5306, "pct": 0.713}, {"state": "MS", "count": 4873, "pct": 0.655}, {"state": "ME", "count": 4479, "pct": 0.602}, {"state": "MT", "count": 4471, "pct": 0.601}, {"state": "NE", "count": 3763, "pct": 0.506}, {"state": "HI", "count": 3432, "pct": 0.461}, {"state": "AK", "count": 3206, "pct": 0.431}, {"state": "WY", "count": 2382, "pct": 0.32}, {"state": "SD", "count": 2139, "pct": 0.288}, {"state": "VT", "count": 2039, "pct": 0.274}, {"state": "RI", "count": 1877, "pct": 0.252}, {"state": "DE", "count": 1873, "pct": 0.252}, {"state": "ND", "count": 1449, "pct": 0.195}, {"state": "DC", "count": 561, "pct": 0.075}, {"state": "MP", "count": 274, "pct": 0.037}, {"state": "VI", "count": 266, "pct": 0.036}, {"state": "GU", "count": 242, "pct": 0.033}, {"state": "AE", "count": 151, "pct": 0.02}], "states_full": [{"state": "CA", "count": 90988, "pct": 12.233}, {"state": "TX", "count": 53586, "pct": 7.205}, {"state": "FL", "count": 42203, "pct": 5.674}, {"state": "WA", "count": 32909, "pct": 4.425}, {"state": "OH", "count": 26753, "pct": 3.597}, {"state": "NY", "count": 26005, "pct": 3.496}, {"state": "PA", "count": 23821, "pct": 3.203}, {"state": "NC", "count": 23435, "pct": 3.151}, {"state": "AZ", "count": 21109, "pct": 2.838}, {"state": "MI", "count": 20600, "pct": 2.77}, {"state": "VA", "count": 20446, "pct": 2.749}, {"state": "TN", "count": 20281, "pct": 2.727}, {"state": "OR", "count": 20081, "pct": 2.7}, {"state": "CO", "count": 19482, "pct": 2.619}, {"state": "GA", "count": 19006, "pct": 2.555}, {"state": "IL", "count": 18950, "pct": 2.548}, {"state": "UT", "count": 18123, "pct": 2.437}, {"state": "IN", "count": 15367, "pct": 2.066}, {"state": "MO", "count": 14965, "pct": 2.012}, {"state": "MA", "count": 13319, "pct": 1.791}, {"state": "NJ", "count": 12879, "pct": 1.732}, {"state": "AL", "count": 12127, "pct": 1.63}, {"state": "MN", "count": 11252, "pct": 1.513}, {"state": "WI", "count": 11238, "pct": 1.511}, {"state": "ID", "count": 11050, "pct": 1.486}, {"state": "SC", "count": 10661, "pct": 1.433}, {"state": "MD", "count": 10648, "pct": 1.432}, {"state": "KY", "count": 9800, "pct": 1.318}, {"state": "OK", "count": 9704, "pct": 1.305}, {"state": "NV", "count": 8091, "pct": 1.088}, {"state": "AR", "count": 7914, "pct": 1.064}, {"state": "KS", "count": 7072, "pct": 0.951}, {"state": "CT", "count": 7013, "pct": 0.943}, {"state": "IA", "count": 6363, "pct": 0.855}, {"state": "NM", "count": 6089, "pct": 0.819}, {"state": "LA", "count": 5960, "pct": 0.801}, {"state": "NH", "count": 5804, "pct": 0.78}, {"state": "WV", "count": 5769, "pct": 0.776}, {"state": "PR", "count": 5306, "pct": 0.713}, {"state": "MS", "count": 4873, "pct": 0.655}, {"state": "ME", "count": 4479, "pct": 0.602}, {"state": "MT", "count": 4471, "pct": 0.601}, {"state": "NE", "count": 3763, "pct": 0.506}, {"state": "HI", "count": 3432, "pct": 0.461}, {"state": "AK", "count": 3206, "pct": 0.431}, {"state": "WY", "count": 2382, "pct": 0.32}, {"state": "SD", "count": 2139, "pct": 0.288}, {"state": "VT", "count": 2039, "pct": 0.274}, {"state": "RI", "count": 1877, "pct": 0.252}, {"state": "DE", "count": 1873, "pct": 0.252}, {"state": "ND", "count": 1449, "pct": 0.195}, {"state": "DC", "count": 561, "pct": 0.075}, {"state": "MP", "count": 274, "pct": 0.037}, {"state": "VI", "count": 266, "pct": 0.036}, {"state": "GU", "count": 242, "pct": 0.033}, {"state": "AE", "count": 151, "pct": 0.02}, {"state": "AP", "count": 107, "pct": 0.014}, {"state": "AS", "count": 16, "pct": 0.002}, {"state": "AA", "count": 4, "pct": 0.001}, {"state": "UM", "count": 3, "pct": 0.0}], "names": [{"name": "JOHN", "count": 23297, "pct": 3.132}, {"name": "MICHAEL", "count": 23143, "pct": 3.112}, {"name": "DAVID", "count": 22722, "pct": 3.055}, {"name": "ROBERT", "count": 22366, "pct": 3.007}, {"name": "JAMES", "count": 21753, "pct": 2.925}, {"name": "WILLIAM", "count": 16924, "pct": 2.275}, {"name": "RICHARD", "count": 13065, "pct": 1.757}, {"name": "THOMAS", "count": 11064, "pct": 1.488}, {"name": "MARK", "count": 9094, "pct": 1.223}, {"name": "CHARLES", "count": 8973, "pct": 1.206}, {"name": "JOSEPH", "count": 8532, "pct": 1.147}, {"name": "DANIEL", "count": 8439, "pct": 1.135}, {"name": "CHRISTOPHER", "count": 8053, "pct": 1.083}, {"name": "PAUL", "count": 7577, "pct": 1.019}, {"name": "STEVEN", "count": 7277, "pct": 0.978}, {"name": "MATTHEW", "count": 6846, "pct": 0.92}, {"name": "BRIAN", "count": 6468, "pct": 0.87}, {"name": "STEPHEN", "count": 6043, "pct": 0.812}, {"name": "DONALD", "count": 5841, "pct": 0.785}, {"name": "JEFFREY", "count": 5780, "pct": 0.777}, {"name": "KENNETH", "count": 5707, "pct": 0.767}, {"name": "ANDREW", "count": 5539, "pct": 0.745}, {"name": "GARY", "count": 5457, "pct": 0.734}, {"name": "RONALD", "count": 5298, "pct": 0.712}, {"name": "TIMOTHY", "count": 5228, "pct": 0.703}, {"name": "KEVIN", "count": 5210, "pct": 0.7}, {"name": "SCOTT", "count": 5101, "pct": 0.686}, {"name": "JASON", "count": 4493, "pct": 0.604}, {"name": "ERIC", "count": 4484, "pct": 0.603}, {"name": "GEORGE", "count": 4418, "pct": 0.594}, {"name": "EDWARD", "count": 4390, "pct": 0.59}, {"name": "GREGORY", "count": 3851, "pct": 0.518}, {"name": "DOUGLAS", "count": 3605, "pct": 0.485}, {"name": "LARRY", "count": 3582, "pct": 0.482}, {"name": "JONATHAN", "count": 3554, "pct": 0.478}, {"name": "PETER", "count": 3523, "pct": 0.474}, {"name": "ANTHONY", "count": 3416, "pct": 0.459}, {"name": "DENNIS", "count": 3405, "pct": 0.458}, {"name": "JOSHUA", "count": 3281, "pct": 0.441}, {"name": "RYAN", "count": 3152, "pct": 0.424}, {"name": "PATRICK", "count": 3110, "pct": 0.418}, {"name": "BENJAMIN", "count": 2764, "pct": 0.372}, {"name": "NICHOLAS", "count": 2698, "pct": 0.363}, {"name": "BRUCE", "count": 2674, "pct": 0.36}, {"name": "FRANK", "count": 2638, "pct": 0.355}, {"name": "ALAN", "count": 2421, "pct": 0.326}, {"name": "ROGER", "count": 2329, "pct": 0.313}, {"name": "RAYMOND", "count": 2251, "pct": 0.303}, {"name": "JERRY", "count": 2238, "pct": 0.301}, {"name": "JUSTIN", "count": 2237, "pct": 0.301}, {"name": "ADAM", "count": 2212, "pct": 0.297}, {"name": "AARON", "count": 2144, "pct": 0.288}, {"name": "KEITH", "count": 2127, "pct": 0.286}, {"name": "SAMUEL", "count": 2072, "pct": 0.279}, {"name": "JACOB", "count": 2039, "pct": 0.274}, {"name": "TERRY", "count": 2023, "pct": 0.272}, {"name": "PHILIP", "count": 1994, "pct": 0.268}, {"name": "GERALD", "count": 1987, "pct": 0.267}, {"name": "NATHAN", "count": 1979, "pct": 0.266}, {"name": "CRAIG", "count": 1967, "pct": 0.264}, {"name": "CARL", "count": 1914, "pct": 0.257}, {"name": "LAWRENCE", "count": 1889, "pct": 0.254}, {"name": "JACK", "count": 1834, "pct": 0.247}, {"name": "CHRIS", "count": 1834, "pct": 0.247}, {"name": "ALEXANDER", "count": 1827, "pct": 0.246}, {"name": "MARY", "count": 1749, "pct": 0.235}, {"name": "WAYNE", "count": 1727, "pct": 0.232}, {"name": "WALTER", "count": 1710, "pct": 0.23}, {"name": "JEREMY", "count": 1702, "pct": 0.229}, {"name": "RUSSELL", "count": 1700, "pct": 0.229}, {"name": "SEAN", "count": 1684, "pct": 0.226}, {"name": "BRANDON", "count": 1678, "pct": 0.226}, {"name": "BRYAN", "count": 1617, "pct": 0.217}, {"name": "SUSAN", "count": 1555, "pct": 0.209}, {"name": "DALE", "count": 1549, "pct": 0.208}, {"name": "LINDA", "count": 1541, "pct": 0.207}, {"name": "TODD", "count": 1513, "pct": 0.203}, {"name": "ARTHUR", "count": 1479, "pct": 0.199}, {"name": "STEVE", "count": 1464, "pct": 0.197}, {"name": "MARTIN", "count": 1460, "pct": 0.196}, {"name": "KYLE", "count": 1457, "pct": 0.196}, {"name": "PHILLIP", "count": 1434, "pct": 0.193}, {"name": "RANDALL", "count": 1400, "pct": 0.188}, {"name": "BRADLEY", "count": 1388, "pct": 0.187}, {"name": "JOSE", "count": 1373, "pct": 0.185}, {"name": "JEFF", "count": 1335, "pct": 0.179}, {"name": "JON", "count": 1332, "pct": 0.179}, {"name": "PATRICIA", "count": 1324, "pct": 0.178}, {"name": "HAROLD", "count": 1317, "pct": 0.177}, {"name": "ZACHARY", "count": 1309, "pct": 0.176}, {"name": "GLENN", "count": 1302, "pct": 0.175}, {"name": "HENRY", "count": 1293, "pct": 0.174}, {"name": "RANDY", "count": 1292, "pct": 0.174}, {"name": "JENNIFER", "count": 1289, "pct": 0.173}, {"name": "JOEL", "count": 1252, "pct": 0.168}, {"name": "TYLER", "count": 1248, "pct": 0.168}, {"name": "ELIZABETH", "count": 1245, "pct": 0.167}, {"name": "FREDERICK", "count": 1229, "pct": 0.165}, {"name": "KAREN", "count": 1223, "pct": 0.164}, {"name": "RALPH", "count": 1184, "pct": 0.159}], "letters": [{"letter": "A", "count": 25474, "pct": 3.425}, {"letter": "K", "count": 542182, "pct": 72.896}, {"letter": "N", "count": 75792, "pct": 10.19}, {"letter": "W", "count": 100328, "pct": 13.489}, {"letter": "other", "count": 0, "pct": 0.0}], "vanity": {"vanity": 0, "general": 743776, "vanity_pct": 0.0}, "expirations": [{"year": 2026, "count": 38350}, {"year": 2027, "count": 87510}, {"year": 2028, "count": 82223}, {"year": 2029, "count": 71566}, {"year": 2030, "count": 71263}, {"year": 2031, "count": 73654}, {"year": 2032, "count": 64934}, {"year": 2033, "count": 66923}, {"year": 2034, "count": 79156}, {"year": 2035, "count": 67007}, {"year": 2036, "count": 41190}], "gender": null, "history": [{"date": "2026-06-22", "total": 743776}]};</script>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="live"><span class="dot"></span><span class="eyebrow" id="eyebrow"></span></div>
+    <div class="total" id="total">0</div>
+    <div class="total-label">active <b>U.S. amateur radio operators</b> on the FCC roster &mdash; licensed, unexpired, ready to get on the air.</div>
+    <div class="microbar" id="microbar"></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">01</span><h2>The licensing ladder</h2></div>
+    <p class="sec-note">Every operator starts at Technician and can climb to General, then Amateur Extra &mdash; each step unlocking more bands and privileges. Here's where today's operators sit.</p>
+    <div class="grid2">
+      <div class="panel"><div class="ladder" id="ladder"></div></div>
+      <div class="panel"><div class="chart-box"><canvas id="classChart"></canvas></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">02</span><h2>Where operators are</h2></div>
+    <p class="sec-note">Active licenses by state of record. <span id="stateSummary"></span></p>
+    <div class="grid2">
+      <div class="panel"><div class="chart-box" style="height:360px"><canvas id="stateChart"></canvas></div></div>
+      <div class="panel" style="max-height:404px; overflow:auto"><table id="stateTable"></table></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">03</span><h2>Call sign anatomy</h2></div>
+    <p class="sec-note">U.S. call signs begin with A, K, N, or W. Operators can also apply for a personalized &ldquo;vanity&rdquo; call instead of taking the sequentially issued one.</p>
+    <div class="grid2">
+      <div class="panel"><div class="chart-box"><canvas id="letterChart"></canvas></div></div>
+      <div class="panel"><div class="chart-box"><canvas id="vanityChart"></canvas></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">04</span><h2>Renewals on the horizon</h2></div>
+    <p class="sec-note">Licenses run 10 years. This is when the current roster comes up for renewal &mdash; the current year is flagged in red.</p>
+    <div class="panel"><div class="chart-box" style="height:320px"><canvas id="expChart"></canvas></div></div>
+  </section>
+
+  <section id="trendSec">
+    <div class="sec-head"><span class="eyebrow">05</span><h2>The roster over time</h2></div>
+    <p class="sec-note" id="trendNote"></p>
+    <div class="panel"><div class="chart-box" style="height:320px"><canvas id="trendChart"></canvas></div></div>
+  </section>
+
+  <section style="border-bottom:none">
+    <div class="sec-head"><span class="eyebrow">06</span><h2>Most common first names</h2></div>
+    <p class="sec-note">The first names on the active roster, most common first.</p>
+    <div class="panel" style="max-height:420px; overflow:auto"><table id="nameTable"></table></div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="tag">TavaOne Education</div>
+  <p style="max-width:62ch; margin:10px 0 18px">A public-interest snapshot of the amateur radio service, maintained to support STEM and licensing education.</p>
+  <div class="src">
+    Source: FCC Universal Licensing System (ULS), <a href="https://data.fcc.gov/download/pub/uls/complete/l_amat.zip">l_amat complete database</a><br>
+    Method: active status &ldquo;A&rdquo; with an expiration date after the snapshot date; records joined on Unique System Identifier.<br>
+    Snapshot: <span id="footDate"></span> &middot; figures reflect that day's FCC file.
+  </div>
+</footer>
+
+<script>
+(function(){
+  const D = DATA;
+  const num = n => n.toLocaleString('en-US');
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const GREEN=css('--green'), GREEN_L=css('--green-l'), MUTED=css('--muted'),
+        BORDER=css('--border'), TEXT=css('--text'), RED=css('--red'), CARD=css('--card');
+  const CLASS_COLORS={N:'#64748b',T:'#34d399',P:'#5eead4',G:'#10b981',A:'#059669',E:'#047857'};
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.getElementById('eyebrow').textContent = 'FCC ULS \u00B7 LIVE LICENSE CENSUS';
+  document.getElementById('footDate').textContent = D.snapshot_date;
+
+  // hero count-up
+  const tEl = document.getElementById('total');
+  if(reduce){ tEl.textContent = num(D.total); }
+  else{
+    const dur=1100, t0=performance.now();
+    (function step(now){
+      const p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3);
+      tEl.textContent = num(Math.round(D.total*e));
+      if(p<1) requestAnimationFrame(step);
+    })(t0);
+  }
+
+  // microstats
+  const micro=[
+    ['Operators', num(D.total)],
+    ['Vanity calls', D.vanity.vanity_pct.toFixed(1)+'%'],
+    ['States & territories', num(D.states_represented)],
+    ['Most common name', D.top_name],
+  ];
+  document.getElementById('microbar').innerHTML = micro.map(m=>
+    `<div class="micro"><div class="v">${m[1]}</div><div class="k">${m[0]}</div></div>`).join('');
+
+  // ladder
+  const maxC = Math.max(...D.classes.map(c=>c.count));
+  document.getElementById('ladder').innerHTML = D.classes.map(c=>
+    `<div class="rung"><div class="name">${c.label}</div>
+       <div class="track"><div class="fill" data-w="${(c.count/maxC*100).toFixed(1)}"
+            style="width:0;background:${CLASS_COLORS[c.code]||GREEN}"></div></div>
+       <div class="val"><b>${num(c.count)}</b> &middot; ${c.pct.toFixed(1)}%</div></div>`).join('');
+  requestAnimationFrame(()=>document.querySelectorAll('.fill').forEach(f=>{
+    f.style.width = reduce ? f.dataset.w+'%' : f.dataset.w+'%';}));
+
+  // chart.js defaults
+  Chart.defaults.color = MUTED; Chart.defaults.borderColor = BORDER;
+  Chart.defaults.font.family = "'JetBrains Mono', monospace";
+  const noLegend={plugins:{legend:{display:false}}};
+  const grid={grid:{color:BORDER}, ticks:{color:MUTED}};
+
+  new Chart(classChart,{type:'doughnut',
+    data:{labels:D.classes.map(c=>c.label),
+      datasets:[{data:D.classes.map(c=>c.count),
+        backgroundColor:D.classes.map(c=>CLASS_COLORS[c.code]||GREEN), borderColor:CARD, borderWidth:2}]},
+    options:{cutout:'62%', plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:12}}}}});
+
+  new Chart(stateChart,{type:'bar',
+    data:{labels:D.states.map(s=>s.state),
+      datasets:[{data:D.states.map(s=>s.count), backgroundColor:GREEN}]},
+    options:{...noLegend, scales:{x:grid,y:grid}}});
+  document.getElementById('stateSummary').textContent =
+    `${D.top_state} leads; ${D.states.length} shown.`;
+  document.getElementById('stateTable').innerHTML =
+    '<thead><tr><th>State</th><th style="text-align:right">Operators</th><th style="text-align:right">%</th></tr></thead><tbody>'+
+    D.states_full.map(s=>`<tr><td>${s.state}</td><td class="num">${num(s.count)}</td><td class="num">${s.pct.toFixed(2)}</td></tr>`).join('')+'</tbody>';
+
+  const L=D.letters.slice(0,4);
+  new Chart(letterChart,{type:'bar',
+    data:{labels:L.map(x=>x.letter),
+      datasets:[{data:L.map(x=>x.count), backgroundColor:['#34d399','#10b981','#059669','#047857']}]},
+    options:{...noLegend, scales:{x:grid,y:grid}}});
+
+  new Chart(vanityChart,{type:'doughnut',
+    data:{labels:['Vanity','General issue'],
+      datasets:[{data:[D.vanity.vanity,D.vanity.general], backgroundColor:[GREEN_L,MUTED], borderColor:CARD, borderWidth:2}]},
+    options:{cutout:'62%', plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:12}}}}});
+
+  const cur=new Date().getFullYear();
+  new Chart(expChart,{type:'bar',
+    data:{labels:D.expirations.map(e=>e.year),
+      datasets:[{data:D.expirations.map(e=>e.count),
+        backgroundColor:D.expirations.map(e=>e.year===cur?RED:GREEN)}]},
+    options:{...noLegend, scales:{x:grid,y:grid}}});
+
+  // trend
+  const h=D.history||[];
+  const tn=document.getElementById('trendNote');
+  if(h.length>1){
+    tn.textContent='Total active operators at each snapshot. Run the generator on a schedule to extend this line.';
+    new Chart(trendChart,{type:'line',
+      data:{labels:h.map(x=>x.date),
+        datasets:[{data:h.map(x=>x.total), borderColor:GREEN, backgroundColor:'rgba(16,185,129,.12)',
+          fill:true, tension:.25, pointBackgroundColor:GREEN_L}]},
+      options:{...noLegend, scales:{x:grid,y:grid}}});
+  } else {
+    tn.textContent='Only one snapshot so far. Re-run the generator periodically (a weekly cron works well) and this chart fills in over time.';
+    document.getElementById('trendChart').parentElement.parentElement.style.opacity=.5;
+  }
+
+  document.getElementById('nameTable').innerHTML =
+    '<thead><tr><th>Rank</th><th>First name</th><th style="text-align:right">Count</th><th style="text-align:right">%</th></tr></thead><tbody>'+
+    D.names.map((x,i)=>`<tr><td class="num" style="color:var(--muted)">${i+1}</td><td>${x.name.charAt(0)+x.name.slice(1).toLowerCase()}</td><td class="num">${num(x.count)}</td><td class="num">${x.pct.toFixed(3)}</td></tr>`).join('')+'</tbody>';
+})();
+</script>
+</body>
+</html>
