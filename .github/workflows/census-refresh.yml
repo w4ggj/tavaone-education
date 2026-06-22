@@ -1,0 +1,73 @@
+name: Weekly License Census refresh
+
+# Regenerates census/index.html from the FCC ULS public database and commits it,
+# accumulating tools/census-history.csv so the "roster over time" trend grows.
+# Runs Monday ~7:00 AM Eastern (11:00 UTC; shifts +/-1h with daylight saving).
+# Can also be run on demand from the Actions tab (workflow_dispatch).
+on:
+  schedule:
+    - cron: "0 11 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: census-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate census page from FCC ULS
+        run: |
+          set -uo pipefail
+          mkdir -p _build
+          # Carry the accumulated trend history into the build dir so the generator
+          # appends to it (the total-over-time series can't be backfilled).
+          if [ -f tools/census-history.csv ]; then
+            cp tools/census-history.csv _build/history.csv
+          fi
+          # data.fcc.gov can throttle datacenter IPs; retry with linear backoff.
+          ok=0
+          for attempt in 1 2 3 4 5; do
+            echo "::group::FCC fetch + build (attempt $attempt)"
+            if python3 tools/fcc_ham_stats.py --out _build; then
+              ok=1
+              echo "::endgroup::"
+              break
+            fi
+            echo "::endgroup::"
+            echo "Attempt $attempt failed; sleeping ${attempt}m before retry."
+            sleep "$((attempt * 60))"
+          done
+          if [ "$ok" -ne 1 ]; then
+            echo "::error::FCC download/generation failed after 5 attempts (data.fcc.gov may be blocking the runner IP)."
+            exit 1
+          fi
+
+      - name: Stage outputs
+        run: |
+          cp _build/ham_stats.html census/index.html
+          cp _build/history.csv tools/census-history.csv
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- census/index.html tools/census-history.csv; then
+            echo "No changes to commit."
+          else
+            git add census/index.html tools/census-history.csv
+            git commit -m "Weekly license census refresh ($(date -u +%Y-%m-%d))"
+            git push
+          fi
