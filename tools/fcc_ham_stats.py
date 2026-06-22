@@ -29,14 +29,14 @@ lowercase first names) beside this script and the gender step turns on.
 Python 3.8+. No third-party packages required for data/JSON/HTML;
 matplotlib is used only for the optional static PNG charts.
 """
-import argparse, csv, io, os, sys, json, zipfile, urllib.request, datetime
+import argparse, csv, io, os, re, sys, json, zipfile, urllib.request, datetime
 from collections import Counter
 
 FCC_URL = "https://data.fcc.gov/download/pub/uls/complete/l_amat.zip"
 
 # ---- ULS PUBACC column indices (0-based), verified against the layouts ----
 HD_UI, HD_CALL, HD_STATUS, HD_SERVICE, HD_GRANT, HD_EXPIRED = 1, 4, 5, 6, 7, 8
-EN_UI, EN_CALL, EN_NAME, EN_FIRST, EN_LAST, EN_STATE, EN_ZIP, EN_FRN = 1, 4, 7, 8, 10, 17, 18, 22
+EN_UI, EN_CALL, EN_NAME, EN_FIRST, EN_LAST, EN_CITY, EN_STATE, EN_ZIP, EN_FRN = 1, 4, 7, 8, 10, 16, 17, 18, 22
 AM_UI, AM_CALL, AM_CLASS, AM_VANITY = 1, 4, 5, 13
 
 # License ladder, entry -> advanced (order is meaningful: it's the progression)
@@ -46,6 +46,30 @@ CLASS_LABELS = {
     "G": "General", "A": "Advanced", "E": "Amateur Extra",
     "?": "Club / other",
 }
+
+# Pinellas County, FL is approximated by ZIP: the 337xx prefix is entirely
+# Pinellas (St. Pete / Clearwater / Largo / Pinellas Park), plus these
+# north-county 346xx ZIPs (Palm Harbor, Tarpon Springs, Dunedin, Oldsmar...).
+PINELLAS_346 = {
+    "34660", "34677", "34679", "34681", "34682", "34683", "34684",
+    "34685", "34688", "34689", "34695", "34697", "34698",
+}
+def zip5(z):
+    z = (z or "").strip()[:5]
+    return z if len(z) == 5 and z.isdigit() else ""
+def is_pinellas(z):
+    z = zip5(z)
+    return bool(z) and (z.startswith("337") or z in PINELLAS_346)
+
+# Call-sign format, e.g. "1x3" for W4GGJ. The premium short formats (1x1, 1x2,
+# 2x1) are no longer issued sequentially -- they're obtainable only through the
+# vanity program -- so counting them is a conservative *lower bound* on vanity.
+CALL_RE = re.compile(r"^([A-Z]{1,2})(\d)([A-Z]{1,3})$")
+VANITY_FORMATS = {"1x1", "1x2", "2x1"}
+FORMAT_ORDER = ["1x2", "2x1", "2x2", "1x3", "2x3"]
+def call_format(call):
+    m = CALL_RE.match((call or "").upper())
+    return f"{len(m.group(1))}x{len(m.group(3))}" if m else "other"
 
 def log(*a, **k): print(*a, file=sys.stderr, flush=True, **k)
 
@@ -112,11 +136,24 @@ def build(zip_path):
         if rec is None: continue
         rec["first"] = row[EN_FIRST].strip()
         rec["state"] = row[EN_STATE].strip().upper()
+        rec["city"] = row[EN_CITY].strip() if len(row) > EN_CITY else ""
+        rec["zip"] = row[EN_ZIP].strip() if len(row) > EN_ZIP else ""
     return list(active.values()), today
 
 # --------------------------------------------------------------------------- #
 # Compute the stats object
 # --------------------------------------------------------------------------- #
+def class_breakdown(recs):
+    """Class distribution (same shape as the national `classes` list) for any subset."""
+    n = len(recs)
+    p = lambda c: round(100 * c / n, 3) if n else 0.0
+    cc = Counter(r.get("class", "") or "?" for r in recs)
+    out = [{"code": c, "label": CLASS_LABELS.get(c, c), "count": cc[c], "pct": p(cc[c])}
+           for c in CLASS_ORDER if c in cc]
+    out += [{"code": c, "label": CLASS_LABELS.get(c, c), "count": cc[c], "pct": p(cc[c])}
+            for c in cc if c not in CLASS_ORDER]
+    return out
+
 def compute(records, today, top_names, top_states):
     n = len(records)
     pct = lambda c, d=n: round(100 * c / d, 3) if d else 0.0
@@ -159,6 +196,56 @@ def compute(records, today, top_names, top_states):
         g = Counter(gmap.get(r.get("first","").lower(), "U") for r in records)
         gender = [{"gender": k, "count": g[k], "pct": pct(g[k])} for k in ("M","F","U")]
 
+    # --- call-sign formats + conservative vanity estimate ---
+    fmt = Counter(call_format(r.get("call", "")) for r in records)
+    formats = [{"format": f, "count": fmt[f], "pct": pct(fmt[f])}
+               for f in FORMAT_ORDER if f in fmt]
+    formats += [{"format": f, "count": fmt[f], "pct": pct(fmt[f])}
+                for f in sorted(fmt) if f not in FORMAT_ORDER]
+    vest = sum(fmt.get(f, 0) for f in VANITY_FORMATS)
+    vanity_estimate = {"count": vest, "pct": pct(vest), "formats": formats}
+
+    # --- Florida (total + class breakdown) ---
+    fl = [r for r in records if r.get("state") == "FL"]
+    fl_rank = next((i + 1 for i, x in enumerate(states_all) if x["state"] == "FL"), None)
+    florida = {"total": len(fl), "rank": fl_rank,
+               "pct_of_us": pct(len(fl)), "classes": class_breakdown(fl)}
+
+    # --- Pinellas County, approximated by ZIP (the area we support) ---
+    pin = [r for r in records if is_pinellas(r.get("zip", ""))]
+    pin_pct = lambda c: round(100 * c / len(pin), 3) if pin else 0.0
+    cities = Counter(r["city"].title() for r in pin if r.get("city"))
+    zips = Counter(zip5(r.get("zip", "")) for r in pin)
+    pnames = Counter(r["first"].upper() for r in pin if r.get("first"))
+    pin_fmt = Counter(call_format(r.get("call", "")) for r in pin)
+    pin_vest = sum(pin_fmt.get(f, 0) for f in VANITY_FORMATS)
+    pinellas = {
+        "total": len(pin),
+        "pct_of_fl": round(100 * len(pin) / len(fl), 3) if fl else 0.0,
+        "pct_of_us": pct(len(pin)),
+        "top_city": cities.most_common(1)[0][0] if cities else "-",
+        "vanity_est": {"count": pin_vest, "pct": pin_pct(pin_vest)},
+        "classes": class_breakdown(pin),
+        "cities": [{"city": c, "count": v, "pct": pin_pct(v)} for c, v in cities.most_common(12)],
+        "zips": [{"zip": z, "count": v, "pct": pin_pct(v)} for z, v in zips.most_common(15)],
+        "names": [{"name": x, "count": v, "pct": pin_pct(v)} for x, v in pnames.most_common(10)],
+    }
+
+    # --- Program impact: licenses earned through our program (roster CSV) ---
+    program = None
+    rpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "program-licenses.csv")
+    if os.path.exists(rpath):
+        callset = {r["call"].upper() for r in records if r.get("call")}
+        entries = []
+        with open(rpath, newline="") as f:
+            for row in csv.DictReader(f):
+                cs = (row.get("callsign") or "").strip().upper()
+                if cs:
+                    entries.append(cs)
+        if entries:
+            program = {"total": len(entries),
+                       "active": sum(1 for cs in entries if cs in callset)}
+
     return {
         "snapshot_date": today.isoformat(),
         "total": n,
@@ -171,8 +258,12 @@ def compute(records, today, top_names, top_states):
         "names": names,
         "letters": letter_rows,
         "vanity": vanity_obj,
+        "vanity_estimate": vanity_estimate,
         "expirations": expirations,
         "gender": gender,
+        "florida": florida,
+        "pinellas": pinellas,
+        "program": program,
     }
 
 # --------------------------------------------------------------------------- #
@@ -363,6 +454,16 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     .rung .fill{transition:none}
   }
 
+  .mono{font-family:var(--mono)}
+
+  /* program impact band */
+  .impact{background:linear-gradient(180deg, rgba(16,185,129,.12), transparent); border-bottom:1px solid var(--border)}
+  .impact-inner{display:flex; align-items:center; gap:24px; padding:36px 0; flex-wrap:wrap}
+  .impact-num{font-family:var(--mono); font-weight:700; font-size:clamp(40px,8vw,72px); line-height:1; color:var(--green-l); text-shadow:0 0 28px rgba(16,185,129,.25)}
+  .impact-txt{font-size:clamp(16px,2.4vw,20px); color:var(--text); max-width:36ch}
+  .impact-txt b{color:var(--light); font-weight:700}
+  .impact-txt .sub{display:block; color:var(--muted); font-size:13px; margin-top:6px}
+
   /* site chrome (matches the main page) */
   .site-bar{position:sticky; top:0; z-index:50; background:rgba(15,23,42,.82); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--border)}
   .site-bar-inner{display:flex; align-items:center; justify-content:space-between; height:64px; gap:20px}
@@ -409,6 +510,13 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   </div>
 </header>
 
+<section class="impact" id="impactBand" style="display:none">
+  <div class="wrap impact-inner">
+    <div class="impact-num" id="impactNum">0</div>
+    <div class="impact-txt">new <b>amateur licenses</b> earned with help from TavaOne Education<span class="sub" id="impactSub"></span></div>
+  </div>
+</section>
+
 <main class="wrap">
 
   <section>
@@ -431,8 +539,11 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
   <section>
     <div class="sec-head"><span class="eyebrow">03</span><h2>Call sign anatomy</h2></div>
-    <p class="sec-note">U.S. call signs begin with A, K, N, or W. Operators can also apply for a personalized &ldquo;vanity&rdquo; call instead of taking the sequentially issued one.</p>
-    <div class="panel"><div class="chart-box"><canvas id="letterChart"></canvas></div></div>
+    <p class="sec-note">U.S. call signs begin with A, K, N, or W, in formats like 1&times;3 (<span class="mono">W4GGJ</span>). The short 1&times;2 and 2&times;1 formats are no longer issued in sequence &mdash; they come only through the <b>vanity</b> program. <span id="vanityNote"></span></p>
+    <div class="grid2">
+      <div class="panel"><div class="chart-box"><canvas id="letterChart"></canvas></div></div>
+      <div class="panel"><div class="chart-box"><canvas id="formatChart"></canvas></div></div>
+    </div>
   </section>
 
   <section>
@@ -447,10 +558,34 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     <div class="panel"><div class="chart-box" style="height:320px"><canvas id="trendChart"></canvas></div></div>
   </section>
 
-  <section style="border-bottom:none">
+  <section>
     <div class="sec-head"><span class="eyebrow">06</span><h2>Most common first names</h2></div>
     <p class="sec-note">The first names on the active roster, most common first.</p>
     <div class="panel" style="max-height:420px; overflow:auto"><table id="nameTable"></table></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">07</span><h2>Florida</h2></div>
+    <p class="sec-note" id="flNote"></p>
+    <div class="grid2">
+      <div class="panel"><div class="ladder" id="flLadder"></div></div>
+      <div class="panel"><div class="chart-box"><canvas id="flChart"></canvas></div></div>
+    </div>
+  </section>
+
+  <section style="border-bottom:none">
+    <div class="sec-head"><span class="eyebrow">08</span><h2>Pinellas County &mdash; our backyard</h2></div>
+    <p class="sec-note" id="pinNote"></p>
+    <div class="microbar" id="pinMicro" style="margin-top:0; margin-bottom:28px"></div>
+    <div class="grid2">
+      <div class="panel"><div class="ladder" id="pinLadder"></div></div>
+      <div class="panel"><div class="chart-box"><canvas id="pinChart"></canvas></div></div>
+    </div>
+    <div class="grid2" style="margin-top:28px">
+      <div class="panel" style="max-height:360px; overflow:auto"><table id="pinCityTable"></table></div>
+      <div class="panel" style="max-height:360px; overflow:auto"><table id="pinZipTable"></table></div>
+    </div>
+    <div class="panel" style="max-height:360px; overflow:auto; margin-top:28px"><table id="pinNameTable"></table></div>
   </section>
 
 </main>
@@ -485,6 +620,29 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   const CLASS_COLORS={N:'#64748b',T:'#34d399',P:'#5eead4',G:'#10b981',A:'#059669',E:'#047857'};
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  const fmtName = x => x.charAt(0)+x.slice(1).toLowerCase();
+  function renderLadder(el, classes){
+    if(!el) return;
+    const mx = Math.max(...classes.map(c=>c.count), 1);
+    el.innerHTML = classes.map(c=>
+      `<div class="rung"><div class="name">${c.label}</div>
+         <div class="track"><div class="fill" data-w="${(c.count/mx*100).toFixed(1)}"
+              style="width:0;background:${CLASS_COLORS[c.code]||GREEN}"></div></div>
+         <div class="val"><b>${num(c.count)}</b> &middot; ${c.pct.toFixed(1)}%</div></div>`).join('');
+  }
+  function classDoughnut(canvas, classes){
+    if(!canvas) return;
+    return new Chart(canvas,{type:'doughnut',
+      data:{labels:classes.map(c=>c.label),
+        datasets:[{data:classes.map(c=>c.count),
+          backgroundColor:classes.map(c=>CLASS_COLORS[c.code]||GREEN), borderColor:CARD, borderWidth:2}]},
+      options:{cutout:'62%', plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:12}}}}});
+  }
+  function rowsTable(el, head, rows){
+    if(!el) return;
+    el.innerHTML = '<thead><tr>'+head+'</tr></thead><tbody>'+rows+'</tbody>';
+  }
+
   document.getElementById('eyebrow').textContent = 'FCC ULS \u00B7 LIVE LICENSE CENSUS';
   document.getElementById('footDate').textContent = D.snapshot_date;
 
@@ -510,15 +668,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   document.getElementById('microbar').innerHTML = micro.map(m=>
     `<div class="micro"><div class="v">${m[1]}</div><div class="k">${m[0]}</div></div>`).join('');
 
-  // ladder
-  const maxC = Math.max(...D.classes.map(c=>c.count));
-  document.getElementById('ladder').innerHTML = D.classes.map(c=>
-    `<div class="rung"><div class="name">${c.label}</div>
-       <div class="track"><div class="fill" data-w="${(c.count/maxC*100).toFixed(1)}"
-            style="width:0;background:${CLASS_COLORS[c.code]||GREEN}"></div></div>
-       <div class="val"><b>${num(c.count)}</b> &middot; ${c.pct.toFixed(1)}%</div></div>`).join('');
-  requestAnimationFrame(()=>document.querySelectorAll('.fill').forEach(f=>{
-    f.style.width = reduce ? f.dataset.w+'%' : f.dataset.w+'%';}));
+  // ladders (national + Florida + Pinellas share one renderer)
+  renderLadder(document.getElementById('ladder'), D.classes);
 
   // chart.js defaults
   Chart.defaults.color = MUTED; Chart.defaults.borderColor = BORDER;
@@ -572,7 +723,66 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
   document.getElementById('nameTable').innerHTML =
     '<thead><tr><th>Rank</th><th>First name</th><th style="text-align:right">Count</th><th style="text-align:right">%</th></tr></thead><tbody>'+
-    D.names.map((x,i)=>`<tr><td class="num" style="color:var(--muted)">${i+1}</td><td>${x.name.charAt(0)+x.name.slice(1).toLowerCase()}</td><td class="num">${num(x.count)}</td><td class="num">${x.pct.toFixed(3)}</td></tr>`).join('')+'</tbody>';
+    D.names.map((x,i)=>`<tr><td class="num" style="color:var(--muted)">${i+1}</td><td>${fmtName(x.name)}</td><td class="num">${num(x.count)}</td><td class="num">${x.pct.toFixed(3)}</td></tr>`).join('')+'</tbody>';
+
+  // estimated vanity + call-sign formats
+  const ve = D.vanity_estimate;
+  document.getElementById('vanityNote').innerHTML =
+    `About <b>${num(ve.count)}</b> active calls (${ve.pct.toFixed(2)}%) use a premium 1&times;1/1&times;2/2&times;1 format &mdash; a conservative floor on vanity calls, since the FCC file can't flag standard-format vanity calls.`;
+  const FMT = ve.formats.filter(f=>f.format!=='other').slice(0,6);
+  new Chart(document.getElementById('formatChart'),{type:'bar',
+    data:{labels:FMT.map(f=>f.format),
+      datasets:[{data:FMT.map(f=>f.count),
+        backgroundColor:FMT.map(f=>['1x1','1x2','2x1'].includes(f.format)?GREEN_L:MUTED)}]},
+    options:{...noLegend, scales:{x:grid,y:grid}}});
+
+  // Florida
+  const FL = D.florida;
+  document.getElementById('flNote').innerHTML =
+    `Florida has <b>${num(FL.total)}</b> active operators` +
+    (FL.rank ? ` &mdash; #${FL.rank} nationally` : ``) +
+    ` (${FL.pct_of_us.toFixed(1)}% of the U.S. total). Here's the class breakdown.`;
+  renderLadder(document.getElementById('flLadder'), FL.classes);
+  classDoughnut(document.getElementById('flChart'), FL.classes);
+
+  // Pinellas County (approximated by ZIP)
+  const P = D.pinellas;
+  document.getElementById('pinNote').innerHTML =
+    `Our home county. <b>${num(P.total)}</b> active operators &mdash; ${P.pct_of_fl.toFixed(1)}% of Florida. ` +
+    `<span style="color:var(--muted)">County isn't in the FCC data, so this is approximated from Pinellas ZIP codes (337xx plus north-county 346xx).</span>`;
+  document.getElementById('pinMicro').innerHTML = [
+    ['Operators', num(P.total)],
+    ['Share of Florida', P.pct_of_fl.toFixed(1)+'%'],
+    ['Top city', P.top_city],
+    ['Est. vanity', num(P.vanity_est.count)],
+  ].map(m=>`<div class="micro"><div class="v">${m[1]}</div><div class="k">${m[0]}</div></div>`).join('');
+  renderLadder(document.getElementById('pinLadder'), P.classes);
+  classDoughnut(document.getElementById('pinChart'), P.classes);
+  rowsTable(document.getElementById('pinCityTable'),
+    '<th>City</th><th style="text-align:right">Operators</th><th style="text-align:right">%</th>',
+    P.cities.map(c=>`<tr><td>${c.city}</td><td class="num">${num(c.count)}</td><td class="num">${c.pct.toFixed(1)}</td></tr>`).join(''));
+  rowsTable(document.getElementById('pinZipTable'),
+    '<th>ZIP</th><th style="text-align:right">Operators</th><th style="text-align:right">%</th>',
+    P.zips.map(z=>`<tr><td>${z.zip}</td><td class="num">${num(z.count)}</td><td class="num">${z.pct.toFixed(1)}</td></tr>`).join(''));
+  rowsTable(document.getElementById('pinNameTable'),
+    '<th>Rank</th><th>First name</th><th style="text-align:right">Operators</th>',
+    P.names.map((x,i)=>`<tr><td class="num" style="color:var(--muted)">${i+1}</td><td>${fmtName(x.name)}</td><td class="num">${num(x.count)}</td></tr>`).join(''));
+
+  // program impact band (shown only when the roster CSV has entries)
+  if(D.program && D.program.total>0){
+    document.getElementById('impactBand').style.display='block';
+    document.getElementById('impactSub').textContent =
+      `${num(D.program.active)} currently active on the FCC roster · verified against today's file`;
+    const pn=document.getElementById('impactNum'), target=D.program.total;
+    if(reduce){ pn.textContent=num(target); }
+    else{
+      const t0=performance.now(), dur=900;
+      (function st(now){const p=Math.min(1,(now-t0)/dur);pn.textContent=num(Math.round(target*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(st);})(t0);
+    }
+  }
+
+  // animate every ladder fill once all ladders are rendered
+  requestAnimationFrame(()=>document.querySelectorAll('.fill').forEach(f=>{ f.style.width=f.dataset.w+'%'; }));
 })();
 </script>
 </body>
@@ -606,7 +816,12 @@ def main():
     print(f"Total active, unexpired: {s['total']:,}")
     for c in s["classes"]:
         print(f"  {c['label']:<16} {c['count']:>10,}  {c['pct']:5.2f}%")
-    print(f"Vanity: {s['vanity']['vanity']:,} ({s['vanity']['vanity_pct']:.2f}%)")
+    print(f"Vanity (AM flag): {s['vanity']['vanity']:,} ({s['vanity']['vanity_pct']:.2f}%)")
+    print(f"Vanity est. (1x1/1x2/2x1): {s['vanity_estimate']['count']:,} ({s['vanity_estimate']['pct']:.2f}%)")
+    print(f"Florida: {s['florida']['total']:,} (rank {s['florida']['rank']})")
+    print(f"Pinellas (by ZIP): {s['pinellas']['total']:,}  top city: {s['pinellas']['top_city']}")
+    if s.get("program"):
+        print(f"Program licenses: {s['program']['total']} ({s['program']['active']} active on FCC roster)")
     print(f"Outputs in: {os.path.abspath(args.out)}/  (open ham_stats.html)")
 
     if tmp:
