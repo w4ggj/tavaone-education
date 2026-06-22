@@ -29,6 +29,30 @@ be backfilled**, since the FCC dump is only a current snapshot. Keep this file i
 the repo so it accumulates; the generator appends to it when it's present in the
 output directory.
 
+## `program-licenses.csv`
+
+The roster of operators **licensed through our program**, driving the "new
+licenses earned with help from TavaOne Education" count on the census page.
+Header: `callsign,name,licensed_date` (only `callsign` is required). Add one row
+per student, e.g.:
+
+```csv
+callsign,name,licensed_date
+KO4ABC,Jane Doe,2025-09-14
+```
+
+The generator counts the entries and cross-checks each call against the current
+FCC roster, so the page can show both the total earned and how many are still
+active. The impact band is hidden until the file has at least one entry.
+
+## Florida & Pinellas sections
+
+The generator also emits a Florida class breakdown and a full Pinellas County
+section (class breakdown, top cities, top ZIP areas, common names, estimated
+vanity). Pinellas has **no county field in FCC data**, so it's approximated from
+ZIP codes — the `337xx` prefix plus a curated set of north-county `346xx` ZIPs
+(see `PINELLAS_346` in the script).
+
 ## Automated weekly refresh
 
 `.github/workflows/census-refresh.yml` runs Monday ~7:00 AM Eastern (and on
