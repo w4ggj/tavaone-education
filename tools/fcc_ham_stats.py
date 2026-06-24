@@ -504,6 +504,17 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .site-foot .foot-nav a[aria-current="page"]{color:var(--green-l)}
   .site-foot .signoff{margin-top:8px; font-family:var(--mono); font-size:12px; color:var(--green-d)}
   @media (max-width:760px){ .site-links{display:none} }
+
+  /* P1 restructure: section pill, "Your license" panel, lookup */
+  .sec-head .pill{margin-left:auto; font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--green-l); background:rgba(16,185,129,.10); border:1px solid var(--green-d); border-radius:999px; padding:3px 11px}
+  .yl-panel{background:rgba(16,185,129,.05); border:.5px solid rgba(16,185,129,.22); border-radius:16px; padding:26px 24px}
+  .lookup{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
+  .lookup input{font-family:var(--mono); text-transform:uppercase; letter-spacing:.08em; font-size:18px; padding:12px 14px; width:200px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; color:var(--light)}
+  .lookup input:focus{outline:none; border-color:var(--green); box-shadow:0 0 0 3px rgba(16,185,129,.15)}
+  .lookup button{font-family:var(--sans); font-weight:600; font-size:15px; padding:12px 22px; background:var(--green); color:#04221a; border:none; border-radius:10px; cursor:pointer}
+  .lookup button:hover{background:var(--green-l)}
+  .result{margin-top:20px}
+  .result .note{color:var(--muted); font-size:14px; margin:0}
 </style>
 </head>
 <body>
@@ -541,14 +552,32 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
 <main class="wrap">
 
-  <section>
-    <div class="sec-head"><span class="eyebrow">01</span><h2>Pinellas County &mdash; our backyard</h2></div>
-    <p class="sec-note" id="pinNote"></p>
-    <div class="microbar" id="pinMicro" style="margin-top:0; margin-bottom:28px"></div>
-    <div class="grid2">
-      <div class="panel"><div class="ladder" id="pinLadder"></div></div>
-      <div class="panel"><div class="chart-box"><canvas id="pinChart"></canvas></div></div>
+  <!-- 1 -->
+  <section id="us">
+    <div class="sec-head"><span class="eyebrow">United States</span><h2>License classes</h2></div>
+    <p class="sec-note">How today's active operators break down by license class. Each operator climbs from Technician to General to Amateur Extra; <b>Legacy</b> groups the discontinued Novice, Technician&nbsp;Plus, and Advanced classes.</p>
+    <div class="panel"><div class="ladder" id="usBars"></div></div>
+  </section>
+
+  <!-- 2 -->
+  <section id="your-license">
+    <div class="sec-head"><span class="eyebrow">Your license</span><h2>Look up a call sign</h2></div>
+    <div class="yl-panel">
+      <p class="sec-note" style="margin:0">Check any U.S. call sign's license class and renewal date &mdash; from the public FCC ULS database, for educational use.</p>
+      <div class="lookup">
+        <input id="callInput" type="text" inputmode="text" autocomplete="off" spellcheck="false" maxlength="7" placeholder="W4GGJ" aria-label="Call sign">
+        <button id="callBtn" type="button">Check</button>
+      </div>
+      <div id="callResult" class="result" hidden></div>
     </div>
+  </section>
+
+  <!-- 3 -->
+  <section id="county">
+    <div class="sec-head"><span class="eyebrow">Local county</span><h2 id="countyName">Pinellas County</h2><span class="pill" id="countyPill">Your county</span></div>
+    <p class="sec-note" id="countyNote"></p>
+    <div class="microbar" id="countyMicro" style="margin-top:0; margin-bottom:28px"></div>
+    <div class="panel"><div class="ladder" id="countyBars"></div></div>
     <div class="grid2" style="margin-top:28px">
       <div class="panel" style="max-height:360px; overflow:auto"><table id="pinCityTable"></table></div>
       <div class="panel" style="max-height:360px; overflow:auto"><table id="pinZipTable"></table></div>
@@ -556,17 +585,17 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     <div class="panel" style="max-height:360px; overflow:auto; margin-top:28px"><table id="pinNameTable"></table></div>
   </section>
 
-  <section>
-    <div class="sec-head"><span class="eyebrow">02</span><h2>The licensing ladder</h2></div>
-    <p class="sec-note">Every operator starts at Technician and can climb to General, then Amateur Extra &mdash; each step unlocking more bands and privileges. Here's where today's operators sit.</p>
-    <div class="grid2">
-      <div class="panel"><div class="ladder" id="ladder"></div></div>
-      <div class="panel"><div class="chart-box"><canvas id="classChart"></canvas></div></div>
-    </div>
+  <!-- 4 -->
+  <section id="florida">
+    <div class="sec-head"><span class="eyebrow">Florida overview</span><h2>Statewide</h2></div>
+    <p class="sec-note" id="flNote"></p>
+    <div class="microbar" id="flMicro" style="margin-top:0; margin-bottom:28px"></div>
+    <div class="panel"><div class="ladder" id="flBars"></div></div>
   </section>
 
+  <!-- ===== national detail (kept from the original page) ===== -->
   <section>
-    <div class="sec-head"><span class="eyebrow">03</span><h2>Where operators are</h2></div>
+    <div class="sec-head"><span class="eyebrow">Detail</span><h2>Where operators are</h2></div>
     <p class="sec-note">Active licenses by state of record. <span id="stateSummary"></span></p>
     <div class="grid2">
       <div class="panel"><div class="chart-box" style="height:360px"><canvas id="stateChart"></canvas></div></div>
@@ -575,7 +604,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   </section>
 
   <section>
-    <div class="sec-head"><span class="eyebrow">04</span><h2>Call sign anatomy</h2></div>
+    <div class="sec-head"><span class="eyebrow">Detail</span><h2>Call sign anatomy</h2></div>
     <p class="sec-note">U.S. call signs begin with A, K, N, or W, in formats like 1&times;3 (<span class="mono">W4GGJ</span>). The short 1&times;2 and 2&times;1 formats are no longer issued in sequence &mdash; they come only through the <b>vanity</b> program. <span id="vanityNote"></span></p>
     <div class="grid2">
       <div class="panel"><div class="chart-box"><canvas id="letterChart"></canvas></div></div>
@@ -584,30 +613,21 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   </section>
 
   <section>
-    <div class="sec-head"><span class="eyebrow">05</span><h2>Renewals on the horizon</h2></div>
+    <div class="sec-head"><span class="eyebrow">Detail</span><h2>Renewals on the horizon</h2></div>
     <p class="sec-note">Licenses run 10 years. This is when the current roster comes up for renewal &mdash; the current year is flagged in red.</p>
     <div class="panel"><div class="chart-box" style="height:320px"><canvas id="expChart"></canvas></div></div>
   </section>
 
   <section id="trendSec">
-    <div class="sec-head"><span class="eyebrow">06</span><h2>The roster over time</h2></div>
+    <div class="sec-head"><span class="eyebrow">Detail</span><h2>The roster over time</h2></div>
     <p class="sec-note" id="trendNote"></p>
     <div class="panel"><div class="chart-box" style="height:320px"><canvas id="trendChart"></canvas></div></div>
   </section>
 
-  <section>
-    <div class="sec-head"><span class="eyebrow">07</span><h2>Most common first names</h2></div>
+  <section style="border-bottom:none">
+    <div class="sec-head"><span class="eyebrow">Detail</span><h2>Most common first names</h2></div>
     <p class="sec-note">The first names on the active roster, most common first.</p>
     <div class="panel" style="max-height:420px; overflow:auto"><table id="nameTable"></table></div>
-  </section>
-
-  <section style="border-bottom:none">
-    <div class="sec-head"><span class="eyebrow">08</span><h2>Florida</h2></div>
-    <p class="sec-note" id="flNote"></p>
-    <div class="grid2">
-      <div class="panel"><div class="ladder" id="flLadder"></div></div>
-      <div class="panel"><div class="chart-box"><canvas id="flChart"></canvas></div></div>
-    </div>
   </section>
 
 </main>
@@ -638,37 +658,43 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   const num = n => n.toLocaleString('en-US');
   const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
   const GREEN=css('--green'), GREEN_L=css('--green-l'), MUTED=css('--muted'),
-        BORDER=css('--border'), TEXT=css('--text'), RED=css('--red'), CARD=css('--card');
-  const CLASS_COLORS={N:'#64748b',T:'#34d399',P:'#5eead4',G:'#10b981',A:'#059669',E:'#047857'};
+        BORDER=css('--border'), RED=css('--red');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const fmtName = x => x.charAt(0)+x.slice(1).toLowerCase();
-  function renderLadder(el, classes){
-    if(!el) return;
-    const mx = Math.max(...classes.map(c=>c.count), 1);
-    el.innerHTML = classes.map(c=>
-      `<div class="rung"><div class="name">${c.label}</div>
-         <div class="track"><div class="fill" data-w="${(c.count/mx*100).toFixed(1)}"
-              style="width:0;background:${CLASS_COLORS[c.code]||GREEN}"></div></div>
-         <div class="val"><b>${num(c.count)}</b> &middot; ${c.pct.toFixed(1)}%</div></div>`).join('');
-  }
-  function classDoughnut(canvas, classes){
-    if(!canvas) return;
-    return new Chart(canvas,{type:'doughnut',
-      data:{labels:classes.map(c=>c.label),
-        datasets:[{data:classes.map(c=>c.count),
-          backgroundColor:classes.map(c=>CLASS_COLORS[c.code]||GREEN), borderColor:CARD, borderWidth:2}]},
-      options:{cutout:'62%', plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:12}}}}});
-  }
+  const microHTML = items => items.map(m=>`<div class="micro"><div class="v">${m[1]}</div><div class="k">${m[0]}</div></div>`).join('');
   function rowsTable(el, head, rows){
     if(!el) return;
     el.innerHTML = '<thead><tr>'+head+'</tr></thead><tbody>'+rows+'</tbody>';
   }
 
+  // Reusable horizontal bar list (national + county class breakdowns).
+  function barsHTML(items){
+    const total = items.reduce((a,b)=>a+b.count,0) || 1;
+    const mx = Math.max(...items.map(i=>i.count), 1);
+    return items.map(i=>{
+      const pct = Math.round(i.count/total*100);
+      const w = (i.count/mx*100).toFixed(1);
+      return `<div class="rung"><div class="name">${i.label}</div>`+
+        `<div class="track"><div class="fill" data-w="${w}" style="width:0;background:${i.color||GREEN}"></div></div>`+
+        `<div class="val"><b>${num(i.count)}</b> &middot; ${pct}%</div></div>`;
+    }).join('');
+  }
+  // Collapse FCC class codes into Technician / General / Amateur Extra / Legacy.
+  function classBuckets(classes){
+    const g = code => (classes.find(c=>c.code===code)||{count:0}).count;
+    return [
+      {label:'Technician',    count:g('T'),               color:'#34d399'},
+      {label:'General',       count:g('G'),               color:'#10b981'},
+      {label:'Amateur Extra', count:g('E'),               color:'#047857'},
+      {label:'Legacy',        count:g('N')+g('P')+g('A'), color:'#64748b'},
+    ];
+  }
+
   document.getElementById('eyebrow').textContent = 'FCC ULS \u00B7 LIVE LICENSE CENSUS';
   document.getElementById('footDate').textContent = D.snapshot_date;
 
-  // hero count-up
+  // hero count-up (United States active total)
   const tEl = document.getElementById('total');
   if(reduce){ tEl.textContent = num(D.total); }
   else{
@@ -679,31 +705,49 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       if(p<1) requestAnimationFrame(step);
     })(t0);
   }
-
-  // microstats
-  const micro=[
+  document.getElementById('microbar').innerHTML = microHTML([
     ['Operators', num(D.total)],
-
     ['States & territories', num(D.states_represented)],
     ['Most common name', D.top_name],
-  ];
-  document.getElementById('microbar').innerHTML = micro.map(m=>
-    `<div class="micro"><div class="v">${m[1]}</div><div class="k">${m[0]}</div></div>`).join('');
+  ]);
 
-  // ladders (national + Florida + Pinellas share one renderer)
-  renderLadder(document.getElementById('ladder'), D.classes);
+  // 1) United States \u2014 class bars
+  document.getElementById('usBars').innerHTML = barsHTML(classBuckets(D.classes));
 
-  // chart.js defaults
+  // 2) Your license \u2014 interactive lookup (real data wiring lands in P3)
+  const ci=document.getElementById('callInput'), cb=document.getElementById('callBtn'), cr=document.getElementById('callResult');
+  function showSoon(){ cr.hidden=false; cr.innerHTML='<p class="note">Per-call lookup is coming soon &mdash; check back shortly.</p>'; }
+  cb.addEventListener('click', showSoon);
+  ci.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); showSoon(); } });
+
+  // 3) Local county \u2014 defaults to Pinellas (approximated by ZIP)
+  const P = D.pinellas;
+  document.getElementById('countyNote').innerHTML =
+    `Our home county. <b>${num(P.total)}</b> active operators &mdash; ${P.pct_of_fl.toFixed(1)}% of Florida. ` +
+    `<span style="color:var(--muted)">County isn't in the FCC data, so this is approximated from Pinellas ZIP codes (337xx plus north-county 346xx).</span>`;
+  document.getElementById('countyMicro').innerHTML = microHTML([
+    ['Active licenses', num(P.total)],
+    ['Share of Florida', P.pct_of_fl.toFixed(1)+'%'],
+    ['Top city', P.top_city],
+  ]);
+  document.getElementById('countyBars').innerHTML = barsHTML(classBuckets(P.classes));
+
+  // 4) Florida overview
+  const FL = D.florida;
+  document.getElementById('flNote').innerHTML =
+    `Florida has <b>${num(FL.total)}</b> active operators` +
+    (FL.rank ? ` &mdash; #${FL.rank} nationally` : ``) +
+    ` (${FL.pct_of_us.toFixed(1)}% of the U.S. total). Class breakdown below.`;
+  document.getElementById('flMicro').innerHTML = microHTML(
+    [['Active licenses', num(FL.total)], ['Share of U.S.', FL.pct_of_us.toFixed(1)+'%']]
+    .concat(FL.rank ? [['Rank nationally', '#'+FL.rank]] : []));
+  document.getElementById('flBars').innerHTML = barsHTML(classBuckets(FL.classes));
+
+  // chart.js defaults (secondary detail charts below)
   Chart.defaults.color = MUTED; Chart.defaults.borderColor = BORDER;
   Chart.defaults.font.family = "'JetBrains Mono', monospace";
   const noLegend={plugins:{legend:{display:false}}};
   const grid={grid:{color:BORDER}, ticks:{color:MUTED}};
-
-  new Chart(classChart,{type:'doughnut',
-    data:{labels:D.classes.map(c=>c.label),
-      datasets:[{data:D.classes.map(c=>c.count),
-        backgroundColor:D.classes.map(c=>CLASS_COLORS[c.code]||GREEN), borderColor:CARD, borderWidth:2}]},
-    options:{cutout:'62%', plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:12}}}}});
 
   new Chart(stateChart,{type:'bar',
     data:{labels:D.states.map(s=>s.state),
@@ -758,28 +802,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         backgroundColor:FMT.map(f=>['1x1','1x2','2x1'].includes(f.format)?GREEN_L:MUTED)}]},
     options:{...noLegend, scales:{x:grid,y:grid}}});
 
-  // Florida
-  const FL = D.florida;
-  document.getElementById('flNote').innerHTML =
-    `Florida has <b>${num(FL.total)}</b> active operators` +
-    (FL.rank ? ` &mdash; #${FL.rank} nationally` : ``) +
-    ` (${FL.pct_of_us.toFixed(1)}% of the U.S. total). Here's the class breakdown.`;
-  renderLadder(document.getElementById('flLadder'), FL.classes);
-  classDoughnut(document.getElementById('flChart'), FL.classes);
-
-  // Pinellas County (approximated by ZIP)
-  const P = D.pinellas;
-  document.getElementById('pinNote').innerHTML =
-    `Our home county. <b>${num(P.total)}</b> active operators &mdash; ${P.pct_of_fl.toFixed(1)}% of Florida. ` +
-    `<span style="color:var(--muted)">County isn't in the FCC data, so this is approximated from Pinellas ZIP codes (337xx plus north-county 346xx).</span>`;
-  document.getElementById('pinMicro').innerHTML = [
-    ['Operators', num(P.total)],
-    ['Share of Florida', P.pct_of_fl.toFixed(1)+'%'],
-    ['Top city', P.top_city],
-    ['Est. vanity', num(P.vanity_est.count)],
-  ].map(m=>`<div class="micro"><div class="v">${m[1]}</div><div class="k">${m[0]}</div></div>`).join('');
-  renderLadder(document.getElementById('pinLadder'), P.classes);
-  classDoughnut(document.getElementById('pinChart'), P.classes);
+  // local county detail tables (Pinellas)
   rowsTable(document.getElementById('pinCityTable'),
     '<th>City</th><th style="text-align:right">Operators</th><th style="text-align:right">%</th>',
     P.cities.map(c=>`<tr><td>${c.city}</td><td class="num">${num(c.count)}</td><td class="num">${c.pct.toFixed(1)}</td></tr>`).join(''));
