@@ -583,11 +583,11 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     <div class="yl-panel">
       <div class="yl-head"><h2 class="yl-title">Your license</h2><span class="pill">Look up any call</span></div>
       <div class="lookup">
-        <input id="callInput" type="text" inputmode="text" autocomplete="off" spellcheck="false" maxlength="10" placeholder="W4GGJ" aria-label="Call sign">
+        <input id="callInput" type="text" inputmode="text" autocomplete="off" spellcheck="false" maxlength="10" placeholder="N0CALL" aria-label="Call sign">
         <button id="callBtn" type="button">Check</button>
       </div>
       <div class="demos">
-        <button type="button" class="demo-chip" data-call="W4GGJ">W4GGJ</button>
+        <button type="button" class="demo-chip" data-demo="N0CALL">Active demo</button>
         <button type="button" class="demo-chip" data-demo="KQ4DEMO">Renewal demo</button>
         <button type="button" class="demo-chip" data-demo="W4GRACE">Expired demo</button>
       </div>
@@ -751,8 +751,9 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   const parseUSDate=s=>{const m=(s||'').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m?new Date(+m[3],+m[1]-1,+m[2]):null;};
   const fmtExp=d=>`exp ${MON[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 
-  // Synthetic demos for the renewal/expired states (W4GGJ uses the live API).
+  // Synthetic demos for the three license states (active / renewal / expired).
   const DEMO = {
+    'N0CALL':  {callsign:'N0CALL',  name:'Active Example',  klass:'GENERAL',    expiry:offsetDays(2200)},
     'KQ4DEMO': {callsign:'KQ4DEMO', name:'Renewal Example', klass:'GENERAL',    expiry:offsetDays(45)},
     'W4GRACE': {callsign:'W4GRACE', name:'Grace Example',   klass:'TECHNICIAN', expiry:offsetDays(-200)},
   };
@@ -806,9 +807,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   cb.addEventListener('click', ()=>lookup(ci.value));
   ci.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); lookup(ci.value); } });
   document.querySelectorAll('.demo-chip').forEach(ch=>ch.addEventListener('click', ()=>{
-    const live=ch.getAttribute('data-call');
-    if(live){ ci.value=live; lookup(live); }
-    else{ ci.value=''; renderLicense(DEMO[ch.getAttribute('data-demo')]); }
+    ci.value=''; renderLicense(DEMO[ch.getAttribute('data-demo')]);
   }));
 
   // 3) Local county \u2014 defaults to Pinellas (approximated by ZIP)
