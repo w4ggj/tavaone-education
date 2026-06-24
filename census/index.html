@@ -109,16 +109,35 @@
   .site-foot .signoff{margin-top:8px; font-family:var(--mono); font-size:12px; color:var(--green-d)}
   @media (max-width:760px){ .site-links{display:none} }
 
-  /* P1 restructure: section pill, "Your license" panel, lookup */
-  .sec-head .pill{margin-left:auto; font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--green-l); background:rgba(16,185,129,.10); border:1px solid var(--green-d); border-radius:999px; padding:3px 11px}
-  .yl-panel{background:rgba(16,185,129,.05); border:.5px solid rgba(16,185,129,.22); border-radius:16px; padding:26px 24px}
-  .lookup{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
-  .lookup input{font-family:var(--mono); text-transform:uppercase; letter-spacing:.08em; font-size:18px; padding:12px 14px; width:200px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; color:var(--light)}
+  /* "Your license" lookup panel + result card */
+  .sec-head .pill, .yl-head .pill{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--green-l); background:rgba(16,185,129,.10); border:1px solid var(--green-d); border-radius:999px; padding:3px 11px}
+  .sec-head .pill{margin-left:auto}
+  .yl-panel{background:rgba(16,185,129,.05); border:.5px solid rgba(16,185,129,.22); border-radius:16px; padding:24px}
+  .yl-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px}
+  .yl-title{margin:0; font-size:22px; font-weight:800; color:var(--light); border-left:3px solid var(--green); padding-left:12px; line-height:1.1}
+  .lookup{display:flex; gap:10px; flex-wrap:wrap}
+  .lookup input{font-family:var(--mono); text-transform:uppercase; letter-spacing:.08em; font-size:18px; padding:12px 14px; flex:1; min-width:180px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; color:var(--light)}
   .lookup input:focus{outline:none; border-color:var(--green); box-shadow:0 0 0 3px rgba(16,185,129,.15)}
-  .lookup button{font-family:var(--sans); font-weight:600; font-size:15px; padding:12px 22px; background:var(--green); color:#04221a; border:none; border-radius:10px; cursor:pointer}
+  .lookup button{font-family:var(--sans); font-weight:600; font-size:15px; padding:12px 26px; background:var(--green); color:#04221a; border:none; border-radius:10px; cursor:pointer}
   .lookup button:hover{background:var(--green-l)}
-  .result{margin-top:20px}
+  .demos{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
+  .demo-chip{font-family:var(--mono); font-size:12px; color:var(--muted); background:transparent; border:1px solid var(--border); border-radius:999px; padding:5px 12px; cursor:pointer; transition:color .15s,border-color .15s}
+  .demo-chip:hover{color:var(--text); border-color:var(--green-d)}
+  .result{margin-top:18px}
   .result .note{color:var(--muted); font-size:14px; margin:0}
+  .lic-card{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:22px 24px}
+  .lic-top{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
+  .lic-call{font-family:var(--mono); font-weight:700; font-size:30px; letter-spacing:.04em; color:var(--light)}
+  .lic-class{font-family:var(--mono); font-size:11px; letter-spacing:.06em; color:var(--green-l); background:rgba(16,185,129,.10); border:1px solid var(--green-d); border-radius:999px; padding:5px 12px; white-space:nowrap}
+  .lic-name{color:var(--muted); font-size:15px; margin-top:3px}
+  .lic-days{display:flex; align-items:baseline; gap:10px; margin:18px 0}
+  .lic-num{font-family:var(--mono); font-weight:700; font-size:44px; line-height:1; color:var(--light)}
+  .lic-dlabel{color:var(--muted); font-size:14px}
+  .lic-banner{display:flex; align-items:center; justify-content:space-between; gap:12px; border-radius:10px; padding:11px 14px}
+  .lic-state{font-weight:600; font-size:14px}
+  .lic-exp{font-family:var(--mono); font-size:12px; color:var(--muted)}
+  .lic-renew{display:inline-block; margin-top:14px; font-weight:600; font-size:14px; color:var(--green-l); text-decoration:none}
+  .lic-renew:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -165,12 +184,16 @@
 
   <!-- 2 -->
   <section id="your-license">
-    <div class="sec-head"><span class="eyebrow">Your license</span><h2>Look up a call sign</h2></div>
     <div class="yl-panel">
-      <p class="sec-note" style="margin:0">Check any U.S. call sign's license class and renewal date &mdash; from the public FCC ULS database, for educational use.</p>
+      <div class="yl-head"><h2 class="yl-title">Your license</h2><span class="pill">Look up any call</span></div>
       <div class="lookup">
-        <input id="callInput" type="text" inputmode="text" autocomplete="off" spellcheck="false" maxlength="7" placeholder="W4GGJ" aria-label="Call sign">
+        <input id="callInput" type="text" inputmode="text" autocomplete="off" spellcheck="false" maxlength="10" placeholder="W4GGJ" aria-label="Call sign">
         <button id="callBtn" type="button">Check</button>
+      </div>
+      <div class="demos">
+        <button type="button" class="demo-chip" data-call="W4GGJ">W4GGJ</button>
+        <button type="button" class="demo-chip" data-demo="KQ4DEMO">Renewal demo</button>
+        <button type="button" class="demo-chip" data-demo="W4GRACE">Expired demo</button>
       </div>
       <div id="callResult" class="result" hidden></div>
     </div>
@@ -318,11 +341,79 @@
   // 1) United States \u2014 class bars
   document.getElementById('usBars').innerHTML = barsHTML(classBuckets(D.classes));
 
-  // 2) Your license \u2014 interactive lookup (real data wiring lands in P3)
+  // 2) Your license \u2014 call-sign lookup + renewal countdown (callook.info JSON)
   const ci=document.getElementById('callInput'), cb=document.getElementById('callBtn'), cr=document.getElementById('callResult');
-  function showSoon(){ cr.hidden=false; cr.innerHTML='<p class="note">Per-call lookup is coming soon &mdash; check back shortly.</p>'; }
-  cb.addEventListener('click', showSoon);
-  ci.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); showSoon(); } });
+  const SHOW_NAME = true;                 // privacy flag: set false to hide licensee names
+  const RENEW_URL = 'https://www.fcc.gov/wireless/universal-licensing-system';
+  const CLASS_DISP = {'EXTRA':'Amateur Extra','AMATEUR EXTRA':'Amateur Extra','ADVANCED':'Advanced','GENERAL':'General','TECHNICIAN':'Technician','TECHNICIAN PLUS':'Technician Plus','NOVICE':'Novice'};
+  const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dayMS=86400000;
+  const midnight=d=>{const x=new Date(d); x.setHours(0,0,0,0); return x;};
+  const offsetDays=n=>{const x=midnight(new Date()); x.setDate(x.getDate()+n); return x;};
+  const titleCase=s=>(s||'').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
+  const fmtPersonName=s=>{ s=(s||'').trim(); if(s.indexOf(',')>-1){ const p=s.split(/,\s*/); return titleCase((p.slice(1).join(' ')+' '+p[0]).trim()); } return titleCase(s); };
+  const parseUSDate=s=>{const m=(s||'').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m?new Date(+m[3],+m[1]-1,+m[2]):null;};
+  const fmtExp=d=>`exp ${MON[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+
+  // Synthetic demos for the renewal/expired states (W4GGJ uses the live API).
+  const DEMO = {
+    'KQ4DEMO': {callsign:'KQ4DEMO', name:'Renewal Example', klass:'GENERAL',    expiry:offsetDays(45)},
+    'W4GRACE': {callsign:'W4GRACE', name:'Grace Example',   klass:'TECHNICIAN', expiry:offsetDays(-200)},
+  };
+
+  function licState(expiry){
+    const today=midnight(new Date()), exp=midnight(expiry);
+    const days=Math.round((exp-today)/dayMS);
+    if(days>90)  return {days, label:'License active',      color:'#34d399', tint:'rgba(16,185,129,.12)', renew:false};
+    if(days>=0)  return {days, label:'Renewal window open', color:'#fbbf24', tint:'rgba(245,158,11,.13)', renew:true};
+    const grace=midnight(expiry); grace.setFullYear(grace.getFullYear()+2);
+    return {days, label: today<grace ? 'Expired \u2014 in grace period' : 'Expired \u2014 grace over',
+            color:'#f87171', tint:'rgba(239,68,68,.13)', renew:true};
+  }
+  function renderLicense(rec){
+    const st=licState(rec.expiry);
+    const big = st.days>=0 ? num(st.days) : num(Math.abs(st.days));
+    const lbl = st.days>=0 ? 'days until expiration' : 'days past expiration';
+    const cls = CLASS_DISP[(rec.klass||'').toUpperCase()] || rec.klass || '\u2014';
+    const nameLine = (SHOW_NAME && rec.name) ? `<div class="lic-name">${rec.name}</div>` : '';
+    const renew = st.renew ? `<a class="lic-renew" href="${RENEW_URL}" target="_blank" rel="noopener">Renew at FCC ULS \u2192</a>` : '';
+    cr.hidden=false;
+    cr.innerHTML =
+      `<div class="lic-card">`+
+        `<div class="lic-top"><div><div class="lic-call">${rec.callsign}</div>${nameLine}</div>`+
+        `<span class="lic-class">${cls}</span></div>`+
+        `<div class="lic-days"><span class="lic-num">${big}</span><span class="lic-dlabel">${lbl}</span></div>`+
+        `<div class="lic-banner" style="background:${st.tint}">`+
+          `<span class="lic-state" style="color:${st.color}">\u25cf ${st.label}</span>`+
+          `<span class="lic-exp">${fmtExp(midnight(rec.expiry))}</span></div>`+
+        renew+
+      `</div>`;
+  }
+  const msg=t=>{ cr.hidden=false; cr.innerHTML='<p class="note">'+t+'</p>'; };
+
+  async function lookup(call){
+    call=(call||'').trim().toUpperCase();
+    if(!call) return;
+    if(DEMO[call]){ renderLicense(DEMO[call]); return; }
+    msg('Looking up '+call+'\u2026');
+    try{
+      const r=await fetch('https://callook.info/'+encodeURIComponent(call)+'/json');
+      const j=await r.json();
+      if(j && j.status==='UPDATING'){ msg('Callook is doing its daily update \u2014 please try again in a few minutes.'); return; }
+      if(!j || j.status!=='VALID' || !j.current){ msg('No active U.S. license found for '+call+'.'); return; }
+      const exp=parseUSDate(j.otherInfo && j.otherInfo.expiryDate);
+      if(!exp){ msg(call+' is on file, but no expiration date is listed.'); return; }
+      renderLicense({callsign:j.current.callsign||call, name:fmtPersonName(j.name), klass:j.current.operClass, expiry:exp});
+    }catch(e){ msg('Lookup is unavailable right now \u2014 please try again in a moment.'); }
+  }
+
+  cb.addEventListener('click', ()=>lookup(ci.value));
+  ci.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); lookup(ci.value); } });
+  document.querySelectorAll('.demo-chip').forEach(ch=>ch.addEventListener('click', ()=>{
+    const live=ch.getAttribute('data-call');
+    if(live){ ci.value=live; lookup(live); }
+    else{ ci.value=''; renderLicense(DEMO[ch.getAttribute('data-demo')]); }
+  }));
 
   // 3) Local county \u2014 defaults to Pinellas (approximated by ZIP)
   const P = D.pinellas;
