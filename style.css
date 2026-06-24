@@ -116,3 +116,17 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
 
 #leadership .role{color:var(--green-lt);font-weight:600;font-size:.92rem;margin-top:2px}
 #leadership .call{font-family:var(--mono);font-size:.8rem;letter-spacing:.05em;color:var(--muted);margin-top:6px}
+
+.events{display:grid;gap:16px;margin-top:40px}
+.event{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start}
+.event-date{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px 14px;text-align:center;min-width:80px}
+.event-month{display:block;font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--green-lt)}
+.event-day{display:block;font-weight:800;font-size:1.7rem;line-height:1.15;color:var(--light)}
+.event-body h3{font-size:1.16rem;font-weight:700;margin-bottom:6px}
+.event-meta{font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;color:var(--muted);margin-bottom:8px}
+.event-body p{color:var(--muted);font-size:.95rem}
+.events-empty{text-align:center}
+.events-empty h3{font-size:1.16rem;font-weight:700;margin-bottom:8px}
+.events-empty p{color:var(--muted);font-size:.96rem;max-width:60ch;margin:0 auto}
+.events-empty a{color:var(--green-lt);font-weight:600}
+@media (max-width:560px){ .event{grid-template-columns:1fr} .event-date{justify-self:start} }
