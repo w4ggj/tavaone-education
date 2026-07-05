@@ -541,7 +541,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
 <header class="site-bar">
   <div class="wrap site-bar-inner">
-    <a href="/" class="mark" aria-label="TavaOne Education home"><img src="/tavaone-education-emblem.svg" alt="" class="mark-emblem" width="28" height="28"/><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></a>
+    <a href="/" class="mark" aria-label="TavaOne Education home"><img src="/tavaone-emblem.png" alt="" class="mark-emblem" width="28" height="28"/><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></a>
     <nav class="site-links" aria-label="Primary">
       <a href="/#what">What's an Elmer</a>
       <a href="/#lab">STEM Lab</a>
@@ -657,7 +657,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
 <footer class="wrap site-foot">
   <div class="foot">
-    <a href="/" class="mark" aria-label="TavaOne Education home"><img src="/tavaone-education-emblem.svg" alt="" class="mark-emblem" width="28" height="28"/><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></a>
+    <a href="/" class="mark" aria-label="TavaOne Education home"><img src="/tavaone-emblem.png" alt="" class="mark-emblem" width="28" height="28"/><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></a>
     <nav class="foot-nav" aria-label="Footer">
       <a href="/">Home</a>
       <a href="/#programs">Programs</a>
