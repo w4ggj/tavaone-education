@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Donate &middot; TavaOne Education</title>
+<meta name="description" content="Support TavaOne Education's teaching station — fund the operating desk, donate gear, or give toward radios and antennas that put brand-new hams on the air." />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../style.css?v=17">
+<style>
+  .donate-hero{padding:80px 0 64px}
+  .donate-hero h1{max-width:22ch}
+
+  .ways-grid{margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:820px){.ways-grid{grid-template-columns:1fr}}
+
+  .way-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:16px}
+  .way-card .way-label{font-family:var(--mono);font-size:.75rem;letter-spacing:.16em;color:var(--green);text-transform:uppercase}
+  .way-card h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em}
+  .way-card p{color:var(--muted);font-size:.97rem;flex:1}
+  .way-card .way-amount{font-family:var(--mono);font-size:1.6rem;font-weight:700;color:var(--green-lt)}
+  .way-card .btn{align-self:flex-start;margin-top:4px}
+
+  .amounts{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+  .amt-chip{display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:600;font-size:.9rem;padding:8px 18px;border-radius:8px;border:1px solid var(--border);color:var(--text);cursor:pointer;transition:border-color .15s,background .15s}
+  .amt-chip:hover,.amt-chip.active{border-color:var(--green);background:rgba(16,185,129,.08)}
+
+  .desk-block{background:linear-gradient(135deg,rgba(16,185,129,.07) 0%,rgba(6,95,70,.12) 100%);border:1px solid rgba(110,231,183,.18);border-radius:20px;padding:52px 48px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  @media(max-width:820px){.desk-block{grid-template-columns:1fr;padding:36px 28px;gap:32px}}
+  .desk-block h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-.03em;max-width:none}
+  .desk-block h2 .price{color:var(--green-lt);display:block;font-size:clamp(2rem,4vw,3rem);margin-top:6px}
+  .desk-block p{color:var(--muted);font-size:1rem;margin-top:12px}
+  .desk-perks{margin-top:20px;list-style:none;display:flex;flex-direction:column;gap:8px}
+  .desk-perks li{display:flex;align-items:flex-start;gap:10px;font-size:.95rem;color:var(--text)}
+  .desk-perks li::before{content:"✓";color:var(--green);font-weight:700;flex-none;margin-top:.1em}
+  .desk-cta{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+  .desk-cta .split-note{font-size:.88rem;color:var(--muted)}
+
+  .trust-block{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:36px 40px}
+  .trust-block p{color:var(--muted);font-size:.97rem;max-width:68ch;margin-top:12px}
+
+  .fl-disclosure{margin-top:64px;padding-top:32px;border-top:1px solid var(--border)}
+  .fl-disclosure p{font-size:.8rem;color:var(--muted);line-height:1.7;max-width:72ch}
+  .fl-disclosure strong{color:var(--text)}
+</style>
+</head>
+<body id="top">
+
+<header>
+  <div class="wrap bar">
+    <a href="/" class="mark"><img src="../tavaone-emblem.png" alt="" class="mark-emblem" width="28" height="28" /><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></a>
+    <nav class="links" aria-label="Primary">
+      <a href="/#what">What's an Elmer</a>
+      <a href="/#lab">STEM Lab</a>
+      <a href="/#programs">Programs</a>
+      <a href="/#tracks">Tracks</a>
+      <a href="/#sponsor">Sponsor</a>
+      <a href="/events/">Events</a>
+      <a href="/census/">License Census</a>
+      <a href="/donate/" aria-current="page">Donate</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- Hero -->
+  <section aria-label="Donate hero">
+    <div class="wrap donate-hero">
+      <p class="seclabel">Support the mission</p>
+      <h1>Help build the room where the next generation gets on the air.</h1>
+      <p class="lede">TavaOne Education pairs new and aspiring hams with experienced operators &mdash; the Elmer tradition, alive and hands-on. We&rsquo;re building a real teaching station where beginners can sit down, key up, and make their first contact. <strong>Your gift puts them in the chair.</strong></p>
+    </div>
+  </section>
+
+  <!-- Why it matters -->
+  <section aria-label="Why it matters">
+    <div class="wrap">
+      <p class="seclabel">The problem we&rsquo;re solving</p>
+      <h2>Getting licensed is the easy part.</h2>
+      <p class="sec-intro">Staying on the air is where most newcomers quit &mdash; no gear, no mentor, no place to try. A dedicated teaching station removes every one of those barriers. It&rsquo;s where curiosity becomes a lifelong operator.</p>
+    </div>
+  </section>
+
+  <!-- Ways to give -->
+  <section aria-label="Ways to give">
+    <div class="wrap">
+      <p class="seclabel">Ways to give</p>
+      <h2>Choose how you&rsquo;d like to help.</h2>
+
+      <div class="ways-grid">
+
+        <!-- Sponsor the desk -->
+        <div class="way-card">
+          <span class="way-label">Featured campaign</span>
+          <span class="way-amount">$340</span>
+          <h3>Sponsor the Teaching Desk</h3>
+          <p>Our custom operating desk is quoted and ready to build the moment it&rsquo;s funded. Cover it in full and your name (or callsign) goes on it as Founding Sponsor.</p>
+          <a class="btn btn-primary" href="#desk-campaign">Sponsor the Desk &rarr;</a>
+        </div>
+
+        <!-- Fund the station -->
+        <div class="way-card">
+          <span class="way-label">General fund</span>
+          <h3>Fund the Teaching Station</h3>
+          <p>Any amount helps equip the room &mdash; radios, antennas, power, and the tools that put a beginner on the air. Choose an amount below or enter your own.</p>
+          <div class="amounts">
+            <span class="amt-chip">$25</span>
+            <span class="amt-chip">$50</span>
+            <span class="amt-chip">$100</span>
+            <span class="amt-chip">Custom</span>
+          </div>
+          <!-- Replace href with your payment processor link when live -->
+          <a class="btn btn-primary" href="#give">Give Now</a>
+        </div>
+
+        <!-- Donate equipment -->
+        <div class="way-card">
+          <span class="way-label">Equipment</span>
+          <h3>Donate Gear</h3>
+          <p>Have a working HF rig, tuner, power supply, antenna, coax, or a computer gathering dust? It can go straight to teaching. Gently-used gear in working condition is very welcome.</p>
+          <a class="btn btn-ghost" href="/donate/equipment/">See the Wishlist &rarr;</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Desk campaign -->
+  <section id="desk-campaign" aria-label="Desk campaign">
+    <div class="wrap">
+      <div class="desk-block">
+        <div>
+          <p class="seclabel">Sponsor campaign</p>
+          <h2>Sponsor the Teaching Desk<span class="price">$340</span></h2>
+          <p>Every station starts with a bench. Ours is designed, quoted, and ready &mdash; we&rsquo;re one $340 gift away from building the desk where beginners will make their first contacts. Fund it in full and it carries your name (or your callsign) as its founding sponsor. Prefer to split it? Four supporters at $85 gets it done just as fast.</p>
+          <ul class="desk-perks">
+            <li>Name or callsign on the desk as Founding Sponsor</li>
+            <li>Recognition on our supporter wall</li>
+            <li>A photo of the finished build in action</li>
+            <li>A donation receipt for every gift</li>
+          </ul>
+        </div>
+        <div class="desk-cta">
+          <!-- Replace href with your payment processor link when live -->
+          <a class="btn btn-primary" href="#give" style="font-size:1.05rem;padding:16px 28px;">Sponsor the Desk &mdash; $340</a>
+          <a class="btn btn-ghost" href="#give">Chip in $85 toward the desk</a>
+          <p class="split-note">Four supporters at $85 &bull; any amount toward this goal is welcome.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust block -->
+  <section aria-label="Trust and tax information">
+    <div class="wrap">
+      <p class="seclabel">About TavaOne Education</p>
+      <div class="trust-block">
+        <h2 style="font-size:1.3rem;font-weight:700;letter-spacing:-.01em;">Your gift is welcome now &mdash; and anticipated to be tax-deductible.</h2>
+        <p style="margin-top:16px;">TavaOne Education is a Florida nonprofit corporation. Our federal 501(c)(3) tax-exempt application is in progress; once approved, exemption is retroactive to our incorporation date, so gifts made now are anticipated to be tax-deductible. Please consult your tax advisor. A donation receipt is provided for every gift.</p>
+      </div>
+
+      <div class="fl-disclosure">
+        <p>A COPY OF THE OFFICIAL REGISTRATION AND FINANCIAL INFORMATION MAY BE OBTAINED FROM THE DIVISION OF CONSUMER SERVICES BY CALLING TOLL-FREE (800-435-7352) WITHIN THE STATE. REGISTRATION DOES NOT IMPLY ENDORSEMENT, APPROVAL, OR RECOMMENDATION BY THE STATE.</p>
+        <p style="margin-top:8px;">Florida Registration No. <strong>CH84123</strong></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="mark"><img src="../tavaone-emblem.png" alt="" class="mark-emblem" width="28" height="28" /><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></div>
+        <div class="signoff">73 de the Elmers crew</div>
+      </div>
+      <div class="legal">
+        <span class="em">TavaOne Education, Inc.</span><br>
+        A Florida nonprofit corporation &middot; St. Petersburg, FL<br>
+        501(c)(3) status pending &middot; &copy; 2026
+      </div>
+      <nav aria-label="Footer">
+        <a href="/#programs">Programs</a>
+        <a href="/#tracks">Tracks</a>
+        <a href="/events/">Events</a>
+        <a href="/census/">License Census</a>
+        <a href="/donate/">Donate</a>
+        <a href="mailto:hello@tavaoneeducation.org?subject=Ask%20an%20Elmer">Ask an Elmer</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
