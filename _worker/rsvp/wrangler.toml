@@ -5,7 +5,7 @@ compatibility_date = "2024-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "tavaone-rsvp"
-database_id = "PASTE_YOUR_DATABASE_ID_HERE"
+database_id = "40c16335-f195-44cf-85bb-216a6a520c79"
 
 # Secrets (set via `npx wrangler secret put`):
 #   RESEND_API_KEY   — from resend.com dashboard
