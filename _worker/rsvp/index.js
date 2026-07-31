@@ -97,8 +97,9 @@ async function sendConfirmation(env, { name, email }) {
       subject: "You're on the list — Get On The Air",
       html: `
 <p>Hi ${firstName},</p>
-<p>You're confirmed. I'll send a reminder with the full address the day before.</p>
-<p>If anything comes up and you can't make it, just reply to this email — no problem at all.</p>
+<p>You're on the list. We don't have a date and time locked in yet, but when we do you'll be the first to know — I'll send you the full details as soon as they're set.</p>
+<p>If your plans change in the meantime, just reply and I'll take you off the list. No problem at all.</p>
+<p>The event is at Balance, 6701 49th St N, Pinellas Park, FL 33781.</p>
 <p>73,<br>Joe · W4GGJ<br>TavaOne Education</p>
 <hr style="border:none;border-top:1px solid #ddd;margin:24px 0">
 <p style="font-size:12px;color:#888;">
@@ -106,7 +107,7 @@ TavaOne Education Inc. · 501(c)(3) nonprofit · FDACS Reg. CH84123<br>
 You received this because you signed up at tavaoneeducation.org/get-on-the-air
 </p>
       `.trim(),
-      text: `Hi ${firstName},\n\nYou're confirmed. I'll send a reminder with the full address the day before.\n\nIf anything comes up and you can't make it, just reply — no problem at all.\n\n73,\nJoe · W4GGJ\nTavaOne Education\n\n---\nTavaOne Education Inc. · 501(c)(3) nonprofit · FDACS Reg. CH84123`,
+      text: `Hi ${firstName},\n\nYou're on the list. We don't have a date and time locked in yet, but when we do you'll be the first to know — I'll send you the full details as soon as they're set.\n\nIf your plans change in the meantime, just reply and I'll take you off the list. No problem at all.\n\nThe event is at Balance, 6701 49th St N, Pinellas Park, FL 33781.\n\n73,\nJoe · W4GGJ\nTavaOne Education\n\n---\nTavaOne Education Inc. · 501(c)(3) nonprofit · FDACS Reg. CH84123`,
     }),
   });
   if (!res.ok) throw new Error(`Resend ${res.status}`);

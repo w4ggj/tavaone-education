@@ -469,7 +469,7 @@ form.addEventListener("submit", async function(e){
     });
     if(!res.ok) throw new Error(res.status);
     form.reset();
-    say("You're on the list. Watch for an email with the details.", true);
+    say("You're on the list. We'll email you as soon as the date is set.", true);
     btn.textContent = "Saved";
   }catch(err){
     say("That didn't send. Try again in a moment, or message me directly and I'll add you by hand.", false);
