@@ -1,0 +1,12 @@
+name = "tavaone-rsvp"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tavaone-rsvp"
+database_id = "PASTE_YOUR_DATABASE_ID_HERE"
+
+# Secrets (set via `npx wrangler secret put`):
+#   RESEND_API_KEY   — from resend.com dashboard
+#   FROM_EMAIL       — e.g. hello@tavaoneeducation.org (must be a verified Resend sender)
