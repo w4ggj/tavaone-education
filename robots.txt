@@ -1,6 +1,4 @@
 User-agent: *
-Disallow: /get-on-the-air
-Disallow: /get-on-the-air.html
 Disallow: /onair
 
 Sitemap: https://tavaoneeducation.org/sitemap.xml

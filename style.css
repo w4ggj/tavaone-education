@@ -19,7 +19,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(15,23,42,.82);backdrop-f
 .mark-emblem{width:28px;height:28px;display:block;flex:none}
 .mark .one,.mark .edu{color:var(--green)}
 .mark .slash{color:var(--text);opacity:.7;margin:0 .15em}
-nav.links{display:flex;gap:22px;font-size:.88rem;font-weight:500}
+nav.links{display:flex;gap:18px;font-size:.88rem;font-weight:500}
 nav.links a{color:var(--muted);transition:color .15s}
 nav.links a:hover{color:var(--text)}
 
