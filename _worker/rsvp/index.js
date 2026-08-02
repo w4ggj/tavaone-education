@@ -39,6 +39,10 @@ export default {
       return handleCourseSignup(request, env);
     }
 
+    if (request.method === "POST" && url.pathname === "/contact") {
+      return handleContact(request, env);
+    }
+
     return new Response("Not found", { status: 404, headers: CORS });
   },
 };
@@ -187,6 +191,66 @@ You received this because you registered at tavaoneeducation.org/courses
 </p>
       `.trim(),
       text: `Hi ${firstName},\n\nYou're on the list for the Technician License Course (${schedule}). We'll email you as soon as the next cohort date is confirmed — usually a week or two out.\n\nIn the meantime, feel free to get a head start on HamStudy.org — it's free and covers exactly what we use in class.\n\nQuestions? Just reply to this email.\n\n73,\nJoe · W4GGJ\nTavaOne Education\n\n---\nTavaOne Education Inc. · 501(c)(3) nonprofit · FDACS Reg. CH84123\nHeld at Balance Gaming · 6701 49th St N, Pinellas Park, FL 33781`,
+    }),
+  });
+  if (!res.ok) throw new Error(`Resend ${res.status}`);
+}
+
+async function handleContact(request, env) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return jsonError("Invalid JSON", 400);
+  }
+
+  const { name, email, topic = "Other", message = "" } = body;
+
+  if (!name || !String(name).trim()) return jsonError("Name required", 422);
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) return jsonError("Valid email required", 422);
+  if (!message || !String(message).trim()) return jsonError("Message required", 422);
+
+  try {
+    await env.DB.prepare(
+      `INSERT INTO contact_messages (name, email, topic, message, created_at)
+       VALUES (?, ?, ?, ?, datetime('now'))`
+    ).bind(
+      String(name).trim().slice(0, 200),
+      String(email).trim().toLowerCase().slice(0, 200),
+      String(topic).slice(0, 100),
+      String(message).trim().slice(0, 5000)
+    ).run();
+  } catch (err) {
+    console.error("D1 insert failed:", err);
+    return jsonError("Storage error", 500);
+  }
+
+  try {
+    await forwardContact(env, { name, email, topic, message });
+  } catch (err) {
+    console.error("Resend failed:", err);
+  }
+
+  return new Response(JSON.stringify({ ok: true }), {
+    status: 200,
+    headers: { "Content-Type": "application/json", ...CORS },
+  });
+}
+
+async function forwardContact(env, { name, email, topic, message }) {
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: env.FROM_EMAIL,
+      to: env.FROM_EMAIL,
+      reply_to: email,
+      subject: `[Contact] ${topic} — ${name}`,
+      html: `<p><strong>From:</strong> ${name} &lt;${email}&gt;<br><strong>Topic:</strong> ${topic}</p><p>${String(message).replace(/\n/g, '<br>')}</p>`,
+      text: `From: ${name} <${email}>\nTopic: ${topic}\n\n${message}`,
     }),
   });
   if (!res.ok) throw new Error(`Resend ${res.status}`);

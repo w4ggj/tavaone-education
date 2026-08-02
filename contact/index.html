@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact &middot; TavaOne Education</title>
+<meta name="description" content="Get in touch with TavaOne Education — ask an Elmer a question, inquire about programs, or reach out about anything else." />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../style.css?v=18">
+<style>
+  .contact-hero{padding:72px 0 48px}
+  .contact-hero h1{max-width:22ch}
+
+  .contact-layout{display:grid;grid-template-columns:1fr 420px;gap:48px;align-items:start;padding-bottom:80px}
+  @media(max-width:860px){.contact-layout{grid-template-columns:1fr}}
+
+  .contact-reasons{display:flex;flex-direction:column;gap:20px}
+  .reason-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px}
+  .reason-card h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+  .reason-card p{font-size:.92rem;color:var(--muted)}
+  .reason-card a{color:var(--green-lt);text-decoration:none;font-weight:600}
+  .reason-card a:hover{text-decoration:underline}
+
+  .contact-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:36px;position:sticky;top:24px}
+  .contact-card h2{font-size:1.2rem;font-weight:800;margin-bottom:6px}
+  .contact-card .subhead{font-size:.9rem;color:var(--muted);margin-bottom:24px}
+
+  .form-group{margin-bottom:18px}
+  .form-group label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;color:var(--text)}
+  .form-group label .opt{font-weight:400;color:var(--muted);font-size:.8rem}
+  .form-group input,.form-group select,.form-group textarea{
+    width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;
+    padding:11px 14px;font-family:var(--sans);font-size:.95rem;color:var(--text);
+    transition:border-color .15s,box-shadow .15s;outline:none
+  }
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+    border-color:var(--green);box-shadow:0 0 0 3px rgba(16,185,129,.12)
+  }
+  .form-group textarea{resize:vertical;min-height:100px}
+  .form-group select option{background:var(--bg)}
+
+  .submit-btn{width:100%;margin-top:6px;font-size:1rem;padding:14px;cursor:pointer;border:none}
+
+  .success-msg{display:none;text-align:center;padding:24px 0}
+  .success-msg .check{font-size:2.5rem;margin-bottom:12px}
+  .success-msg h3{font-size:1.2rem;font-weight:800;margin-bottom:8px}
+  .success-msg p{font-size:.92rem;color:var(--muted)}
+
+  .error-banner{display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:12px 14px;font-size:.88rem;color:#fca5a5;margin-bottom:16px}
+</style>
+</head>
+<body id="top">
+
+<header>
+  <div class="wrap bar">
+    <a href="/" class="mark"><img src="../tavaone-emblem.png" alt="" class="mark-emblem" width="28" height="28" /><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></a>
+    <nav class="links" id="site-nav" aria-label="Primary"></nav>
+  </div>
+</header>
+<script src="/nav.js"></script>
+
+<main>
+
+  <section aria-label="Contact intro">
+    <div class="wrap contact-hero">
+      <p class="seclabel">Get in touch</p>
+      <h1>We&rsquo;d love to hear from you.</h1>
+      <p class="lede" style="margin-top:16px;">Questions about getting licensed, starting a program, or anything else — drop us a message and a real operator will get back to you.</p>
+    </div>
+  </section>
+
+  <section aria-label="Contact form and reasons">
+    <div class="wrap contact-layout">
+
+      <!-- Left: reasons to reach out -->
+      <div class="contact-reasons">
+        <div class="reason-card">
+          <h3>Ask an Elmer</h3>
+          <p>Stuck on a concept, not sure which license class to aim for, or just want to know if ham radio is for you? We&rsquo;re happy to help — no question is too basic.</p>
+        </div>
+        <div class="reason-card">
+          <h3>Start a program</h3>
+          <p>Looking to bring a Technician course, Radio Merit Badge session, or POTA activation to your school, Scout troop, or club? Tell us about your group and we&rsquo;ll figure out the details together. Or <a href="/courses/">register for our next open cohort</a>.</p>
+        </div>
+        <div class="reason-card">
+          <h3>Sponsor or partner</h3>
+          <p>Interested in sponsoring the teaching station or partnering with us? Head to our <a href="/donate/">donate page</a> for campaign details, or send us a message and we&rsquo;ll be in touch.</p>
+        </div>
+        <div class="reason-card">
+          <h3>Everything else</h3>
+          <p>Media, volunteers, equipment questions, general curiosity — use the form and we&rsquo;ll route it to the right person.</p>
+        </div>
+      </div>
+
+      <!-- Right: contact form -->
+      <div class="contact-card">
+        <h2>Send us a message</h2>
+        <p class="subhead">We typically reply within a day or two.</p>
+
+        <div class="error-banner" id="errBanner"></div>
+
+        <form id="contactForm" novalidate>
+          <div class="form-group">
+            <label for="f-name">Name</label>
+            <input type="text" id="f-name" name="name" autocomplete="name" required placeholder="Jane Smith" />
+          </div>
+
+          <div class="form-group">
+            <label for="f-email">Email</label>
+            <input type="email" id="f-email" name="email" autocomplete="email" required placeholder="jane@example.com" />
+          </div>
+
+          <div class="form-group">
+            <label for="f-topic">Topic</label>
+            <select id="f-topic" name="topic">
+              <option value="Ask an Elmer">Ask an Elmer</option>
+              <option value="Start a program">Start a program</option>
+              <option value="Sponsorship / partnership">Sponsorship / partnership</option>
+              <option value="Equipment donation">Equipment donation</option>
+              <option value="Media / press">Media / press</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="f-message">Message</label>
+            <textarea id="f-message" name="message" required placeholder="What's on your mind?"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary submit-btn" id="submitBtn">Send message &rarr;</button>
+        </form>
+
+        <div class="success-msg" id="successMsg">
+          <div class="check">&#10003;</div>
+          <h3>Message sent!</h3>
+          <p>Thanks for reaching out. We&rsquo;ll get back to you within a day or two.</p>
+          <p style="margin-top:12px;"><a href="/" style="color:var(--green-lt);">Back to TavaOne Education</a></p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="mark"><img src="../tavaone-emblem.png" alt="" class="mark-emblem" width="28" height="28" /><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></div>
+        <div class="signoff">73 de the Elmers crew</div>
+      </div>
+      <div class="legal">
+        <span class="em">TavaOne Education, Inc.</span><br>
+        A Florida nonprofit corporation &middot; St. Petersburg, FL<br>
+        501(c)(3) tax-exempt nonprofit &middot; &copy; 2026
+      </div>
+      <nav aria-label="Footer">
+        <a href="/#programs">Programs</a>
+        <a href="/#tracks">Tracks</a>
+        <a href="/events/">Events</a>
+        <a href="/census/">License Census</a>
+        <a href="/donate/">Donate</a>
+        <a href="/contact/" aria-current="page">Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+const CONTACT_ENDPOINT = "https://tavaone-rsvp.jleone0.workers.dev/contact";
+
+const form = document.getElementById("contactForm");
+const submitBtn = document.getElementById("submitBtn");
+const errBanner = document.getElementById("errBanner");
+const successMsg = document.getElementById("successMsg");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  errBanner.style.display = "none";
+
+  const name = document.getElementById("f-name").value.trim();
+  const email = document.getElementById("f-email").value.trim();
+  const message = document.getElementById("f-message").value.trim();
+
+  if (!name) return showError("Please enter your name.");
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) return showError("Please enter a valid email address.");
+  if (!message) return showError("Please enter a message.");
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Sending…";
+
+  try {
+    const res = await fetch(CONTACT_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        email,
+        topic: document.getElementById("f-topic").value,
+        message,
+      }),
+    });
+
+    if (res.ok) {
+      form.style.display = "none";
+      successMsg.style.display = "block";
+    } else {
+      const data = await res.json().catch(() => ({}));
+      showError(data.error || "Something went wrong. Please try again.");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Send message →";
+    }
+  } catch {
+    showError("Could not reach the server. Check your connection and try again.");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Send message →";
+  }
+});
+
+function showError(msg) {
+  errBanner.textContent = msg;
+  errBanner.style.display = "block";
+  errBanner.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+</script>
+
+</body>
+</html>

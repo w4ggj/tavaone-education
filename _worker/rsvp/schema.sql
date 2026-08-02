@@ -19,5 +19,14 @@ CREATE TABLE IF NOT EXISTS course_signups (
   created_at TEXT    NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  name       TEXT    NOT NULL,
+  email      TEXT    NOT NULL,
+  topic      TEXT    NOT NULL DEFAULT 'Other',
+  message    TEXT    NOT NULL,
+  created_at TEXT    NOT NULL
+);
+
 -- Query all RSVPs (run via: npx wrangler d1 execute tavaone-rsvp --command "SELECT * FROM rsvps ORDER BY created_at")
 -- No public read endpoint is exposed by the Worker.

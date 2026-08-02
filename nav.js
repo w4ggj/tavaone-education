@@ -30,6 +30,7 @@
 
   var secondary = [
     { href: '/courses/',  label: 'Register' },
+    { href: '/contact/',  label: 'Contact' },
     { href: '/events/',   label: 'Events' },
     { href: '/census/',   label: 'License Census' },
     { href: '/#resources',label: 'Resources' },
