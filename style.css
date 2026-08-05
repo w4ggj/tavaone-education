@@ -130,3 +130,9 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
 .events-empty p{color:var(--muted);font-size:.96rem;max-width:60ch;margin:0 auto}
 .events-empty a{color:var(--green-lt);font-weight:600}
 @media (max-width:560px){ .event{grid-template-columns:1fr} .event-date{justify-self:start} }
+
+.solar-live{margin-top:16px;padding-top:12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.solar-live-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.solar-live-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.solar-live-chip{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.72rem;color:var(--green-lt);background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:6px;padding:4px 9px;text-decoration:none;transition:background .12s,border-color .12s}
+.solar-live-chip:hover{background:rgba(16,185,129,.16);border-color:rgba(16,185,129,.4)}
