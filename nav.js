@@ -39,19 +39,18 @@
 
   var primary = [
     { href: '/#what',     label: "What's an Elmer" },
-    { href: '/#lab',      label: 'STEM Lab' },
     { href: '/#programs', label: 'Programs' },
     { href: '/#tracks',   label: 'Tracks' },
-    { href: '/#sponsor',  label: 'Sponsor' },
+    { href: '/courses/',  label: 'Register' },
     { href: '/donate/',   label: 'Donate' },
   ];
 
   var secondary = [
-    { href: '/courses/',   label: 'Register' },
     { href: '/contact/',   label: 'Contact' },
     { href: '/events/',    label: 'Events' },
     { href: '/census/',    label: 'License Census' },
     { href: '/#resources', label: 'Resources' },
+    { href: '/#sponsor',  label: 'Sponsor' },
     { href: 'https://solar.tavaoneeducation.org', label: 'Learn Solar' },
   ];
 
