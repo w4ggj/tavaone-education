@@ -52,6 +52,7 @@
     { href: '/events/',    label: 'Events' },
     { href: '/census/',    label: 'License Census' },
     { href: '/#resources', label: 'Resources' },
+    { href: 'https://solar.tavaoneeducation.org', label: 'Learn Solar' },
   ];
 
   var all = primary.concat(secondary);
