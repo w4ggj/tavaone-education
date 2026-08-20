@@ -4,3 +4,5 @@ out/
 _census_build/
 __pycache__/
 *.pyc
+
+.wrangler/
