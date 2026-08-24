@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Elmer &middot; TavaOne Education</title>
+<meta name="description" content="A free amateur radio licensing tutor. Practice the current question pools, look up what your licence class may transmit, and find local clubs. No account, nothing collected." />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<!-- The parent stylesheet supplies the shared header and footer once deployed.
+     It is absent during local development, which is why elmer.css carries its
+     own copy of the design tokens. -->
+<link rel="stylesheet" href="../style.css?v=18" />
+<link rel="stylesheet" href="elmer.css" />
+</head>
+<body id="top">
+
+<!-- Shared site header and footer, matching study/index.html so the page is
+     part of the site rather than an orphan sitting inside it. nav.js builds the
+     primary links; the emblem paths are relative to /elmer/. -->
+<header>
+  <div class="wrap bar">
+    <a href="/" class="mark"><img src="../tavaone-emblem.png" alt="" class="mark-emblem" width="28" height="28" /><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></a>
+    <nav class="links" id="site-nav" aria-label="Primary"></nav>
+  </div>
+</header>
+<script src="/nav.js?v=2"></script>
+
+<div class="wrap">
+
+  <header class="elmer-head">
+    <div class="eyebrow">TavaOne Education</div>
+    <h1>Elmer</h1>
+    <p class="lede">
+      A free tutor for people getting or upgrading a US amateur radio licence.
+      No account, no sign-up, nothing collected. Works offline once loaded.
+    </p>
+  </header>
+
+  <!-- Scope disclosure, brief §2a. What Elmer knows, stated before it is asked
+       anything, with the verified dates rendered live from the data. -->
+  <section class="scope">
+    <h2>What Elmer knows</h2>
+    <ul>
+      <li><b>Licensing</b> — the current NCVEC question pools, US privileges by class and band, and Part 97 of the FCC rules</li>
+      <li><b>Operating</b> — standard band plans and calling frequencies, and Parks on the Air program rules and parks</li>
+      <li><b>Local</b> — clubs in the Tampa Bay area, and where to look up repeaters and exam sessions</li>
+    </ul>
+    <p class="caveat">
+      Everything here comes from those sources. Every frequency, power limit and
+      pool answer is read from a table, not generated. Elmer does not know
+      what's happening on the air right now, and it won't recommend gear or
+      troubleshoot your rig.
+    </p>
+    <div class="dates" id="verified-dates">Loading source dates…</div>
+  </section>
+
+  <nav class="tabs" role="tablist" id="tabs">
+    <button role="tab" data-panel="quiz" aria-selected="true">Practice</button>
+    <button role="tab" data-panel="exam" aria-selected="false">Mock exam</button>
+    <button role="tab" data-panel="privileges" aria-selected="false">Privileges</button>
+    <button role="tab" data-panel="bandplans" aria-selected="false">Band plans</button>
+    <button role="tab" data-panel="parks" aria-selected="false">Parks</button>
+    <button role="tab" data-panel="local" aria-selected="false">Local</button>
+  </nav>
+
+  <!-- ── practice ──────────────────────────────────────────────────────── -->
+  <section class="panel" id="panel-quiz" data-active>
+    <div class="card">
+      <div class="row">
+        <div class="field">
+          <label for="quiz-pool">Licence class</label>
+          <select id="quiz-pool">
+            <option value="technician">Technician (element 2)</option>
+            <option value="general">General (element 3)</option>
+            <option value="extra">Extra (element 4)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="quiz-sub">Subelement</label>
+          <select id="quiz-sub"><option value="">All</option></select>
+        </div>
+        <div class="field" style="flex:0 0 auto">
+          <button class="primary" id="quiz-start">Start</button>
+        </div>
+        <div class="field" style="flex:0 0 auto">
+          <button class="ghost" id="quiz-weak">Weak areas only</button>
+        </div>
+      </div>
+      <p class="note" id="quiz-hint">Your progress is kept in this browser only. Nothing is sent anywhere.</p>
+    </div>
+
+    <div class="card" id="quiz-card" hidden>
+      <div class="progress"><span id="quiz-bar" style="width:0%"></span></div>
+      <div class="qmeta">
+        <span class="qid" id="quiz-id"></span>
+        <span class="mono muted" id="quiz-count"></span>
+      </div>
+      <p class="qtext" id="quiz-question"></p>
+      <div id="quiz-figure"></div>
+      <div class="answers" id="quiz-answers"></div>
+      <p class="note" id="quiz-feedback"></p>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="primary" id="quiz-next" hidden>Next question</button>
+        <button class="ghost" id="quiz-stop">Finish</button>
+      </div>
+    </div>
+
+    <div class="card" id="quiz-stats">
+      <div class="kicker">Your progress</div>
+      <div class="stats" id="quiz-stats-body"></div>
+      <div style="margin-top:14px">
+        <button class="ghost" id="quiz-reset">Reset progress</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── mock exam ─────────────────────────────────────────────────────── -->
+  <section class="panel" id="panel-exam">
+    <div class="card">
+      <div class="kicker">Mock exam</div>
+      <p class="muted" style="margin-top:0">
+        One question drawn at random from every group in the pool, which is how
+        a real exam is built. Answers are shown only at the end.
+      </p>
+      <div class="row">
+        <div class="field">
+          <label for="exam-pool">Licence class</label>
+          <select id="exam-pool">
+            <option value="technician">Technician (element 2)</option>
+            <option value="general">General (element 3)</option>
+            <option value="extra">Extra (element 4)</option>
+          </select>
+        </div>
+        <div class="field" style="flex:0 0 auto">
+          <button class="primary" id="exam-start">Start exam</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="exam-card" hidden>
+      <div class="progress"><span id="exam-bar" style="width:0%"></span></div>
+      <div class="qmeta">
+        <span class="qid" id="exam-id"></span>
+        <span class="mono muted" id="exam-count"></span>
+      </div>
+      <p class="qtext" id="exam-question"></p>
+      <div id="exam-figure"></div>
+      <div class="answers" id="exam-answers"></div>
+      <div style="margin-top:16px">
+        <button class="ghost" id="exam-abandon">Abandon</button>
+      </div>
+    </div>
+
+    <div id="exam-result"></div>
+  </section>
+
+  <!-- ── privileges ────────────────────────────────────────────────────── -->
+  <section class="panel" id="panel-privileges">
+    <div class="card">
+      <div class="kicker">Privilege lookup</div>
+      <p class="muted" style="margin-top:0">
+        What each licence class may transmit on a given frequency, with the Part
+        97 citation. Every value is read from a table.
+      </p>
+      <div class="row">
+        <div class="field">
+          <label for="priv-freq">Frequency</label>
+          <input type="text" id="priv-freq" placeholder="14.250 MHz, 146.52, or 7025 kHz" />
+        </div>
+        <div class="field">
+          <label for="priv-class">Licence class</label>
+          <select id="priv-class">
+            <option value="">Any</option>
+            <option>Technician</option>
+            <option>General</option>
+            <option>Extra</option>
+          </select>
+        </div>
+      </div>
+      <p class="note" id="priv-parsed"></p>
+    </div>
+    <div id="priv-result"></div>
+    <div class="card">
+      <div class="kicker">Or browse by class</div>
+      <div class="row">
+        <div class="field">
+          <label for="priv-browse">Show every band for</label>
+          <select id="priv-browse">
+            <option value="">—</option>
+            <option>Technician</option>
+            <option>General</option>
+            <option>Extra</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div id="priv-browse-result"></div>
+  </section>
+
+  <!-- ── band plans ────────────────────────────────────────────────────── -->
+  <section class="panel" id="panel-bandplans">
+    <div class="card">
+      <div class="kicker">Band plans</div>
+      <p class="muted" style="margin-top:0">
+        Calling frequencies and activity centres. <b>These are voluntary
+        convention, not law.</b> The legal limits are under Privileges.
+      </p>
+    </div>
+    <div id="bandplan-result"></div>
+  </section>
+
+  <!-- ── parks ─────────────────────────────────────────────────────────── -->
+  <section class="panel" id="panel-parks">
+    <div class="card">
+      <div class="kicker">Parks on the Air — Florida</div>
+      <div class="row">
+        <div class="field">
+          <label for="park-q">Search by name, reference or grid</label>
+          <input type="search" id="park-q" placeholder="Sawgrass, US-6700, EL87" />
+        </div>
+      </div>
+      <p class="note" id="park-count"></p>
+    </div>
+    <div id="park-result"></div>
+    <div class="card">
+      <div class="kicker">Program rules</div>
+      <div id="pota-rules"></div>
+    </div>
+  </section>
+
+  <!-- ── local ─────────────────────────────────────────────────────────── -->
+  <section class="panel" id="panel-local">
+    <div class="card">
+      <div class="kicker">Clubs — Tampa Bay</div>
+      <div id="clubs-result"></div>
+    </div>
+    <div class="card">
+      <div class="kicker">Repeaters and exam sessions</div>
+      <div id="links-result"></div>
+    </div>
+  </section>
+
+  <p class="mono muted" style="font-size:.78rem;line-height:1.8;padding:30px 0 10px;border-top:1px solid var(--border);margin-top:20px">
+    Free, no account, nothing collected. Progress is stored in this browser only.
+  </p>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="mark"><img src="../tavaone-emblem.png" alt="" class="mark-emblem" width="28" height="28" /><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></div>
+        <div class="signoff">73 de the Elmers crew</div>
+      </div>
+      <div class="legal">
+        <span class="em">TavaOne Education, Inc.</span><br>
+        A Florida nonprofit corporation &middot; St. Petersburg, FL<br>
+        501(c)(3) tax-exempt nonprofit &middot; &copy; 2026
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

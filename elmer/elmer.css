@@ -1,0 +1,204 @@
+/* ==========================================================================
+   Elmer — Phase 1 static app.
+
+   The tokens below mirror tavaoneeducation.org/style.css so the page looks
+   native when it lands at /elmer/. They are duplicated rather than imported
+   because this page has to work standalone during development, before the
+   parent stylesheet exists beside it. The deployed page links ../style.css as
+   well, which wins for the shared header and footer.
+   ========================================================================== */
+
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --border: #334155;
+  --green: #10b981;
+  --green-lt: #34d399;
+  --green-dk: #065f46;
+  --accent: #6ee7b7;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --light: #f8fafc;
+  --red: #f87171;
+  --yellow: #fbbf24;
+  --sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --maxw: 1080px;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+a { color: var(--green-lt); }
+
+/* ── header ───────────────────────────────────────────────────────────── */
+
+.elmer-head { padding: 40px 0 8px; }
+.elmer-head h1 { font-size: 2rem; margin: 0 0 6px; letter-spacing: -0.02em; }
+.elmer-head .eyebrow {
+  font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.18em;
+  color: var(--green-lt); text-transform: uppercase; margin-bottom: 12px;
+}
+.elmer-head p.lede { color: var(--muted); margin: 0; max-width: 62ch; }
+
+/* ── scope disclosure ─────────────────────────────────────────────────── */
+
+.scope {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 22px; margin: 24px 0 8px;
+}
+.scope h2 { font-size: 0.95rem; margin: 0 0 12px; }
+.scope ul { margin: 0 0 12px; padding-left: 18px; }
+.scope li { margin-bottom: 6px; font-size: 0.92rem; }
+.scope li b { color: var(--light); }
+.scope .caveat { font-size: 0.9rem; color: var(--muted); margin: 10px 0 0; }
+.scope .dates {
+  font-family: var(--mono); font-size: 0.72rem; color: var(--muted);
+  margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
+  line-height: 1.8;
+}
+.scope details summary { cursor: pointer; color: var(--green-lt); font-size: 0.9rem; }
+
+/* ── tabs ─────────────────────────────────────────────────────────────── */
+
+.tabs {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin: 28px 0 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px;
+}
+.tabs button {
+  background: none; border: 1px solid transparent; color: var(--muted);
+  font-family: var(--sans); font-size: 0.92rem; font-weight: 500;
+  padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: all 0.12s;
+}
+.tabs button:hover { color: var(--text); background: rgba(255, 255, 255, 0.04); }
+.tabs button[aria-selected="true"] {
+  color: var(--bg); background: var(--green-lt); font-weight: 600;
+}
+
+.panel { display: none; padding-bottom: 80px; }
+.panel[data-active] { display: block; }
+
+/* ── generic bits ─────────────────────────────────────────────────────── */
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 22px; margin-bottom: 16px;
+}
+.kicker {
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em;
+  color: var(--accent); text-transform: uppercase; margin-bottom: 8px;
+}
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); }
+.empty {
+  border: 1px dashed var(--border); border-radius: var(--radius);
+  padding: 28px; text-align: center; color: var(--muted);
+}
+
+button.primary, .btn {
+  background: var(--green); color: #04231a; border: none; border-radius: 8px;
+  font-family: var(--sans); font-weight: 600; font-size: 0.92rem;
+  padding: 10px 18px; cursor: pointer;
+}
+button.primary:hover, .btn:hover { background: var(--green-lt); }
+button.ghost {
+  background: none; border: 1px solid var(--border); color: var(--text);
+  border-radius: 8px; padding: 10px 16px; cursor: pointer;
+  font-family: var(--sans); font-size: 0.92rem;
+}
+button.ghost:hover { border-color: var(--green); color: var(--green-lt); }
+
+input[type="text"], input[type="search"], input[type="number"], select {
+  background: var(--bg); border: 1px solid var(--border); color: var(--text);
+  border-radius: 8px; padding: 10px 12px; font-family: var(--sans);
+  font-size: 0.95rem; width: 100%;
+}
+input:focus, select:focus { outline: none; border-color: var(--green); }
+
+.row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+.field { flex: 1 1 200px; }
+.field label {
+  display: block; font-size: 0.78rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;
+  font-family: var(--mono);
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); }
+th {
+  font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--muted); font-weight: 500;
+}
+td.num { font-family: var(--mono); white-space: nowrap; }
+.scroll { overflow-x: auto; }
+
+.pill {
+  display: inline-block; font-family: var(--mono); font-size: 0.7rem;
+  padding: 2px 8px; border-radius: 20px; border: 1px solid var(--border);
+  color: var(--muted); margin-right: 6px;
+}
+.pill.reg { border-color: var(--green-dk); color: var(--green-lt); }
+.pill.conv { border-color: var(--border); color: var(--yellow); }
+
+.cite { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+.note { font-size: 0.86rem; color: var(--muted); margin-top: 6px; }
+
+/* ── quiz ─────────────────────────────────────────────────────────────── */
+
+.qmeta {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; flex-wrap: wrap; margin-bottom: 14px;
+}
+.qid { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); }
+.qtext { font-size: 1.08rem; margin: 0 0 18px; }
+
+.answers { display: grid; gap: 8px; }
+.answers button {
+  text-align: left; background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); border-radius: 8px; padding: 12px 14px; cursor: pointer;
+  font-family: var(--sans); font-size: 0.95rem; line-height: 1.5;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.answers button:hover:not(:disabled) { border-color: var(--green); }
+.answers button:disabled { cursor: default; }
+.answers button .letter {
+  font-family: var(--mono); font-weight: 700; color: var(--muted); flex-shrink: 0;
+}
+.answers button.correct { border-color: var(--green); background: rgba(16, 185, 129, 0.1); }
+.answers button.correct .letter { color: var(--green-lt); }
+.answers button.wrong { border-color: var(--red); background: rgba(248, 113, 113, 0.08); }
+.answers button.wrong .letter { color: var(--red); }
+
+.progress { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 18px; }
+.progress span { display: block; height: 100%; background: var(--green); transition: width 0.2s; }
+
+.stats { display: flex; gap: 22px; flex-wrap: wrap; font-family: var(--mono); font-size: 0.8rem; }
+.stats b { color: var(--light); font-size: 1.3rem; display: block; font-weight: 700; }
+.stats span { color: var(--muted); }
+
+@media (max-width: 640px) {
+  .elmer-head h1 { font-size: 1.6rem; }
+  .tabs button { font-size: 0.86rem; padding: 7px 11px; }
+}
+
+/* ── figures ──────────────────────────────────────────────────────────── */
+
+/* NCVEC publishes the Extra diagrams as line-art SVG on a transparent ground,
+   which is invisible on a dark page. A white plate behind them is the fix; the
+   diagram itself is untouched. */
+.figure {
+  background: #fff; border-radius: 8px; padding: 14px;
+  margin: 0 0 18px; text-align: center;
+}
+.figure img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
