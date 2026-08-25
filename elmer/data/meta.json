@@ -1,0 +1,165 @@
+{
+ "_generated": "2026-08-24T20:01:33.099Z",
+ "_source": "D1 elmer",
+ "pools": [
+  {
+   "class": "Technician",
+   "pool_version": "2026-2030",
+   "effective_date": "2026-07-01",
+   "expires_date": "2030-06-30",
+   "question_count": 409,
+   "verified_date": "2026-08-20"
+  },
+  {
+   "class": "General",
+   "pool_version": "2023-2027",
+   "effective_date": "2023-07-01",
+   "expires_date": "2027-06-30",
+   "question_count": 423,
+   "verified_date": "2026-08-20"
+  },
+  {
+   "class": "Extra",
+   "pool_version": "2024-2028",
+   "effective_date": "2024-07-01",
+   "expires_date": "2028-06-30",
+   "question_count": 599,
+   "verified_date": "2026-08-20"
+  }
+ ],
+ "cfr": [
+  {
+   "part": "95",
+   "subpart": "E",
+   "retrieved": "2026-08-24",
+   "sections": 30
+  },
+  {
+   "part": "97",
+   "subpart": "A",
+   "retrieved": "2026-08-24",
+   "sections": 15
+  },
+  {
+   "part": "97",
+   "subpart": "B",
+   "retrieved": "2026-08-24",
+   "sections": 11
+  },
+  {
+   "part": "97",
+   "subpart": "C",
+   "retrieved": "2026-08-24",
+   "sections": 11
+  },
+  {
+   "part": "97",
+   "subpart": "D",
+   "retrieved": "2026-08-24",
+   "sections": 9
+  },
+  {
+   "part": "97",
+   "subpart": "E",
+   "retrieved": "2026-08-24",
+   "sections": 4
+  },
+  {
+   "part": "97",
+   "subpart": "F",
+   "retrieved": "2026-08-24",
+   "sections": 13
+  }
+ ],
+ "freshness": [
+  {
+   "table_name": "pool_sources",
+   "row_count": 3,
+   "oldest": "2026-08-20",
+   "newest": "2026-08-20"
+  },
+  {
+   "table_name": "cfr_sections",
+   "row_count": 93,
+   "oldest": "2026-08-24",
+   "newest": "2026-08-24"
+  },
+  {
+   "table_name": "privileges",
+   "row_count": 117,
+   "oldest": "2026-08-23",
+   "newest": "2026-08-23"
+  },
+  {
+   "table_name": "band_plans",
+   "row_count": 14,
+   "oldest": "2026-08-20",
+   "newest": "2026-08-23"
+  },
+  {
+   "table_name": "pota_parks",
+   "row_count": 13067,
+   "oldest": "2026-08-20",
+   "newest": "2026-08-20"
+  },
+  {
+   "table_name": "pota_rules",
+   "row_count": 22,
+   "oldest": "2026-08-23",
+   "newest": "2026-08-23"
+  },
+  {
+   "table_name": "clubs",
+   "row_count": 6,
+   "oldest": "2026-08-24",
+   "newest": "2026-08-24"
+  }
+ ],
+ "datasets": [
+  {
+   "file": "pool-technician.json",
+   "count": 409,
+   "bytes": 166593
+  },
+  {
+   "file": "pool-general.json",
+   "count": 423,
+   "bytes": 180091
+  },
+  {
+   "file": "pool-extra.json",
+   "count": 599,
+   "bytes": 261193
+  },
+  {
+   "file": "privileges.json",
+   "count": 117,
+   "bytes": 71608
+  },
+  {
+   "file": "band-plans.json",
+   "count": 14,
+   "bytes": 3380
+  },
+  {
+   "file": "clubs.json",
+   "count": 6,
+   "bytes": 2097
+  },
+  {
+   "file": "pota-rules.json",
+   "count": 22,
+   "bytes": 6136
+  },
+  {
+   "file": "external-links.json",
+   "count": 4,
+   "bytes": 1575
+  },
+  {
+   "file": "parks-fl.json",
+   "count": 459,
+   "bytes": 115888
+  }
+ ]
+}
