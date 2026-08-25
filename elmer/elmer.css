@@ -214,4 +214,14 @@ td.num { font-family: var(--mono); white-space: nowrap; }
   background: #fff; border-radius: 8px; padding: 14px;
   margin: 0 0 18px; text-align: center;
 }
-.figure img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+/* NCVEC's SVGs carry a viewBox but no width/height attributes, so inside an
+   <img> they have no intrinsic size and collapse to 0x0 under `height:auto`
+   alone. Giving width an explicit value lets the viewBox supply the aspect
+   ratio and the diagram sizes itself from there. */
+.figure img {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
