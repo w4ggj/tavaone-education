@@ -62,11 +62,15 @@
     if (!figure) return '';
     if (FIGURE_PDF[figure]) {
       return '<p class="note"><a href="figures/' + esc(FIGURE_PDF[figure]) +
-        '" target="_blank" rel="noopener">Open figure ' + esc(figure) +
+        '?v=1" target="_blank" rel="noopener">Open figure ' + esc(figure) +
         ' (PDF, published by NCVEC)</a></p>';
     }
+    // Versioned like the site's own stylesheet. It also sidesteps a stale CDN
+    // entry: probing a URL while GitHub Pages was still building cached the
+    // 404, and a cached negative on an asset the page needs is indistinguishable
+    // from a broken deploy. A version bump is a new URL and cannot inherit one.
     return '<div class="figure"><img src="figures/' + esc(figure) +
-      '.svg" alt="Figure ' + esc(figure) + '" loading="lazy" /></div>';
+      '.svg?v=1" alt="Figure ' + esc(figure) + '" loading="lazy" /></div>';
   }
 
   function esc(s) {
