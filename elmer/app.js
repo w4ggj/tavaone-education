@@ -625,8 +625,7 @@
       bits.push(p.class + ' pool ' + p.pool_version + ' verified ' + p.verified_date);
     });
     (meta.cfr || []).forEach(function (c) {
-      bits.push('Part ' + c.part + (c.subpart ? ' Subpart ' + c.subpart : '') +
-        ' retrieved ' + c.retrieved);
+      bits.push((c.label || ('Part ' + c.part)) + ' retrieved ' + c.retrieved);
     });
     (meta.freshness || []).forEach(function (f) {
       if (f.table_name === 'privileges') bits.push('Privileges verified ' + f.newest);

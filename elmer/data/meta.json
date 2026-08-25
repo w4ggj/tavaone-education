@@ -1,5 +1,5 @@
 {
- "_generated": "2026-08-24T20:01:33.099Z",
+ "_generated": "2026-08-25T12:04:34.091Z",
  "_source": "D1 elmer",
  "pools": [
   {
@@ -30,45 +30,15 @@
  "cfr": [
   {
    "part": "95",
-   "subpart": "E",
+   "label": "Part 95 Subpart E",
    "retrieved": "2026-08-24",
    "sections": 30
   },
   {
    "part": "97",
-   "subpart": "A",
+   "label": "Part 97",
    "retrieved": "2026-08-24",
-   "sections": 15
-  },
-  {
-   "part": "97",
-   "subpart": "B",
-   "retrieved": "2026-08-24",
-   "sections": 11
-  },
-  {
-   "part": "97",
-   "subpart": "C",
-   "retrieved": "2026-08-24",
-   "sections": 11
-  },
-  {
-   "part": "97",
-   "subpart": "D",
-   "retrieved": "2026-08-24",
-   "sections": 9
-  },
-  {
-   "part": "97",
-   "subpart": "E",
-   "retrieved": "2026-08-24",
-   "sections": 4
-  },
-  {
-   "part": "97",
-   "subpart": "F",
-   "retrieved": "2026-08-24",
-   "sections": 13
+   "sections": 63
   }
  ],
  "freshness": [
