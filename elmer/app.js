@@ -27,14 +27,33 @@
 
   /* ── data loading ─────────────────────────────────────────────────────── */
 
+  // meta.json is always revalidated; every other dataset is fetched with the
+  // build stamp meta carries as a cache key.
+  //
+  // Without this, a data update never reaches anyone who has visited before.
+  // The JSON files have stable names, so a browser or CDN that cached them
+  // serves the old copy indefinitely — which for a page whose whole claim is
+  // "these values come from a verified table" means quietly showing values
+  // from a table that has since been corrected. One always-fresh file is
+  // enough to version all the rest.
+  var versionReady = fetch(DATA + 'meta.json', { cache: 'no-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (meta) {
+      cache.meta = Promise.resolve(meta);
+      return meta && meta._generated ? '?v=' + encodeURIComponent(meta._generated) : '';
+    })
+    .catch(function () { return ''; });
+
   // Datasets are fetched on first use, so opening the quiz does not pull the
   // park list. A missing file is an expected state, not an error: the table
   // behind it may simply not be seeded yet.
   function load(name) {
     if (cache[name]) return cache[name];
-    cache[name] = fetch(DATA + name + '.json')
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .catch(function () { return null; });
+    cache[name] = versionReady.then(function (v) {
+      return fetch(DATA + name + '.json' + v)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function () { return null; });
+    });
     return cache[name];
   }
 
