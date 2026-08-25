@@ -15,7 +15,7 @@
      It is absent during local development, which is why elmer.css carries its
      own copy of the design tokens. -->
 <link rel="stylesheet" href="../style.css?v=18" />
-<link rel="stylesheet" href="elmer.css?v=3" />
+<link rel="stylesheet" href="elmer.css?v=4" />
 </head>
 <body id="top">
 
@@ -63,7 +63,7 @@
     <button role="tab" data-panel="quiz" aria-selected="true">Practice</button>
     <button role="tab" data-panel="exam" aria-selected="false">Mock exam</button>
     <button role="tab" data-panel="privileges" aria-selected="false">Privileges</button>
-    <button role="tab" data-panel="bandplans" aria-selected="false">Band plans</button>
+    <button role="tab" data-panel="bandplans" aria-selected="false">Bands</button>
     <button role="tab" data-panel="parks" aria-selected="false">Parks</button>
     <button role="tab" data-panel="local" aria-selected="false">Local</button>
   </nav>
@@ -205,10 +205,26 @@
   <!-- ── band plans ────────────────────────────────────────────────────── -->
   <section class="panel" id="panel-bandplans">
     <div class="card">
-      <div class="kicker">Band plans</div>
+      <div class="kicker">Frequency allocations</div>
       <p class="muted" style="margin-top:0">
-        Calling frequencies and activity centres. <b>These are voluntary
-        convention, not law.</b> The legal limits are under Privileges.
+        Every band, every segment, and which licence classes may transmit there.
+        Read from 47 CFR §§ 97.301, 97.305 and 97.313 — this is the law, not a
+        band plan.
+      </p>
+      <p class="note" style="margin-top:10px">
+        <span class="cls on">T</span> Technician &nbsp;
+        <span class="cls on">G</span> General &nbsp;
+        <span class="cls on">E</span> Amateur Extra &nbsp;&nbsp;
+        A dimmed letter means that class may not use the segment.
+      </p>
+    </div>
+    <div id="allocations-result"></div>
+
+    <div class="card" style="margin-top:28px">
+      <div class="kicker">Calling frequencies and activity centres</div>
+      <p class="muted" style="margin-top:0">
+        Where people actually operate. <b>These are voluntary convention, not
+        law</b> — the allocations above are what binds you.
       </p>
     </div>
     <div id="bandplan-result"></div>
@@ -267,6 +283,6 @@
   </div>
 </footer>
 
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>

@@ -225,3 +225,16 @@ td.num { font-family: var(--mono); white-space: nowrap; }
   display: block;
   margin: 0 auto;
 }
+
+/* ── licence-class markers on the allocations chart ───────────────────── */
+
+/* Present and absent classes both render, so the eye can scan a column and
+   see where a privilege starts. A missing letter would just look like a gap. */
+.cls {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; margin-right: 3px; border-radius: 5px;
+  font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
+  border: 1px solid var(--border); color: var(--border); background: none;
+}
+.cls.on { border-color: var(--green); color: var(--bg); background: var(--green-lt); }
+td.classes { white-space: nowrap; }

@@ -512,7 +512,94 @@
 
   /* ── band plans ───────────────────────────────────────────────────────── */
 
+  var CLASS_ORDER = ['Technician', 'General', 'Extra'];
+  var CLASS_SHORT = { Technician: 'T', General: 'G', Extra: 'E' };
+
+  /**
+   * The allocations chart: every band, every segment, and which licence classes
+   * may use it.
+   *
+   * Built from `privileges`, which is transcribed from 47 CFR §§ 97.301, 97.305
+   * and 97.313 — not from anybody's published band chart. Those charts are
+   * copyrighted work; the underlying allocations are law.
+   *
+   * Segments identical in frequency, modes and power across classes are merged
+   * into one row listing all of them, so 6 m 50.1-51.0 MHz reads as one line
+   * for T/G/E rather than three near-identical ones. Where classes genuinely
+   * differ — Extra from 14.000 MHz, General from 14.025 — they stay separate,
+   * because that difference is the whole point of the chart.
+   */
+  function renderAllocations(rows) {
+    var merged = {};
+    var order = [];
+
+    rows.forEach(function (r) {
+      var key = [r.band, r.freq_start_hz, r.freq_stop_hz, r.modes,
+        r.max_power_mw, r.power_basis, r.channel_label].join('|');
+      if (!merged[key]) {
+        merged[key] = { row: r, classes: [] };
+        order.push(key);
+      }
+      if (merged[key].classes.indexOf(r.class) === -1) merged[key].classes.push(r.class);
+    });
+
+    var byBand = {};
+    var bandOrder = [];
+    order.forEach(function (key) {
+      var m = merged[key];
+      var band = m.row.band;
+      if (!byBand[band]) { byBand[band] = []; bandOrder.push(band); }
+      byBand[band].push(m);
+    });
+
+    // Ascending by frequency, which is how every band chart is read.
+    bandOrder.sort(function (a, b) {
+      return byBand[a][0].row.freq_start_hz - byBand[b][0].row.freq_start_hz;
+    });
+
+    var html = '';
+    bandOrder.forEach(function (band) {
+      var list = byBand[band].slice().sort(function (a, b) {
+        return a.row.freq_start_hz - b.row.freq_start_hz;
+      });
+
+      html += '<div class="card"><div class="kicker">' + esc(band) + '</div>' +
+        '<div class="scroll"><table><tr><th>Segment</th><th>Classes</th>' +
+        '<th>Modes</th><th>Max power</th><th>Citation</th></tr>';
+
+      list.forEach(function (m) {
+        var r = m.row;
+        var span = r.freq_start_hz === r.freq_stop_hz
+          ? fmtHz(r.freq_start_hz)
+          : fmtHz(r.freq_start_hz) + ' – ' + fmtHz(r.freq_stop_hz);
+
+        var pills = CLASS_ORDER.map(function (c) {
+          var has = m.classes.indexOf(c) !== -1;
+          return '<span class="cls' + (has ? ' on' : '') + '" title="' + esc(c) + '">' +
+            CLASS_SHORT[c] + '</span>';
+        }).join('');
+
+        html += '<tr><td class="num">' + esc(span) +
+          (r.channel_label ? '<br /><span class="cite">' + esc(r.channel_label) + '</span>' : '') +
+          '</td><td class="classes">' + pills + '</td><td>' + esc(r.modes) +
+          '</td><td class="num">' + esc(fmtPower(r.max_power_mw, r.power_basis)) +
+          '</td><td class="cite">§ ' + esc(r.cfr_cite) + '</td></tr>';
+      });
+
+      html += '</table></div></div>';
+    });
+
+    return html;
+  }
+
   function initBandPlans() {
+    load('privileges').then(function (data) {
+      var rows = rowsOf(data);
+      el('allocations-result').innerHTML = rows.length
+        ? renderAllocations(rows)
+        : unavailable('the allocations chart');
+    });
+
     load('band-plans').then(function (data) {
       var rows = rowsOf(data);
       if (!rows.length) {
@@ -529,7 +616,7 @@
       });
       html += '</table></div>' +
         '<p class="note">Every row here is voluntary convention, not a rule. ' +
-        'What you may legally transmit is under Privileges.</p></div>';
+        'The allocations above are the law.</p></div>';
       el('bandplan-result').innerHTML = html;
     });
   }
