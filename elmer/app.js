@@ -69,8 +69,12 @@
     // entry: probing a URL while GitHub Pages was still building cached the
     // 404, and a cached negative on an asset the page needs is indistinguishable
     // from a broken deploy. A version bump is a new URL and cannot inherit one.
+    // No loading="lazy". Exactly one figure is on screen at a time and each is
+    // a few kilobytes, so it buys nothing — and injecting a lazy image into the
+    // panel left it permanently un-loaded: complete stayed false and the
+    // element rendered at zero height while the file itself fetched fine.
     return '<div class="figure"><img src="figures/' + esc(figure) +
-      '.svg?v=1" alt="Figure ' + esc(figure) + '" loading="lazy" /></div>';
+      '.svg?v=1" alt="Figure ' + esc(figure) + '" /></div>';
   }
 
   function esc(s) {
