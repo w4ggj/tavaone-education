@@ -44,7 +44,20 @@ a { color: var(--green-lt); }
 
 /* ── header ───────────────────────────────────────────────────────────── */
 
-.elmer-head { padding: 40px 0 8px; }
+/* The site stylesheet targets bare elements — `header` is sticky with a
+   translucent blurred background and z-index 50, and `section` carries 84px of
+   vertical padding. Both reach anything here with the same tag name. The title
+   block is a div for that reason, and these resets make the page immune to the
+   collision even if the markup changes back. */
+.elmer-head, .scope, .panel {
+  position: static;
+  z-index: auto;
+  backdrop-filter: none;
+}
+.scope, .panel { padding-top: 0; padding-bottom: 0; }
+.panel { padding-bottom: 80px; }
+
+.elmer-head { padding: 40px 0 8px; background: none; }
 .elmer-head h1 { font-size: 2rem; margin: 0 0 6px; letter-spacing: -0.02em; }
 .elmer-head .eyebrow {
   font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.18em;
