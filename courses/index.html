@@ -60,6 +60,11 @@
 
   .error-banner{display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:12px 14px;font-size:.88rem;color:#fca5a5;margin-bottom:16px}
 
+  .wish-table{width:100%;border-collapse:collapse;font-size:.93rem}
+  .wish-table thead th{text-align:left;padding:8px 12px;font-family:var(--mono);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--green);border-bottom:1px solid var(--border);font-weight:500}
+  .wish-table tbody tr{border-bottom:1px solid rgba(51,65,85,.5)}
+  .wish-table tbody td{padding:12px 12px;vertical-align:top;color:var(--text)}
+
   .fl-disclosure{margin-top:64px;padding-top:32px;border-top:1px solid var(--border)}
   .fl-disclosure p{font-size:.8rem;color:var(--muted);line-height:1.7;max-width:72ch}
   .fl-disclosure strong{color:var(--text)}
@@ -95,13 +100,28 @@
         <div class="detail-block">
           <h3>What&rsquo;s covered</h3>
           <ul>
-            <li>FCC rules, privileges &amp; operating basics</li>
-            <li>VHF/UHF practices, electronics, antennas &amp; RF safety &mdash; all in plain language</li>
             <li>Study alongside HamStudy.org; instructor tracks your progress between sessions</li>
-            <li>Dedicated exam-prep &amp; practice-test session included</li>
             <li>Free license exam at SPARC &mdash; walk in a beginner, walk out licensed</li>
             <li>Scout and STEM groups welcome</li>
           </ul>
+        </div>
+
+        <div class="detail-block">
+          <h3>Session breakdown</h3>
+          <table class="wish-table" style="margin-top:12px;">
+            <thead>
+              <tr><th>Session</th><th>What happens</th></tr>
+            </thead>
+            <tbody>
+              <tr><td style="white-space:nowrap;font-weight:600;">Day 1</td><td style="color:var(--muted);">FCC rules, privileges, operating basics</td></tr>
+              <tr><td style="white-space:nowrap;font-weight:600;">Day 2</td><td style="color:var(--muted);">VHF/UHF practice, electronics fundamentals</td></tr>
+              <tr><td style="white-space:nowrap;font-weight:600;">Day 3</td><td style="color:var(--muted);">Antennas and RF safety</td></tr>
+              <tr><td style="white-space:nowrap;font-weight:600;">Day 4</td><td style="color:var(--muted);">Putting it together, question-pool work</td></tr>
+              <tr><td style="white-space:nowrap;font-weight:600;">Day 5</td><td style="color:var(--muted);">Review and practice tests</td></tr>
+              <tr><td style="white-space:nowrap;font-weight:600;">Day 6</td><td style="color:var(--muted);">Exam</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:14px;font-size:.9rem;color:var(--muted);">Days 1–4 run twice a week over two weeks. Days 5 and 6 follow on a separate date.</p>
         </div>
 
         <div class="detail-block">
@@ -109,11 +129,11 @@
           <div class="sched-chips">
             <div class="sched-chip">
               <strong>Option A &mdash; Tue/Thu evenings</strong>
-              <span>Four weeknight sessions over two weeks</span>
+              <span>Days 1–4 over two weeks, then Days 5–6</span>
             </div>
             <div class="sched-chip">
               <strong>Option B &mdash; Sunday afternoons</strong>
-              <span>Two full Sunday sessions</span>
+              <span>Two full Sunday sessions for Days 1–4, then Days 5–6</span>
             </div>
           </div>
           <p style="margin-top:14px;font-size:.9rem;color:var(--muted);">Dates are set once a cohort fills. We&rsquo;ll confirm your schedule by email before locking in a date.</p>
