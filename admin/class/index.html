@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Class Admin — TavaOne Education</title>
+<meta name="robots" content="noindex,nofollow" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../style.css?v=18">
+<style>
+  /* ── layout ── */
+  .admin-wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+  .admin-header { padding: 40px 0 28px; border-bottom: 1px solid var(--border); margin-bottom: 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .admin-header h1 { font-size: 1.5rem; font-weight: 800; }
+
+  /* ── tabs ── */
+  .tab-bar { display: flex; gap: 4px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
+  .tab-btn { background: none; border: none; font-family: var(--sans); font-size: .95rem; font-weight: 600; color: var(--muted); cursor: pointer; padding: 10px 18px; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s, border-color .15s; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--green-lt); border-bottom-color: var(--green-lt); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── class selector ── */
+  .class-select-row { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
+  .class-select-row select { background: var(--card); border: 1px solid var(--border); border-radius: 9px; padding: 10px 14px; font-family: var(--sans); font-size: .95rem; color: var(--text); min-width: 280px; outline: none; cursor: pointer; }
+  .class-select-row select:focus { border-color: var(--green); }
+
+  /* ── roster table ── */
+  .roster-table-wrap { overflow-x: auto; }
+  .roster-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+  .roster-table thead th { text-align: left; padding: 10px 14px; font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--green); border-bottom: 1px solid var(--border); font-weight: 500; white-space: nowrap; }
+  .roster-table tbody tr { border-bottom: 1px solid rgba(51,65,85,.5); }
+  .roster-table tbody tr:hover { background: rgba(255,255,255,.02); }
+  .roster-table tbody td { padding: 12px 14px; vertical-align: top; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: .75rem; font-weight: 600; }
+  .badge-paid { background: rgba(16,185,129,.15); color: var(--green-lt); }
+  .badge-pending { background: rgba(251,191,36,.12); color: #fbbf24; }
+  .badge-consent { background: rgba(16,185,129,.10); color: var(--green); }
+
+  .action-btn { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: .8rem; color: var(--muted); cursor: pointer; font-family: var(--sans); transition: background .12s, color .12s; }
+  .action-btn:hover { background: rgba(255,255,255,.05); color: var(--text); }
+  .action-btn.danger:hover { border-color: #f87171; color: #f87171; }
+
+  .roster-stats { display: flex; gap: 24px; margin-bottom: 20px; flex-wrap: wrap; }
+  .roster-stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; }
+  .roster-stat .num { font-size: 1.8rem; font-weight: 800; color: var(--green-lt); }
+  .roster-stat .lbl { font-size: .8rem; color: var(--muted); margin-top: 2px; }
+
+  /* ── new class form ── */
+  .new-class-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; max-width: 520px; margin-bottom: 40px; }
+  .new-class-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 18px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width:540px) { .form-row { grid-template-columns: 1fr; } }
+  .fg { margin-bottom: 16px; }
+  .fg label { display: block; font-size: .82rem; font-weight: 600; margin-bottom: 5px; color: var(--muted); }
+  .fg input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-family: var(--sans); font-size: .92rem; color: var(--text); outline: none; transition: border-color .15s; }
+  .fg input:focus { border-color: var(--green); }
+
+  /* ── presentation tab ── */
+  .pres-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  @media(max-width:720px) { .pres-layout { grid-template-columns: 1fr; } }
+
+  .sys-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+  .sys-card h3 { font-size: .95rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .sys-card h3 .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex: none; }
+  .sys-card[data-on="true"] h3 .status-dot { background: var(--green); }
+
+  .toggle-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .toggle-row label { font-size: .9rem; color: var(--muted); cursor: pointer; }
+  .toggle { position: relative; width: 40px; height: 22px; flex: none; }
+  .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+  .toggle-track { position: absolute; inset: 0; background: var(--border); border-radius: 99px; cursor: pointer; transition: background .18s; }
+  .toggle input:checked ~ .toggle-track { background: var(--green); }
+  .toggle-thumb { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: transform .18s; pointer-events: none; }
+  .toggle input:checked ~ .toggle-track ~ .toggle-thumb { transform: translateX(18px); }
+
+  .pres-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-family: var(--mono); font-size: .82rem; color: var(--text); outline: none; transition: border-color .15s; margin-bottom: 10px; }
+  .pres-input:focus { border-color: var(--green); }
+
+  select.pres-input { font-family: var(--sans); font-size: .88rem; cursor: pointer; }
+
+  .slide-idx { display: flex; align-items: center; gap: 12px; }
+  .slide-idx .idx-num { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; min-width: 40px; text-align: center; }
+  .slide-idx button { background: var(--card); border: 1px solid var(--border); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; color: var(--text); font-size: 1.1rem; line-height: 1; transition: background .12s; }
+  .slide-idx button:hover { background: rgba(255,255,255,.06); }
+  .slide-idx button:disabled { opacity: .35; cursor: not-allowed; }
+
+  .notes-preview { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: .85rem; color: var(--muted); min-height: 60px; white-space: pre-wrap; line-height: 1.6; }
+  .notes-preview em { color: var(--border); font-style: normal; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 22px; font-size: .9rem; font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,.5); transition: transform .22s; z-index: 999; pointer-events: none; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  .empty-state { text-align: center; padding: 40px; color: var(--muted); font-size: .95rem; }
+</style>
+</head>
+<body id="top">
+
+<header>
+  <div class="wrap bar">
+    <a href="/" class="mark"><img src="../../tavaone-emblem.png" alt="" class="mark-emblem" width="28" height="28" /><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></a>
+    <nav class="links" id="site-nav" aria-label="Primary"></nav>
+  </div>
+</header>
+<script src="/nav.js?v=2"></script>
+
+<main>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>Class Admin</h1>
+      <a href="/class/" class="btn btn-ghost" style="font-size:.88rem;">View public registration →</a>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="roster">Roster</button>
+      <button class="tab-btn" data-tab="classes">Classes</button>
+      <button class="tab-btn" data-tab="presentation">Presentation</button>
+    </div>
+
+    <!-- ══ ROSTER TAB ══════════════════════════════════════════════════════ -->
+    <div class="tab-panel active" id="tab-roster">
+      <div class="class-select-row">
+        <select id="rosterClassSelect">
+          <option value="">— select a class —</option>
+        </select>
+        <button class="btn btn-ghost" id="rosterRefresh" style="font-size:.88rem;">↻ Refresh</button>
+        <button class="btn btn-ghost" id="rosterCsv" style="font-size:.88rem;">↓ CSV</button>
+      </div>
+
+      <div class="roster-stats" id="rosterStats" style="display:none;">
+        <div class="roster-stat"><div class="num" id="statTotal">—</div><div class="lbl">Registered</div></div>
+        <div class="roster-stat"><div class="num" id="statPaid">—</div><div class="lbl">Paid / Free</div></div>
+        <div class="roster-stat"><div class="num" id="statPending">—</div><div class="lbl">Pending payment</div></div>
+      </div>
+
+      <div class="roster-table-wrap">
+        <table class="roster-table" id="rosterTable" style="display:none;">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Guardian</th>
+              <th>Consent</th>
+              <th>Status</th>
+              <th>Registered</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="rosterBody"></tbody>
+        </table>
+        <div class="empty-state" id="rosterEmpty" style="display:none;">No registrations yet for this class.</div>
+      </div>
+    </div>
+
+    <!-- ══ CLASSES TAB ═════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-classes">
+      <div class="new-class-card">
+        <h3>Create a new class</h3>
+        <div class="fg">
+          <label>Title</label>
+          <input type="text" id="nc-title" placeholder="Technician License Course — Module 1" />
+        </div>
+        <div class="form-row">
+          <div class="fg">
+            <label>Date &amp; time</label>
+            <input type="datetime-local" id="nc-date" />
+          </div>
+          <div class="fg">
+            <label>Capacity (blank = unlimited)</label>
+            <input type="number" id="nc-capacity" placeholder="20" min="1" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="fg">
+            <label>Price (cents, 0 = free)</label>
+            <input type="number" id="nc-price" placeholder="0" min="0" value="0" />
+          </div>
+        </div>
+        <button class="btn btn-primary" id="ncSubmit">Create class →</button>
+      </div>
+
+      <div class="roster-table-wrap">
+        <table class="roster-table" id="classesTable">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Date</th>
+              <th>Price</th>
+              <th>Enrolled / Cap</th>
+              <th>Total regs</th>
+            </tr>
+          </thead>
+          <tbody id="classesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ PRESENTATION TAB ════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-presentation">
+      <div class="pres-layout">
+
+        <div>
+          <!-- Deck library -->
+          <div class="sys-card" id="deckCard">
+            <h3>Deck library</h3>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+              <select class="pres-input" id="sgPresentPdfPick" style="margin-bottom:0;flex:1;"></select>
+              <button class="action-btn" id="sgPresentPdfRefresh">↻</button>
+            </div>
+            <p style="font-size:.8rem;color:var(--muted);">Choosing a deck loads it on the classroom TV and auto-pulls speaker notes.</p>
+          </div>
+
+          <!-- TV on/off -->
+          <div class="sys-card" id="tvCard" data-on="false">
+            <h3><span class="status-dot"></span> Classroom TV</h3>
+            <div class="toggle-row">
+              <label class="toggle">
+                <input type="checkbox" id="sgPresentToggle" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+              <label for="sgPresentToggle">Show deck on TV</label>
+            </div>
+          </div>
+
+          <!-- Slide navigation -->
+          <div class="sys-card">
+            <h3>Slide navigation</h3>
+            <div class="slide-idx">
+              <button id="slidePrev" disabled>&larr;</button>
+              <div class="idx-num" id="slideNum">— / —</div>
+              <button id="slideNext" disabled>&rarr;</button>
+            </div>
+            <p style="margin-top:10px;font-size:.8rem;color:var(--muted);">The phone remote also controls this. Navigation reflects the TV&rsquo;s current page once the PDF loads.</p>
+          </div>
+        </div>
+
+        <div>
+          <!-- Speaker notes -->
+          <div class="sys-card">
+            <h3>Speaker notes</h3>
+            <div class="notes-preview" id="notesDisplay"><em>Load a deck to see notes.</em></div>
+            <p style="margin-top:10px;font-size:.8rem;color:var(--muted);">Notes are shown here and on the phone remote — never on the classroom TV.</p>
+            <button class="action-btn" id="sgPresentNotesPull" style="margin-top:10px;">↓ Re-pull from PDF</button>
+          </div>
+
+          <!-- Manual PDF URL override -->
+          <div class="sys-card">
+            <h3>Manual deck URL <span style="font-size:.75rem;color:var(--muted);font-weight:400;">(advanced)</span></h3>
+            <input class="pres-input" type="url" id="sgPresentPdf" placeholder="https://…/deck.pdf" />
+            <button class="btn btn-ghost" id="sgPresentPdfSave" style="font-size:.85rem;">Load URL →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Config ─────────────────────────────────────────────────────────────────
+const API  = "https://tavaone-education-api.REPLACE_WITH_YOUR_WORKERS_SUBDOMAIN.workers.dev";
+const FB   = "https://balance-nfc-default-rtdb.firebaseio.com";
+const PDFJS_VER = "3.11.174";
+
+// ── Firebase helpers ───────────────────────────────────────────────────────
+function fbGet(path) {
+  return fetch(`${FB}/${path}.json`, { cache: "no-store" }).then(r => r.json());
+}
+function fbSet(path, val) {
+  return fetch(`${FB}/${path}.json`, { method: "PUT", body: JSON.stringify(val) }).then(r => r.json());
+}
+function fbUpdate(path, obj) {
+  return fetch(`${FB}/${path}.json`, { method: "PATCH", body: JSON.stringify(obj) }).then(r => r.json());
+}
+
+// ── Toast ──────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+}
+
+// ── Tabs ───────────────────────────────────────────────────────────────────
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+    if (btn.dataset.tab === "presentation") initPresentation();
+    if (btn.dataset.tab === "classes") loadClasses();
+  });
+});
+
+// ── API helpers ────────────────────────────────────────────────────────────
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(`${API}${path}`, {
+    ...opts,
+    headers: { "Content-Type": "application/json", ...opts.headers },
+  });
+  return res;
+}
+
+// ── Roster tab ─────────────────────────────────────────────────────────────
+let allClasses = [];
+
+async function loadClassOptions() {
+  const res = await apiFetch("/api/admin/classes");
+  const classes = await res.json();
+  allClasses = classes;
+  const sel = document.getElementById("rosterClassSelect");
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">— select a class —</option>';
+  classes.forEach(c => {
+    const o = document.createElement("option");
+    o.value = c.id;
+    o.textContent = `${c.title} — ${new Date(c.starts_at).toLocaleDateString("en-US")}`;
+    sel.appendChild(o);
+  });
+  if (cur) sel.value = cur;
+}
+
+function fmtDate(iso) {
+  return new Date(iso).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" });
+}
+
+async function loadRoster(classId) {
+  if (!classId) return;
+  const res = await apiFetch(`/api/admin/roster/${encodeURIComponent(classId)}`);
+  if (!res.ok) { showToast("Failed to load roster"); return; }
+  const { registrations } = await res.json();
+
+  const body = document.getElementById("rosterBody");
+  const table = document.getElementById("rosterTable");
+  const empty = document.getElementById("rosterEmpty");
+  const stats = document.getElementById("rosterStats");
+
+  const paid = registrations.filter(r => r.paid).length;
+  const pending = registrations.length - paid;
+  document.getElementById("statTotal").textContent = registrations.length;
+  document.getElementById("statPaid").textContent = paid;
+  document.getElementById("statPending").textContent = pending;
+  stats.style.display = registrations.length ? "" : "none";
+
+  if (!registrations.length) {
+    table.style.display = "none";
+    empty.style.display = "";
+    return;
+  }
+  table.style.display = "";
+  empty.style.display = "none";
+
+  body.innerHTML = registrations.map((r, i) => `
+    <tr id="row-${r.id}">
+      <td style="color:var(--muted);font-family:var(--mono);font-size:.8rem;">${i + 1}</td>
+      <td><strong>${esc(r.name)}</strong></td>
+      <td style="color:var(--muted);font-size:.85rem;">${esc(r.email)}</td>
+      <td style="color:var(--muted);font-size:.85rem;">${r.guardian_name ? esc(r.guardian_name) : '<em style="color:var(--border)">—</em>'}</td>
+      <td>${r.consent ? '<span class="badge badge-consent">✓</span>' : '<span class="badge" style="color:var(--muted)">—</span>'}</td>
+      <td>${r.paid ? '<span class="badge badge-paid">Paid</span>' : '<span class="badge badge-pending">Pending</span>'}</td>
+      <td style="color:var(--muted);font-size:.82rem;white-space:nowrap;">${fmtDate(r.created_at)}</td>
+      <td style="white-space:nowrap;">
+        ${!r.paid ? `<button class="action-btn" onclick="markPaid('${r.id}')">Mark paid</button> ` : ""}
+        <button class="action-btn danger" onclick="deleteReg('${r.id}', '${esc(r.name)}')">Remove</button>
+      </td>
+    </tr>
+  `).join("");
+
+  // CSV data stashed for export
+  window._rosterData = registrations;
+}
+
+function esc(s) {
+  return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+async function markPaid(regId) {
+  const res = await apiFetch(`/api/admin/registrations/${regId}`, {
+    method: "PATCH", body: JSON.stringify({ paid: 1 }),
+  });
+  if (res.ok) { showToast("Marked as paid"); loadRoster(document.getElementById("rosterClassSelect").value); }
+  else showToast("Couldn't update — try again");
+}
+
+async function deleteReg(regId, name) {
+  if (!confirm(`Remove ${name} from this class?`)) return;
+  const res = await apiFetch(`/api/admin/registrations/${regId}`, { method: "DELETE" });
+  if (res.ok) { showToast(`Removed ${name}`); loadRoster(document.getElementById("rosterClassSelect").value); }
+  else showToast("Couldn't remove — try again");
+}
+
+document.getElementById("rosterClassSelect").addEventListener("change", e => {
+  loadRoster(e.target.value);
+});
+document.getElementById("rosterRefresh").addEventListener("click", () => {
+  const id = document.getElementById("rosterClassSelect").value;
+  loadClassOptions().then(() => { if (id) loadRoster(id); });
+});
+document.getElementById("rosterCsv").addEventListener("click", () => {
+  const data = window._rosterData;
+  if (!data?.length) { showToast("No roster loaded"); return; }
+  const headers = ["#","Name","Email","Guardian","Consent","Paid","Registered","Notes"];
+  const rows = data.map((r, i) => [
+    i+1, r.name, r.email, r.guardian_name || "", r.consent ? "Yes" : "No",
+    r.paid ? "Yes" : "No", r.created_at, r.notes || ""
+  ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(","));
+  const csv = [headers.join(","), ...rows].join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = `roster-${document.getElementById("rosterClassSelect").value || "class"}.csv`;
+  a.click();
+});
+
+// ── Classes tab ─────────────────────────────────────────────────────────────
+async function loadClasses() {
+  const res = await apiFetch("/api/admin/classes");
+  const classes = await res.json();
+  const body = document.getElementById("classesBody");
+  if (!classes.length) {
+    body.innerHTML = '<tr><td colspan="5" class="empty-state">No classes yet.</td></tr>';
+    return;
+  }
+  body.innerHTML = classes.map(c => `
+    <tr>
+      <td><strong>${esc(c.title)}</strong></td>
+      <td style="color:var(--muted);white-space:nowrap;">${fmtDate(c.starts_at)}</td>
+      <td style="color:var(--muted);">${c.price_cents === 0 ? "Free" : "$" + (c.price_cents/100).toFixed(2)}</td>
+      <td style="color:var(--muted);">${c.paid_registrations}${c.capacity ? " / " + c.capacity : ""}</td>
+      <td style="color:var(--muted);">${c.total_registrations}</td>
+    </tr>
+  `).join("");
+}
+
+document.getElementById("ncSubmit").addEventListener("click", async () => {
+  const title = document.getElementById("nc-title").value.trim();
+  const starts_at = document.getElementById("nc-date").value;
+  const capacity = document.getElementById("nc-capacity").value;
+  const price_cents = parseInt(document.getElementById("nc-price").value || "0", 10);
+  if (!title || !starts_at) { showToast("Title and date are required"); return; }
+  const res = await apiFetch("/api/admin/classes", {
+    method: "POST",
+    body: JSON.stringify({ title, starts_at: new Date(starts_at).toISOString(), price_cents, capacity: capacity ? parseInt(capacity) : null }),
+  });
+  if (res.ok) {
+    showToast("Class created");
+    document.getElementById("nc-title").value = "";
+    document.getElementById("nc-date").value = "";
+    document.getElementById("nc-capacity").value = "";
+    document.getElementById("nc-price").value = "0";
+    loadClasses();
+    loadClassOptions();
+  } else {
+    const d = await res.json().catch(() => ({}));
+    showToast(d.error || "Couldn't create class");
+  }
+});
+
+// ── Presentation tab ────────────────────────────────────────────────────────
+let presInited = false;
+let presState = { on: false, idx: 0, pages: null, pdf: null, notes: null };
+let presPoller;
+
+const LIB = { owner: "w4ggj", repo: "tavaone-education", branch: "main", dir: "presentations" };
+function libUrl(name) {
+  return `https://cdn.jsdelivr.net/gh/${LIB.owner}/${LIB.repo}@${LIB.branch}/${LIB.dir}/${name.split("/").map(encodeURIComponent).join("/")}`;
+}
+
+// pdf.js lazy loader
+const pdfjsLoad = { state: "idle", api: null, cbs: [] };
+function loadPdfJs(cb) {
+  if (pdfjsLoad.state === "ready") return cb(pdfjsLoad.api);
+  if (pdfjsLoad.state === "failed") return cb(null);
+  pdfjsLoad.cbs.push(cb);
+  if (pdfjsLoad.state === "loading") return;
+  pdfjsLoad.state = "loading";
+  const s = document.createElement("script");
+  s.src = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VER}/pdf.min.js`;
+  s.onload = () => {
+    const api = window.pdfjsLib || null;
+    if (api) {
+      try { api.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VER}/pdf.worker.min.js`; } catch(e) {}
+      pdfjsLoad.state = "ready"; pdfjsLoad.api = api;
+    } else pdfjsLoad.state = "failed";
+    const cbs = pdfjsLoad.cbs; pdfjsLoad.cbs = []; cbs.forEach(f => f(pdfjsLoad.api));
+  };
+  s.onerror = () => { pdfjsLoad.state = "failed"; const cbs = pdfjsLoad.cbs; pdfjsLoad.cbs = []; cbs.forEach(f => f(null)); };
+  document.head.appendChild(s);
+}
+
+function notesFromPdf(url) {
+  return new Promise((resolve, reject) => {
+    loadPdfJs(api => {
+      if (!api) return reject(new Error("pdfjs unavailable"));
+      api.getDocument(url).promise.then(doc => {
+        const tasks = [];
+        for (let i = 1; i <= doc.numPages; i++) tasks.push(doc.getPage(i).then(p => p.getAnnotations()));
+        return Promise.all(tasks);
+      }).then(annPerPage => {
+        resolve(annPerPage.map(anns => {
+          const out = [];
+          (anns || []).forEach(a => {
+            const sub = a.subtype || "";
+            if (sub === "Link" || sub === "Popup" || sub === "Widget") return;
+            let c = a.contents;
+            if (!c && a.contentsObj) c = a.contentsObj.str;
+            c = (c || "").replace(/\r/g, "\n").trim();
+            if (c && !out.includes(c)) out.push(c);
+          });
+          return out.join("\n");
+        }));
+      }).catch(reject);
+    });
+  });
+}
+
+function paintNotes(notes, idx) {
+  const el = document.getElementById("notesDisplay");
+  if (!Array.isArray(notes) || !notes.length) { el.innerHTML = "<em>No notes for this deck.</em>"; return; }
+  const note = notes[idx] || "";
+  el.textContent = note || "(no notes for this slide)";
+}
+
+function paintSlideNav(idx, pages) {
+  const num = document.getElementById("slideNum");
+  const prev = document.getElementById("slidePrev");
+  const next = document.getElementById("slideNext");
+  num.textContent = pages ? `${idx + 1} / ${pages}` : "— / —";
+  prev.disabled = idx <= 0;
+  next.disabled = pages == null || idx >= pages - 1;
+}
+
+function applyPresState(s) {
+  presState = s;
+  // TV toggle
+  const tog = document.getElementById("sgPresentToggle");
+  if (tog.checked !== !!s.on) tog.checked = !!s.on;
+  const tvCard = document.getElementById("tvCard");
+  tvCard.setAttribute("data-on", s.on ? "true" : "false");
+  // Slide nav
+  paintSlideNav(s.idx || 0, s.pages);
+  // Notes
+  paintNotes(s.notes, s.idx || 0);
+  // Manual URL field
+  const urlField = document.getElementById("sgPresentPdf");
+  if (document.activeElement !== urlField) urlField.value = s.pdf || "";
+}
+
+async function pollPresent() {
+  try {
+    const s = await fbGet("present");
+    if (s) applyPresState({ ...presState, ...s });
+  } catch {}
+}
+
+function fillPdfList() {
+  const pick = document.getElementById("sgPresentPdfPick");
+  const api = `https://api.github.com/repos/${LIB.owner}/${LIB.repo}/contents/${LIB.dir}?ref=${LIB.branch}`;
+  fetch(api, { cache: "no-store", headers: { Accept: "application/vnd.github+json" } })
+    .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(list => {
+      const pdfs = (Array.isArray(list) ? list : [])
+        .filter(f => f.type === "file" && /\.pdf$/i.test(f.name))
+        .map(f => f.name).sort();
+      pick.innerHTML = "";
+      const o0 = document.createElement("option");
+      o0.value = ""; o0.textContent = pdfs.length ? "— choose a deck —" : "— no PDFs found —";
+      pick.appendChild(o0);
+      pdfs.forEach(n => {
+        const o = document.createElement("option"); o.value = n;
+        o.textContent = n.replace(/\.pdf$/i, "");
+        pick.appendChild(o);
+      });
+      const cur = (presState.pdf || "").trim();
+      pdfs.forEach(n => { if (libUrl(n) === cur) pick.value = n; });
+    })
+    .catch(() => { pick.innerHTML = "<option value=''>— couldn't load list (tap ↻) —</option>"; });
+}
+
+function initPresentation() {
+  if (presInited) return;
+  presInited = true;
+
+  fbGet("present").then(s => { if (s) applyPresState({ ...presState, ...s }); });
+  fillPdfList();
+  presPoller = setInterval(pollPresent, 4000);
+
+  // TV toggle
+  document.getElementById("sgPresentToggle").addEventListener("change", function() {
+    const on = this.checked;
+    document.getElementById("tvCard").setAttribute("data-on", on ? "true" : "false");
+    fbSet("present/on", on)
+      .then(() => showToast(on ? "Deck showing on TV" : "TV hidden"))
+      .catch(() => { this.checked = !on; showToast("Couldn't reach Firebase"); });
+  });
+
+  // Deck library pick
+  document.getElementById("sgPresentPdfPick").addEventListener("change", function() {
+    const name = this.value; if (!name) return;
+    const url = libUrl(name);
+    document.getElementById("sgPresentPdf").value = url;
+    showToast("Loading " + name.replace(/\.pdf$/i, "") + "…");
+    fbUpdate("present", { pdf: url, idx: 0, pages: null }).then(() => {
+      return notesFromPdf(url).then(notes => {
+        const hasAny = notes.some(c => c && c.trim());
+        return fbUpdate("present", { notes: hasAny ? notes : null }).then(() => {
+          presState.notes = hasAny ? notes : null;
+          presState.idx = 0;
+          paintNotes(presState.notes, 0);
+          showToast(hasAny ? "Deck loaded + notes pulled" : "Deck loaded (no notes in this PDF)");
+        });
+      }).catch(() => showToast("Deck loaded (couldn't read notes)"));
+    }).catch(() => showToast("Couldn't load deck — try again"));
+  });
+
+  document.getElementById("sgPresentPdfRefresh").addEventListener("click", fillPdfList);
+
+  // Manual URL save
+  document.getElementById("sgPresentPdfSave").addEventListener("click", () => {
+    const url = document.getElementById("sgPresentPdf").value.trim();
+    fbUpdate("present", { pdf: url || null, idx: 0, pages: null })
+      .then(() => showToast(url ? "Deck URL set" : "Deck cleared"))
+      .catch(() => showToast("Couldn't save — try again"));
+  });
+
+  // Slide nav
+  document.getElementById("slidePrev").addEventListener("click", () => {
+    const idx = Math.max(0, (presState.idx || 0) - 1);
+    fbSet("present/idx", idx).then(() => {
+      presState.idx = idx;
+      paintSlideNav(idx, presState.pages);
+      paintNotes(presState.notes, idx);
+    });
+  });
+  document.getElementById("slideNext").addEventListener("click", () => {
+    const max = presState.pages ? presState.pages - 1 : 9999;
+    const idx = Math.min(max, (presState.idx || 0) + 1);
+    fbSet("present/idx", idx).then(() => {
+      presState.idx = idx;
+      paintSlideNav(idx, presState.pages);
+      paintNotes(presState.notes, idx);
+    });
+  });
+
+  // Re-pull notes
+  document.getElementById("sgPresentNotesPull").addEventListener("click", function() {
+    const url = (presState.pdf || "").trim();
+    if (!url) { showToast("No deck loaded"); return; }
+    this.disabled = true;
+    showToast("Reading notes from PDF…");
+    notesFromPdf(url).then(notes => {
+      const hasAny = notes.some(c => c && c.trim());
+      if (!hasAny) { showToast("No speaker notes found in that PDF"); this.disabled = false; return; }
+      fbUpdate("present", { notes }).then(() => {
+        presState.notes = notes;
+        paintNotes(notes, presState.idx || 0);
+        showToast("Pulled notes for " + notes.length + " slide" + (notes.length === 1 ? "" : "s"));
+      }).catch(() => showToast("Read notes but couldn't save — try again"));
+    }).catch(() => showToast("Couldn't read PDF (CORS or broken link)"))
+      .finally(() => { this.disabled = false; });
+  });
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+loadClassOptions();
+</script>
+</body>
+</html>

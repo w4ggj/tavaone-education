@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Class Registration — TavaOne Education</title>
+<meta name="description" content="Register for a TavaOne Education class." />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../style.css?v=18">
+<style>
+  .reg-hero { padding: 64px 0 40px; }
+  .reg-hero h1 { max-width: 28ch; }
+  .reg-layout { display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: start; padding-bottom: 80px; }
+  @media(max-width:860px) { .reg-layout { grid-template-columns: 1fr; } }
+
+  .class-meta { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .class-meta-item { display: flex; align-items: center; gap: 10px; font-size: .95rem; color: var(--muted); }
+  .class-meta-item strong { color: var(--text); }
+
+  .reg-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 36px; position: sticky; top: 24px; }
+  .reg-card h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 6px; }
+  .reg-card .price-tag { font-size: 1.5rem; font-weight: 800; color: var(--green-lt); margin-bottom: 20px; }
+  .reg-card .price-tag .price-sub { font-size: .85rem; font-weight: 400; color: var(--muted); }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 6px; }
+  .form-group label .opt { font-weight: 400; color: var(--muted); font-size: .8rem; }
+  .form-group input, .form-group textarea {
+    width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 9px;
+    padding: 11px 14px; font-family: var(--sans); font-size: .95rem; color: var(--text);
+    transition: border-color .15s, box-shadow .15s; outline: none;
+  }
+  .form-group input:focus, .form-group textarea:focus {
+    border-color: var(--green); box-shadow: 0 0 0 3px rgba(16,185,129,.12);
+  }
+  .form-group textarea { resize: vertical; min-height: 72px; }
+
+  .consent-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; font-size: .88rem; color: var(--muted); }
+  .consent-row input[type=checkbox] { margin-top: 2px; flex: none; width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }
+
+  .submit-btn { width: 100%; margin-top: 6px; font-size: 1rem; padding: 14px; cursor: pointer; border: none; }
+  .form-note { font-size: .8rem; color: var(--muted); margin-top: 12px; text-align: center; }
+  .error-banner { display: none; background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.25); border-radius: 8px; padding: 12px 14px; font-size: .88rem; color: #fca5a5; margin-bottom: 16px; }
+  .success-msg { display: none; text-align: center; padding: 24px 0; }
+  .success-msg .check { font-size: 2.5rem; margin-bottom: 12px; }
+  .success-msg h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
+  .success-msg p { font-size: .92rem; color: var(--muted); }
+
+  .fl-disclosure { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+  .fl-disclosure p { font-size: .8rem; color: var(--muted); line-height: 1.7; max-width: 72ch; }
+  .fl-disclosure strong { color: var(--text); }
+
+  .loading-state { text-align: center; padding: 60px 0; color: var(--muted); }
+  .not-found { text-align: center; padding: 80px 0; }
+  .not-found h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; }
+</style>
+</head>
+<body id="top">
+
+<header>
+  <div class="wrap bar">
+    <a href="/" class="mark"><img src="../tavaone-emblem.png" alt="" class="mark-emblem" width="28" height="28" /><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></a>
+    <nav class="links" id="site-nav" aria-label="Primary"></nav>
+  </div>
+</header>
+<script src="/nav.js?v=2"></script>
+
+<main>
+  <section aria-label="Class registration">
+    <div class="wrap reg-hero">
+      <a href="/#tracks" class="back-link" style="display:inline-flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted);margin-bottom:40px;text-decoration:none;">&larr; Back to Learning Tracks</a>
+      <div id="loadingState" class="loading-state">Loading class details…</div>
+      <div id="notFound" class="not-found" style="display:none;">
+        <h2>Class not found</h2>
+        <p style="color:var(--muted)">This class may no longer be available. <a href="/#tracks" style="color:var(--green-lt)">View all tracks →</a></p>
+      </div>
+      <div id="classHeader" style="display:none;">
+        <p class="seclabel" id="classTrack"></p>
+        <h1 id="classTitle"></h1>
+        <div class="class-meta" id="classMeta"></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Registration form" id="regSection" style="display:none;">
+    <div class="wrap reg-layout">
+
+      <div id="classDescription"></div>
+
+      <div class="reg-card">
+        <h2>Register</h2>
+        <div class="price-tag" id="priceTag"></div>
+
+        <div class="error-banner" id="errBanner"></div>
+
+        <form id="regForm" novalidate>
+          <div class="form-group">
+            <label for="f-name">Full name</label>
+            <input type="text" id="f-name" name="name" autocomplete="name" required placeholder="Jane Smith" />
+          </div>
+          <div class="form-group">
+            <label for="f-email">Email</label>
+            <input type="email" id="f-email" name="email" autocomplete="email" required placeholder="jane@example.com" />
+          </div>
+          <div class="form-group">
+            <label for="f-guardian">Parent / guardian name <span class="opt">(if registrant is under 18)</span></label>
+            <input type="text" id="f-guardian" name="guardian_name" autocomplete="name" placeholder="John Smith" />
+          </div>
+          <div class="consent-row">
+            <input type="checkbox" id="f-consent" name="consent" />
+            <label for="f-consent">I confirm that the student is 13 or older (or is part of a Scout group event), and I consent to participation in this class.</label>
+          </div>
+          <div class="form-group">
+            <label for="f-notes">Questions or notes <span class="opt">(optional)</span></label>
+            <textarea id="f-notes" name="notes" placeholder="Anything we should know…"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary submit-btn" id="submitBtn">Register &rarr;</button>
+          <p class="form-note" id="formNote"></p>
+        </form>
+
+        <div class="success-msg" id="successMsg">
+          <div class="check">&#10003;</div>
+          <h3 id="successHeading">You&rsquo;re registered!</h3>
+          <p id="successBody">Check your inbox for confirmation details.</p>
+          <p style="margin-top:12px;"><a href="/" style="color:var(--green-lt);">Back to TavaOne Education</a></p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section aria-label="Legal disclosure">
+    <div class="wrap">
+      <div class="fl-disclosure">
+        <p>A COPY OF THE OFFICIAL REGISTRATION AND FINANCIAL INFORMATION MAY BE OBTAINED FROM THE DIVISION OF CONSUMER SERVICES BY CALLING TOLL-FREE (800-435-7352) WITHIN THE STATE. REGISTRATION DOES NOT IMPLY ENDORSEMENT, APPROVAL, OR RECOMMENDATION BY THE STATE.</p>
+        <p style="margin-top:8px;">Florida Registration No. <strong>CH84123</strong></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="mark"><img src="../tavaone-emblem.png" alt="" class="mark-emblem" width="28" height="28" /><span class="wordmark"><span>Tava</span><span class="one">One</span><span class="slash">//</span><span class="edu">Education</span></span></div>
+        <div class="signoff">73 de the Elmers crew</div>
+      </div>
+      <div class="legal">
+        <span class="em">TavaOne Education, Inc.</span><br>
+        A Florida nonprofit corporation &middot; St. Petersburg, FL<br>
+        501(c)(3) tax-exempt nonprofit &middot; &copy; 2026
+      </div>
+      <nav aria-label="Footer">
+        <a href="/#programs">Programs</a>
+        <a href="/#tracks">Tracks</a>
+        <a href="/events/">Events</a>
+        <a href="/census/">License Census</a>
+        <a href="/donate/">Donate</a>
+        <a href="mailto:hello@tavaoneeducation.org?subject=Ask%20an%20Elmer">Ask an Elmer</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+const API = "https://tavaone-education-api.REPLACE_WITH_YOUR_WORKERS_SUBDOMAIN.workers.dev";
+
+const params = new URLSearchParams(location.search);
+const classId = params.get("id");
+
+const elLoading = document.getElementById("loadingState");
+const elNotFound = document.getElementById("notFound");
+const elHeader = document.getElementById("classHeader");
+const elRegSection = document.getElementById("regSection");
+const elForm = document.getElementById("regForm");
+const elSubmit = document.getElementById("submitBtn");
+const elErr = document.getElementById("errBanner");
+const elSuccess = document.getElementById("successMsg");
+
+function fmtDate(iso) {
+  return new Date(iso).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" });
+}
+
+function fmtPrice(cents) {
+  if (cents === 0) return "No charge";
+  return "$" + (cents / 100).toFixed(2);
+}
+
+async function loadClass() {
+  if (!classId) {
+    // Show a list of upcoming classes if no ?id= param
+    try {
+      const res = await fetch(`${API}/api/classes`);
+      const classes = await res.json();
+      elLoading.style.display = "none";
+      if (!classes.length) {
+        document.getElementById("notFound").style.display = "";
+        document.getElementById("notFound").querySelector("h2").textContent = "No upcoming classes";
+        return;
+      }
+      elHeader.style.display = "";
+      document.getElementById("classTitle").textContent = "Upcoming Classes";
+      document.getElementById("classTrack").textContent = "Enroll";
+      elRegSection.style.display = "";
+      document.getElementById("classDescription").innerHTML = classes.map(c => `
+        <div class="card" style="margin-bottom:16px;">
+          <h3><a href="/class/?id=${c.id}" style="color:var(--green-lt);text-decoration:none;">${c.title}</a></h3>
+          <p style="color:var(--muted);font-size:.9rem;">${fmtDate(c.starts_at)}</p>
+          <p style="margin-top:8px;">${fmtPrice(c.price_cents)} &middot; ${c.enrolled}${c.capacity ? "/" + c.capacity : ""} enrolled</p>
+          <a class="more" href="/class/?id=${c.id}">Register →</a>
+        </div>
+      `).join("");
+      document.querySelector(".reg-card").style.display = "none";
+      return;
+    } catch { /* fall through */ }
+    elLoading.style.display = "none";
+    elNotFound.style.display = "";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/api/classes/${encodeURIComponent(classId)}`);
+    if (!res.ok) throw new Error("not found");
+    const cls = await res.json();
+
+    elLoading.style.display = "none";
+    elHeader.style.display = "";
+    elRegSection.style.display = "";
+
+    document.getElementById("classTitle").textContent = cls.title;
+    document.getElementById("classMeta").innerHTML = `
+      <div class="class-meta-item"><strong>${fmtDate(cls.starts_at)}</strong></div>
+      <div class="class-meta-item">Balance Gaming · 6701 49th St N, Pinellas Park, FL 33781</div>
+      ${cls.capacity ? `<div class="class-meta-item">${cls.enrolled} / ${cls.capacity} spots filled</div>` : ""}
+    `;
+
+    const priceTag = document.getElementById("priceTag");
+    if (cls.price_cents === 0) {
+      priceTag.innerHTML = 'No charge <span class="price-sub">— enrollment required</span>';
+      document.getElementById("formNote").textContent = "No payment required.";
+      elSubmit.textContent = "Register →";
+    } else {
+      priceTag.innerHTML = `$${(cls.price_cents / 100).toFixed(2)} <span class="price-sub">— paid via Stripe</span>`;
+      document.getElementById("formNote").textContent = "You'll be taken to a secure Stripe checkout page.";
+      elSubmit.textContent = "Proceed to payment →";
+    }
+
+    if (cls.capacity && cls.enrolled >= cls.capacity) {
+      elForm.style.display = "none";
+      elErr.textContent = "This class is full.";
+      elErr.style.display = "";
+    }
+
+    window._cls = cls;
+  } catch {
+    elLoading.style.display = "none";
+    elNotFound.style.display = "";
+  }
+}
+
+elForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  elErr.style.display = "none";
+
+  const name = document.getElementById("f-name").value.trim();
+  const email = document.getElementById("f-email").value.trim();
+  const guardian_name = document.getElementById("f-guardian").value.trim();
+  const consent = document.getElementById("f-consent").checked;
+  const notes = document.getElementById("f-notes").value.trim();
+
+  if (!name) return showErr("Please enter your name.");
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) return showErr("Please enter a valid email address.");
+
+  elSubmit.disabled = true;
+  elSubmit.textContent = "Sending…";
+
+  try {
+    const res = await fetch(`${API}/api/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ class_id: classId, name, email, guardian_name, consent, notes }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showErr(data.error || "Something went wrong. Please try again.");
+      elSubmit.disabled = false;
+      elSubmit.textContent = window._cls?.price_cents === 0 ? "Register →" : "Proceed to payment →";
+      return;
+    }
+
+    if (data.status === "pending_payment" && data.checkout_url) {
+      window.location.href = data.checkout_url;
+      return;
+    }
+
+    elForm.style.display = "none";
+    elSuccess.style.display = "block";
+  } catch {
+    showErr("Could not reach the server. Check your connection and try again.");
+    elSubmit.disabled = false;
+    elSubmit.textContent = window._cls?.price_cents === 0 ? "Register →" : "Proceed to payment →";
+  }
+});
+
+function showErr(msg) {
+  elErr.textContent = msg;
+  elErr.style.display = "";
+  elErr.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+loadClass();
+</script>
+</body>
+</html>

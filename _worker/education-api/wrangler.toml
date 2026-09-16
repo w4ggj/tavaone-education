@@ -1,0 +1,13 @@
+name = "tavaone-education-api"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tavaone-education"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+# Secrets (set via `npx wrangler secret put`):
+#   STRIPE_SECRET_KEY        — from Stripe dashboard (education account)
+#   STRIPE_WEBHOOK_SECRET    — from Stripe webhook endpoint settings
+#   CF_ACCESS_AUD            — Cloudflare Access Application Audience tag for /admin/*
