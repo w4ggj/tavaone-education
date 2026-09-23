@@ -1,7 +1,7 @@
 :root{
-  --bg:#0f172a; --card:#1e293b; --border:#334155;
-  --green:#10b981; --green-lt:#34d399; --green-dk:#065f46; --accent:#6ee7b7;
-  --text:#e2e8f0; --muted:#94a3b8; --light:#f8fafc;
+  --bg:#050d1a; --card:#0a1628; --border:#1a3a5c;
+  --green:#00a8cc; --green-lt:#00d4ff; --green-dk:#003a52; --accent:#7ee8fa;
+  --text:#e2e8f0; --muted:#7a9ab8; --light:#f0f8ff;
   --sans:'Plus Jakarta Sans',system-ui,sans-serif;
   --mono:'JetBrains Mono',ui-monospace,monospace;
   --maxw:1080px;
@@ -13,7 +13,7 @@ a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--green-lt);outline-offset:3px;border-radius:3px}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 
-header{position:sticky;top:0;z-index:50;background:rgba(15,23,42,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+header{position:sticky;top:0;z-index:50;background:rgba(5,13,26,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
 .bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:20px}
 .mark{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-weight:700;font-size:1.05rem;letter-spacing:-.01em;white-space:nowrap}
 .mark-emblem{width:28px;height:28px;display:block;flex:none}
@@ -33,12 +33,12 @@ h1 .em{color:var(--green)}
 .cta-row{margin-top:34px;display:flex;flex-wrap:wrap;gap:14px}
 .btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:.95rem;padding:13px 22px;border-radius:10px;transition:transform .12s,background .15s,border-color .15s}
 .btn:hover{transform:translateY(-2px)}
-.btn-primary{background:var(--green);color:#04221a}
+.btn-primary{background:var(--green);color:#020a14}
 .btn-primary:hover{background:var(--green-lt)}
 .btn-ghost{border:1px solid var(--border);color:var(--text)}
 .btn-ghost:hover{border-color:var(--green)}
 
-.signal{margin-top:64px;position:relative;height:78px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(16,185,129,.05),transparent)}
+.signal{margin-top:64px;position:relative;height:78px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(0,168,204,.05),transparent)}
 .signal svg{display:block;width:100%;height:78px}
 .wave-grp{animation:wave 5s linear infinite}
 @keyframes wave{from{transform:translateX(0)}to{transform:translateX(-200px)}}
@@ -64,7 +64,7 @@ h2{font-size:clamp(1.7rem,3.6vw,2.4rem);font-weight:700;letter-spacing:-.02em;ma
 .tracklist li{position:relative;padding-left:20px;color:var(--muted);font-size:.92rem}
 .tracklist li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--green)}
 
-.lab{background:linear-gradient(180deg,rgba(16,185,129,.06),transparent)}
+.lab{background:linear-gradient(180deg,rgba(0,168,204,.06),transparent)}
 .labnote{margin-top:22px;font-size:.92rem;color:var(--muted);font-style:italic}
 
 .sponsor{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -134,5 +134,5 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
 .solar-live{margin-top:16px;padding-top:12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
 .solar-live-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .solar-live-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
-.solar-live-chip{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.72rem;color:var(--green-lt);background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:6px;padding:4px 9px;text-decoration:none;transition:background .12s,border-color .12s}
-.solar-live-chip:hover{background:rgba(16,185,129,.16);border-color:rgba(16,185,129,.4)}
+.solar-live-chip{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.72rem;color:var(--green-lt);background:rgba(0,168,204,.08);border:1px solid rgba(0,168,204,.2);border-radius:6px;padding:4px 9px;text-decoration:none;transition:background .12s,border-color .12s}
+.solar-live-chip:hover{background:rgba(0,168,204,.16);border-color:rgba(0,168,204,.4)}
