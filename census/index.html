@@ -12,7 +12,7 @@
 <style>
   :root{
     --bg:#0f172a; --bg2:#0b1120; --card:#1e293b; --border:#334155;
-    --green:#10b981; --green-l:#34d399; --green-d:#065f46;
+    --green:#00a8cc; --green-l:#00d4ff; --green-d:#003a52;
     --text:#e2e8f0; --muted:#94a3b8; --light:#f8fafc; --red:#ef4444;
     --sans:'Plus Jakarta Sans',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
   }
@@ -24,13 +24,13 @@
 
   /* hero */
   .hero{position:relative; padding:88px 0 56px; border-bottom:1px solid var(--border);
-        background:radial-gradient(120% 80% at 50% -10%, rgba(16,185,129,.10), transparent 60%), var(--bg2);}
+        background:radial-gradient(120% 80% at 50% -10%, rgba(0,168,204,.10), transparent 60%), var(--bg2);}
   .live{display:inline-flex; align-items:center; gap:8px; margin-bottom:22px; flex-wrap:wrap}
   .live .updated{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
-  .dot{width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 0 0 rgba(16,185,129,.6); animation:pulse 2.4s infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.5)}70%{box-shadow:0 0 0 9px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+  .dot{width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 0 0 rgba(0,168,204,.6); animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,168,204,.5)}70%{box-shadow:0 0 0 9px rgba(0,168,204,0)}100%{box-shadow:0 0 0 0 rgba(0,168,204,0)}}
   .total{font-family:var(--mono); font-weight:700; font-size:clamp(56px,13vw,150px); line-height:.95;
-         color:var(--light); text-shadow:0 0 32px rgba(16,185,129,.28); letter-spacing:-.02em; margin:6px 0 4px}
+         color:var(--light); text-shadow:0 0 32px rgba(0,168,204,.28); letter-spacing:-.02em; margin:6px 0 4px}
   .total-label{font-size:clamp(15px,2.4vw,20px); color:var(--muted); max-width:46ch}
   .total-label b{color:var(--green-l); font-weight:600}
 
@@ -62,7 +62,7 @@
   th,td{text-align:left; padding:9px 10px; border-bottom:1px solid var(--border)}
   th{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700}
   td.num{font-family:var(--mono); text-align:right; color:var(--light)}
-  tbody tr:hover{background:rgba(16,185,129,.06)}
+  tbody tr:hover{background:rgba(0,168,204,.06)}
 
   footer{padding:48px 0 72px; color:var(--muted); font-size:13px}
   footer .src{font-family:var(--mono); font-size:12px; line-height:1.9}
@@ -83,9 +83,9 @@
   .mono{font-family:var(--mono)}
 
   /* program impact band */
-  .impact{background:linear-gradient(180deg, rgba(16,185,129,.12), transparent); border-bottom:1px solid var(--border)}
+  .impact{background:linear-gradient(180deg, rgba(0,168,204,.12), transparent); border-bottom:1px solid var(--border)}
   .impact-inner{display:flex; align-items:center; gap:24px; padding:36px 0; flex-wrap:wrap}
-  .impact-num{font-family:var(--mono); font-weight:700; font-size:clamp(40px,8vw,72px); line-height:1; color:var(--green-l); text-shadow:0 0 28px rgba(16,185,129,.25)}
+  .impact-num{font-family:var(--mono); font-weight:700; font-size:clamp(40px,8vw,72px); line-height:1; color:var(--green-l); text-shadow:0 0 28px rgba(0,168,204,.25)}
   .impact-txt{font-size:clamp(16px,2.4vw,20px); color:var(--text); max-width:36ch}
   .impact-txt b{color:var(--light); font-weight:700}
   .impact-txt .sub{display:block; color:var(--muted); font-size:13px; margin-top:6px}
@@ -110,14 +110,14 @@
   @media (max-width:760px){ .site-links{display:none} }
 
   /* "Your license" lookup panel + result card */
-  .sec-head .pill, .yl-head .pill{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--green-l); background:rgba(16,185,129,.10); border:1px solid var(--green-d); border-radius:999px; padding:3px 11px}
+  .sec-head .pill, .yl-head .pill{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--green-l); background:rgba(0,168,204,.10); border:1px solid var(--green-d); border-radius:999px; padding:3px 11px}
   .sec-head .pill{margin-left:auto}
-  .yl-panel{background:rgba(16,185,129,.05); border:.5px solid rgba(16,185,129,.22); border-radius:16px; padding:24px}
+  .yl-panel{background:rgba(0,168,204,.05); border:.5px solid rgba(0,168,204,.22); border-radius:16px; padding:24px}
   .yl-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px}
   .yl-title{margin:0; font-size:22px; font-weight:800; color:var(--light); border-left:3px solid var(--green); padding-left:12px; line-height:1.1}
   .lookup{display:flex; gap:10px; flex-wrap:wrap}
   .lookup input{font-family:var(--mono); text-transform:uppercase; letter-spacing:.08em; font-size:18px; padding:12px 14px; flex:1; min-width:180px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; color:var(--light)}
-  .lookup input:focus{outline:none; border-color:var(--green); box-shadow:0 0 0 3px rgba(16,185,129,.15)}
+  .lookup input:focus{outline:none; border-color:var(--green); box-shadow:0 0 0 3px rgba(0,168,204,.15)}
   .lookup button{font-family:var(--sans); font-weight:600; font-size:15px; padding:12px 26px; background:var(--green); color:#04221a; border:none; border-radius:10px; cursor:pointer}
   .lookup button:hover{background:var(--green-l)}
   .demos{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
@@ -128,7 +128,7 @@
   .lic-card{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:22px 24px}
   .lic-top{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
   .lic-call{font-family:var(--mono); font-weight:700; font-size:30px; letter-spacing:.04em; color:var(--light)}
-  .lic-class{font-family:var(--mono); font-size:11px; letter-spacing:.06em; color:var(--green-l); background:rgba(16,185,129,.10); border:1px solid var(--green-d); border-radius:999px; padding:5px 12px; white-space:nowrap}
+  .lic-class{font-family:var(--mono); font-size:11px; letter-spacing:.06em; color:var(--green-l); background:rgba(0,168,204,.10); border:1px solid var(--green-d); border-radius:999px; padding:5px 12px; white-space:nowrap}
   .lic-name{color:var(--muted); font-size:15px; margin-top:3px}
   .lic-days{display:flex; align-items:baseline; gap:10px; margin:18px 0}
   .lic-num{font-family:var(--mono); font-weight:700; font-size:44px; line-height:1; color:var(--light)}
@@ -311,8 +311,8 @@
   function classBuckets(classes){
     const g = code => (classes.find(c=>c.code===code)||{count:0}).count;
     return [
-      {label:'Technician',    count:g('T'),               color:'#34d399'},
-      {label:'General',       count:g('G'),               color:'#10b981'},
+      {label:'Technician',    count:g('T'),               color:'#00d4ff'},
+      {label:'General',       count:g('G'),               color:'#00a8cc'},
       {label:'Amateur Extra', count:g('E'),               color:'#047857'},
       {label:'Legacy',        count:g('N')+g('P')+g('A'), color:'#64748b'},
     ];
@@ -365,7 +365,7 @@
   function licState(expiry){
     const today=midnight(new Date()), exp=midnight(expiry);
     const days=Math.round((exp-today)/dayMS);
-    if(days>90)  return {days, label:'License active',      color:'#34d399', tint:'rgba(16,185,129,.12)', renew:false};
+    if(days>90)  return {days, label:'License active',      color:'#00d4ff', tint:'rgba(0,168,204,.12)', renew:false};
     if(days>=0)  return {days, label:'Renewal window open', color:'#fbbf24', tint:'rgba(245,158,11,.13)', renew:true};
     const grace=midnight(expiry); grace.setFullYear(grace.getFullYear()+2);
     return {days, label: today<grace ? 'Expired \u2014 in grace period' : 'Expired \u2014 grace over',
@@ -456,7 +456,7 @@
   const L=D.letters.slice(0,4);
   new Chart(letterChart,{type:'bar',
     data:{labels:L.map(x=>x.letter),
-      datasets:[{data:L.map(x=>x.count), backgroundColor:['#34d399','#10b981','#059669','#047857']}]},
+      datasets:[{data:L.map(x=>x.count), backgroundColor:['#00d4ff','#00a8cc','#059669','#047857']}]},
     options:{...noLegend, scales:{x:grid,y:grid}}});
 
   const cur=new Date().getFullYear();
@@ -473,7 +473,7 @@
     tn.textContent='Total active operators at each snapshot. Run the generator on a schedule to extend this line.';
     new Chart(trendChart,{type:'line',
       data:{labels:h.map(x=>x.date),
-        datasets:[{data:h.map(x=>x.total), borderColor:GREEN, backgroundColor:'rgba(16,185,129,.12)',
+        datasets:[{data:h.map(x=>x.total), borderColor:GREEN, backgroundColor:'rgba(0,168,204,.12)',
           fill:true, tension:.25, pointBackgroundColor:GREEN_L}]},
       options:{...noLegend, scales:{x:grid,y:grid}}});
   } else {
