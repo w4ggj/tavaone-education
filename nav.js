@@ -50,6 +50,7 @@
     { href: '/courses/',   label: 'Register' },
     { href: '/contact/',   label: 'Contact' },
     { href: '/events/',    label: 'Events' },
+    { href: '/pinellas-stem-radio-lab/', label: 'STEM Radio Lab' },
     { href: '/census/',    label: 'License Census' },
     { href: '/#resources', label: 'Resources' },
     { href: 'https://solar.tavaoneeducation.org', label: 'Learn Solar' },
