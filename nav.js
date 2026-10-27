@@ -39,7 +39,6 @@
 
   var primary = [
     { href: '/#what',     label: "What's an Elmer" },
-    { href: '/#lab',      label: 'STEM Lab' },
     { href: '/#programs', label: 'Programs' },
     { href: '/#tracks',   label: 'Tracks' },
     { href: '/#sponsor',  label: 'Sponsor' },
