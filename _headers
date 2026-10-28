@@ -3,3 +3,4 @@
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://tavaoneeducation.org https://widgets.guidestar.org https://stepupforstudents.org data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
