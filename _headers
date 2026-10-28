@@ -20,6 +20,9 @@
 /robots.txt
   Cache-Control: public, max-age=86400
 
+/opensearch.xml
+  Cache-Control: public, max-age=86400
+
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
