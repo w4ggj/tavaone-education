@@ -9,5 +9,13 @@
   "icons": [
     {"src": "/favicon-32.png?v=3",        "sizes": "32x32",   "type": "image/png"},
     {"src": "/apple-touch-icon.png?v=3",  "sizes": "180x180", "type": "image/png"}
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png?v=1",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "label": "TavaOne Education — amateur radio mentorship and STEM education in Pinellas County"
+    }
   ]
 }
