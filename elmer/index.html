@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#050d1a" />
+<link rel="manifest" href="/manifest.json" />
 <title>Elmer &middot; TavaOne Education</title>
 <meta name="description" content="A free amateur radio licensing tutor. Practice the current question pools, look up what your licence class may transmit, and find local clubs. No account, nothing collected." />
 <link rel="canonical" href="https://tavaoneeducation.org/elmer/" />
@@ -30,10 +31,11 @@
 <!-- The parent stylesheet supplies the shared header and footer once deployed.
      It is absent during local development, which is why elmer.css carries its
      own copy of the design tokens. -->
-<link rel="stylesheet" href="../style.css?v=19" />
+<link rel="stylesheet" href="../style.css?v=20" />
 <link rel="stylesheet" href="elmer.css?v=4" />
 </head>
 <body id="top">
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- Shared site header and footer, matching study/index.html so the page is
      part of the site rather than an orphan sitting inside it. nav.js builds the
@@ -46,7 +48,7 @@
 </header>
 <script src="/nav.js?v=3"></script>
 
-<div class="wrap">
+<div class="wrap" id="main-content">
 
   <div class="elmer-head">
     <div class="eyebrow">TavaOne Education</div>

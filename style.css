@@ -136,3 +136,6 @@ footer{border-top:1px solid var(--border);padding:40px 0;color:var(--muted);font
 .solar-live-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .solar-live-chip{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.72rem;color:var(--green-lt);background:rgba(0,168,204,.08);border:1px solid rgba(0,168,204,.2);border-radius:6px;padding:4px 9px;text-decoration:none;transition:background .12s,border-color .12s}
 .solar-live-chip:hover{background:rgba(0,168,204,.16);border-color:rgba(0,168,204,.4)}
+
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip-link:focus{position:fixed;left:16px;top:16px;width:auto;height:auto;overflow:visible;z-index:999;background:var(--green);color:#020a14;font-weight:700;font-size:.95rem;padding:10px 18px;border-radius:8px;text-decoration:none;outline:2px solid var(--green-lt);outline-offset:2px}
