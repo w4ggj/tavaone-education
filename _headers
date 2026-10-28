@@ -1,3 +1,25 @@
+# Versioned assets — cache one year; cache-busting params (e.g. ?v=20) handle invalidation
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+/manifest.json
+  Cache-Control: public, max-age=86400
+
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+
+/robots.txt
+  Cache-Control: public, max-age=86400
+
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
