@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>TavaOne Edu</ShortName>
+  <Description>Search TavaOne Education — amateur radio mentorship and STEM</Description>
+  <Url type="text/html" template="https://www.google.com/search?q={searchTerms}+site:tavaoneeducation.org"/>
+  <Image width="32" height="32" type="image/png">https://tavaoneeducation.org/favicon-32.png?v=3</Image>
+  <Language>en-us</Language>
+  <InputEncoding>UTF-8</InputEncoding>
+</OpenSearchDescription>
