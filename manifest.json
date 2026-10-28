@@ -1,0 +1,13 @@
+{
+  "name": "TavaOne Education",
+  "short_name": "TavaOne Edu",
+  "description": "Free amateur-radio mentorship and STEM education in Pinellas County, FL.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#050d1a",
+  "theme_color": "#050d1a",
+  "icons": [
+    {"src": "/favicon-32.png?v=3",        "sizes": "32x32",   "type": "image/png"},
+    {"src": "/apple-touch-icon.png?v=3",  "sizes": "180x180", "type": "image/png"}
+  ]
+}
