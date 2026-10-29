@@ -11,3 +11,6 @@ database_id = "REPLACE_WITH_D1_DATABASE_ID"
 #   STRIPE_SECRET_KEY        — from Stripe dashboard (education account)
 #   STRIPE_WEBHOOK_SECRET    — from Stripe webhook endpoint settings
 #   CF_ACCESS_AUD            — Cloudflare Access Application Audience tag for /admin/*
+#   CF_ACCESS_TEAM_DOMAIN    — e.g. yourteam.cloudflareaccess.com
+#   FIREBASE_CLIENT_EMAIL    — service account email from Firebase project settings
+#   FIREBASE_PRIVATE_KEY     — service account private key (with \n escaped as \\n)
