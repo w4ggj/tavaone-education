@@ -61,7 +61,8 @@ async function verifyAccessJwt(request, env) {
     const ok = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", key, sig, data);
     if (!ok) return false;
     const payload = JSON.parse(atob(payloadB64.replace(/-/g, "+").replace(/_/g, "/")));
-    if (payload.aud !== env.CF_ACCESS_AUD) return false;
+    const auds = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
+    if (!auds.includes(env.CF_ACCESS_AUD)) return false;
     if (payload.exp < Math.floor(Date.now() / 1000)) return false;
     return true;
   } catch {
