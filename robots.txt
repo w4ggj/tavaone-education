@@ -1,5 +1,0 @@
-User-agent: *
-Disallow: /onair
-Disallow: /admin/
-
-Sitemap: https://tavaoneeducation.org/sitemap.xml
