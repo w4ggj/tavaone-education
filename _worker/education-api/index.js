@@ -132,6 +132,8 @@ export default {
            VALUES (?, ?, ?, ?, ?, ?, 1, ?)`
         ).bind(regId, class_id, name.trim(), email.trim().toLowerCase(),
                guardian_name?.trim() || null, consent ? 1 : 0, notes?.trim() || null).run();
+        // Auto-provision study guide access (non-blocking)
+        provisionStudyGuideAccess(email.trim().toLowerCase(), name.trim(), cls.title, env);
         return json({ status: "registered", registration_id: regId });
       }
 
@@ -170,6 +172,11 @@ export default {
         const regId = session.metadata?.registration_id;
         if (regId) {
           await env.DB.prepare(`UPDATE registrations SET paid = 1 WHERE id = ?`).bind(regId).run();
+          // Look up registration to provision study guide access
+          const reg = await env.DB.prepare(
+            `SELECT r.name, r.email, c.title FROM registrations r JOIN classes c ON c.id = r.class_id WHERE r.id = ?`
+          ).bind(regId).first();
+          if (reg) provisionStudyGuideAccess(reg.email, reg.name, reg.title, env);
         }
       }
       return json({ received: true });
@@ -240,6 +247,117 @@ export default {
     return err("Not found", 404);
   },
 };
+
+// ---- Firebase study-guide provisioning -----------------------------------
+// Scope covers Firebase Auth Admin API + Firestore
+const FB_PROJECT = 'tavaone-education';
+const FB_API_KEY = 'AIzaSyADg4_ZQUUZHvlqclK9Ge9M-YafpcbnHRs';
+
+function detectCourse(classTitle) {
+  const t = (classTitle || '').toLowerCase();
+  if (t.includes('technician')) return 'technician';
+  if (t.includes('general')) return 'general';
+  if (t.includes('extra')) return 'extra';
+  return null;
+}
+
+async function getServiceAccountToken(env) {
+  if (!env.FIREBASE_CLIENT_EMAIL || !env.FIREBASE_PRIVATE_KEY) return null;
+  const now = Math.floor(Date.now() / 1000);
+  const b64url = obj => btoa(JSON.stringify(obj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const header = b64url({ alg: 'RS256', typ: 'JWT' });
+  const payload = b64url({
+    iss: env.FIREBASE_CLIENT_EMAIL, sub: env.FIREBASE_CLIENT_EMAIL,
+    aud: 'https://oauth2.googleapis.com/token',
+    scope: 'https://www.googleapis.com/auth/cloud-platform',
+    iat: now, exp: now + 3600,
+  });
+  const sigInput = `${header}.${payload}`;
+  const pem = env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
+  const pemBody = pem.replace(/-----BEGIN PRIVATE KEY-----/, '').replace(/-----END PRIVATE KEY-----/, '').replace(/\s/g, '');
+  const keyDer = Uint8Array.from(atob(pemBody), c => c.charCodeAt(0));
+  const cryptoKey = await crypto.subtle.importKey('pkcs8', keyDer.buffer, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']);
+  const sigBytes = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', cryptoKey, new TextEncoder().encode(sigInput));
+  const sig = btoa(String.fromCharCode(...new Uint8Array(sigBytes))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const jwt = `${sigInput}.${sig}`;
+  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: jwt }),
+  });
+  const tokenData = await tokenRes.json();
+  return tokenData.access_token || null;
+}
+
+async function findOrCreateFirebaseUser(email, name, token) {
+  // Try to find existing user by email
+  const lookupRes = await fetch(
+    `https://identitytoolkit.googleapis.com/v1/projects/${FB_PROJECT}/accounts:lookup`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: [email] }),
+    }
+  );
+  const lookupData = await lookupRes.json();
+  if (lookupData.users?.length) return { uid: lookupData.users[0].localId, isNew: false };
+
+  // Create new user (no password — they'll set it via email link)
+  const createRes = await fetch(
+    `https://identitytoolkit.googleapis.com/v1/projects/${FB_PROJECT}/accounts`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, displayName: name, emailVerified: false }),
+    }
+  );
+  const createData = await createRes.json();
+  if (!createData.localId) throw new Error('Firebase user creation failed: ' + JSON.stringify(createData));
+  return { uid: createData.localId, isNew: true };
+}
+
+async function sendPasswordSetupEmail(email) {
+  await fetch(
+    `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${FB_API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestType: 'PASSWORD_RESET', email }),
+    }
+  );
+}
+
+async function createFirestoreEnrollment(uid, course, token) {
+  const url = `https://firestore.googleapis.com/v1/projects/${FB_PROJECT}/databases/(default)/documents/enrollments`;
+  await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fields: {
+        uid: { stringValue: uid },
+        course: { stringValue: course },
+        createdAt: { timestampValue: new Date().toISOString() },
+        classRegistration: { booleanValue: true },
+      }
+    }),
+  });
+}
+
+// Orchestrates Firebase user creation + Firestore enrollment + welcome email.
+// Fails silently so a Firebase hiccup never breaks class registration.
+async function provisionStudyGuideAccess(email, name, classTitle, env) {
+  const course = detectCourse(classTitle);
+  if (!course) return; // class title doesn't map to a known course
+  try {
+    const token = await getServiceAccountToken(env);
+    if (!token) return;
+    const { uid, isNew } = await findOrCreateFirebaseUser(email, name, token);
+    await createFirestoreEnrollment(uid, course, token);
+    if (isNew) await sendPasswordSetupEmail(email);
+  } catch (e) {
+    console.error('provisionStudyGuideAccess error:', e);
+  }
+}
 
 // ---- Minimal Stripe client -----------------------------------------------
 // Uses the Stripe REST API directly — no npm dependency needed in a Worker.
